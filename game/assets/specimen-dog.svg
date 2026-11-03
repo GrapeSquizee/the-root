@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 640">
+<defs><radialGradient id="bg"><stop stop-color="#3f5a48"/><stop offset="1" stop-color="#081714"/></radialGradient><linearGradient id="fur" x2="1" y2="1"><stop stop-color="#dccba5"/><stop offset="1" stop-color="#806e53"/></linearGradient></defs>
+<rect width="512" height="640" fill="url(#bg)"/>
+<circle cx="256" cy="290" r="177" fill="none" stroke="#ab9769" opacity=".26"/>
+<circle cx="256" cy="290" r="125" fill="none" stroke="#ab9769" opacity=".18"/>
+<path d="M115 366 Q143 332 189 345 Q235 327 293 344 L331 320 Q368 310 394 337 L378 382 Q342 395 322 385 L315 463 L290 467 L284 400 L205 405 L194 466 L169 466 L165 396 Q133 395 115 366Z" fill="url(#fur)" stroke="#e4d6af" stroke-width="5"/>
+<path d="M323 332 Q312 282 340 248 Q369 222 405 246 L423 296 Q401 337 364 347Z" fill="url(#fur)" stroke="#e4d6af" stroke-width="5"/>
+<path d="M340 255 L329 207 Q342 202 363 232 M390 251 L423 216 Q432 237 412 275" fill="#a58b67" stroke="#e4d6af" stroke-width="4"/>
+<circle cx="392" cy="277" r="5" fill="#f7e5b6"/><circle cx="421" cy="297" r="5" fill="#2e2825"/>
+<path d="M119 357 Q83 347 80 299" fill="none" stroke="#c8b58e" stroke-width="12" stroke-linecap="round"/>
+<g fill="#a9d9c3" opacity=".7"><circle cx="113" cy="177" r="3"/><circle cx="402" cy="171" r="4"/><circle cx="202" cy="113" r="2"/><circle cx="342" cy="425" r="2"/></g>
+<path d="M76 500 Q241 478 437 503" fill="none" stroke="#ad956a" opacity=".5"/>
+<text x="256" y="556" text-anchor="middle" fill="#cbb384" font-size="19" font-family="serif" letter-spacing="5">DOG</text>
+</svg>

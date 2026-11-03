@@ -1,0 +1,17 @@
+# Godot's generated import and editor cache
+**/.godot/
+
+# Temporary local test configuration
+.godot-test-config/
+
+# Python cache
+__pycache__/
+
+# Local Godot binary is installed separately from game source
+Godot_v4.7.2-stable_win64/
+
+# 저작권이 있는 참고작 사본은 올리지 않는다(작법 기준은 docs/16에 요약)
+.codex-remote-attachments/
+
+# 로컬 Godot 에디터 캐시
+.godot-test-config/

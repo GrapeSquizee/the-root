@@ -1,0 +1,3461 @@
+{
+  "version": "0.2",
+  "cycle1": [
+    "cat",
+    "water",
+    "sunflower",
+    "gold",
+    "golden_eagle",
+    "hammer",
+    "moon",
+    "iron",
+    "honey_bee",
+    "smartphone",
+    "emperor_penguin",
+    "spider",
+    "common_octopus",
+    "bottlenose_dolphin",
+    "shiitake",
+    "little_brown_bat",
+    "stony_coral",
+    "platypus",
+    "dugong",
+    "humpback_anglerfish"
+  ],
+  "cycle2": [
+    "ice",
+    "salt",
+    "quartz",
+    "earth",
+    "moss",
+    "bakers_yeast",
+    "great_white_shark",
+    "diamond",
+    "sun",
+    "e_coli",
+    "emperor_penguin",
+    "bottlenose_dolphin",
+    "little_brown_bat",
+    "stony_coral",
+    "platypus",
+    "dugong",
+    "humpback_anglerfish",
+    "common_octopus",
+    "honey_bee",
+    "shiitake"
+  ],
+  "entities": [
+    {
+      "entity_id": "cat",
+      "name_ko": "고양이",
+      "name_en": "Cat",
+      "scientific_name": "Felis catus",
+      "difficulty": 1,
+      "max_depth": 6,
+      "complete_bonus": 120,
+      "observe_hint": "몸에 털이 있고 새끼에게 젖을 먹인다.",
+      "design_role": "초반 즉답 / 포유류 기준점",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Felis+catus",
+      "path": [
+        "physical",
+        "living",
+        "animalia",
+        "chordata",
+        "mammalia",
+        "carnivora"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "animalia",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "animalia",
+          "correct_category_id": "chordata",
+          "distractor_category_id": "arthropoda",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "chordata",
+          "correct_category_id": "mammalia",
+          "distractor_category_id": "aves",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "mammalia",
+          "correct_category_id": "carnivora",
+          "distractor_category_id": "primates",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 1,
+        "start_depth": 1
+      },
+      "cycle2": {
+        "position": null,
+        "start_depth": null
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "vertebrate",
+          "value": true
+        },
+        {
+          "attribute_id": "mammal",
+          "value": true
+        },
+        {
+          "attribute_id": "has_fur",
+          "value": true
+        },
+        {
+          "attribute_id": "lactation",
+          "value": true
+        },
+        {
+          "attribute_id": "oviparous",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "golden_eagle",
+      "name_ko": "검독수리",
+      "name_en": "Golden Eagle",
+      "scientific_name": "Aquila chrysaetos",
+      "difficulty": 2,
+      "max_depth": 6,
+      "complete_bonus": 130,
+      "observe_hint": "깃털과 부리를 가지며 알을 낳는다.",
+      "design_role": "조류 기준점",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Aquila+chrysaetos",
+      "path": [
+        "physical",
+        "living",
+        "animalia",
+        "chordata",
+        "aves",
+        "accipitriformes"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "animalia",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "animalia",
+          "correct_category_id": "chordata",
+          "distractor_category_id": "arthropoda",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "chordata",
+          "correct_category_id": "aves",
+          "distractor_category_id": "mammalia",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "aves",
+          "correct_category_id": "accipitriformes",
+          "distractor_category_id": "falconiformes",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 5,
+        "start_depth": 2
+      },
+      "cycle2": {
+        "position": null,
+        "start_depth": null
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "vertebrate",
+          "value": true
+        },
+        {
+          "attribute_id": "bird",
+          "value": true
+        },
+        {
+          "attribute_id": "feathers",
+          "value": true
+        },
+        {
+          "attribute_id": "oviparous",
+          "value": true
+        },
+        {
+          "attribute_id": "mammal",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "emperor_penguin",
+      "name_ko": "황제펭귄",
+      "name_en": "Emperor Penguin",
+      "scientific_name": "Aptenodytes forsteri",
+      "difficulty": 4,
+      "max_depth": 6,
+      "complete_bonus": 150,
+      "observe_hint": "날지는 못하지만 몸 전체에 깃털이 있다.",
+      "design_role": "비행=조류라는 직관 흔들기",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Aptenodytes+forsteri",
+      "path": [
+        "physical",
+        "living",
+        "animalia",
+        "chordata",
+        "aves",
+        "sphenisciformes"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "animalia",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "animalia",
+          "correct_category_id": "chordata",
+          "distractor_category_id": "arthropoda",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "chordata",
+          "correct_category_id": "aves",
+          "distractor_category_id": "mammalia",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "aves",
+          "correct_category_id": "sphenisciformes",
+          "distractor_category_id": "procellariiformes",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 11,
+        "start_depth": 3
+      },
+      "cycle2": {
+        "position": 11,
+        "start_depth": 5
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "vertebrate",
+          "value": true
+        },
+        {
+          "attribute_id": "bird",
+          "value": true
+        },
+        {
+          "attribute_id": "feathers",
+          "value": true
+        },
+        {
+          "attribute_id": "powered_flight",
+          "value": false
+        },
+        {
+          "attribute_id": "aquatic_adapted",
+          "value": true
+        }
+      ]
+    },
+    {
+      "entity_id": "bottlenose_dolphin",
+      "name_ko": "큰돌고래",
+      "name_en": "Bottlenose Dolphin",
+      "scientific_name": "Tursiops truncatus",
+      "difficulty": 5,
+      "max_depth": 6,
+      "complete_bonus": 160,
+      "observe_hint": "아가미가 없고 수면 위로 올라와 폐로 호흡한다.",
+      "design_role": "수중 외형 vs 포유류",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Tursiops+truncatus",
+      "path": [
+        "physical",
+        "living",
+        "animalia",
+        "chordata",
+        "mammalia",
+        "cetacea"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "animalia",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "animalia",
+          "correct_category_id": "chordata",
+          "distractor_category_id": "arthropoda",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "chordata",
+          "correct_category_id": "mammalia",
+          "distractor_category_id": "aves",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "mammalia",
+          "correct_category_id": "cetacea",
+          "distractor_category_id": "sirenia",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 14,
+        "start_depth": 3
+      },
+      "cycle2": {
+        "position": 12,
+        "start_depth": 5
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "vertebrate",
+          "value": true
+        },
+        {
+          "attribute_id": "mammal",
+          "value": true
+        },
+        {
+          "attribute_id": "pulmonary_respiration",
+          "value": true
+        },
+        {
+          "attribute_id": "lactation",
+          "value": true
+        },
+        {
+          "attribute_id": "gill_respiration",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "dugong",
+      "name_ko": "듀공",
+      "name_en": "Dugong",
+      "scientific_name": "Dugong dugon",
+      "difficulty": 6,
+      "max_depth": 6,
+      "complete_bonus": 170,
+      "observe_hint": "바다에서 살지만 폐로 호흡하고 새끼에게 젖을 먹인다.",
+      "design_role": "낯선 해양 포유류",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Dugong+dugon",
+      "path": [
+        "physical",
+        "living",
+        "animalia",
+        "chordata",
+        "mammalia",
+        "sirenia"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "animalia",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "animalia",
+          "correct_category_id": "chordata",
+          "distractor_category_id": "arthropoda",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "chordata",
+          "correct_category_id": "mammalia",
+          "distractor_category_id": "aves",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "mammalia",
+          "correct_category_id": "sirenia",
+          "distractor_category_id": "cetacea",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 19,
+        "start_depth": 3
+      },
+      "cycle2": {
+        "position": 16,
+        "start_depth": 5
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "vertebrate",
+          "value": true
+        },
+        {
+          "attribute_id": "mammal",
+          "value": true
+        },
+        {
+          "attribute_id": "pulmonary_respiration",
+          "value": true
+        },
+        {
+          "attribute_id": "lactation",
+          "value": true
+        },
+        {
+          "attribute_id": "aquatic_adapted",
+          "value": true
+        }
+      ]
+    },
+    {
+      "entity_id": "platypus",
+      "name_ko": "오리너구리",
+      "name_en": "Platypus",
+      "scientific_name": "Ornithorhynchus anatinus",
+      "difficulty": 7,
+      "max_depth": 6,
+      "complete_bonus": 180,
+      "observe_hint": "알을 낳지만 털과 젖샘을 가진다.",
+      "design_role": "대표적 예외 / 고난도",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Ornithorhynchus+anatinus",
+      "path": [
+        "physical",
+        "living",
+        "animalia",
+        "chordata",
+        "mammalia",
+        "monotremata"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "animalia",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "animalia",
+          "correct_category_id": "chordata",
+          "distractor_category_id": "arthropoda",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "chordata",
+          "correct_category_id": "mammalia",
+          "distractor_category_id": "aves",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "mammalia",
+          "correct_category_id": "monotremata",
+          "distractor_category_id": "rodentia",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 18,
+        "start_depth": 3
+      },
+      "cycle2": {
+        "position": 15,
+        "start_depth": 5
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "vertebrate",
+          "value": true
+        },
+        {
+          "attribute_id": "mammal",
+          "value": true
+        },
+        {
+          "attribute_id": "oviparous",
+          "value": true
+        },
+        {
+          "attribute_id": "has_fur",
+          "value": true
+        },
+        {
+          "attribute_id": "lactation",
+          "value": true
+        }
+      ]
+    },
+    {
+      "entity_id": "little_brown_bat",
+      "name_ko": "작은갈색박쥐",
+      "name_en": "Little Brown Bat",
+      "scientific_name": "Myotis lucifugus",
+      "difficulty": 5,
+      "max_depth": 6,
+      "complete_bonus": 160,
+      "observe_hint": "날개에 깃털이 없고 몸에 털이 있으며 새끼에게 젖을 먹인다.",
+      "design_role": "비행 vs 포유류",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Myotis+lucifugus",
+      "path": [
+        "physical",
+        "living",
+        "animalia",
+        "chordata",
+        "mammalia",
+        "chiroptera"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "animalia",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "animalia",
+          "correct_category_id": "chordata",
+          "distractor_category_id": "arthropoda",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "chordata",
+          "correct_category_id": "mammalia",
+          "distractor_category_id": "aves",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "mammalia",
+          "correct_category_id": "chiroptera",
+          "distractor_category_id": "carnivora",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 16,
+        "start_depth": 3
+      },
+      "cycle2": {
+        "position": 13,
+        "start_depth": 5
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "vertebrate",
+          "value": true
+        },
+        {
+          "attribute_id": "mammal",
+          "value": true
+        },
+        {
+          "attribute_id": "powered_flight",
+          "value": true
+        },
+        {
+          "attribute_id": "feathers",
+          "value": false
+        },
+        {
+          "attribute_id": "echolocation",
+          "value": true
+        }
+      ]
+    },
+    {
+      "entity_id": "great_white_shark",
+      "name_ko": "백상아리",
+      "name_en": "Great White Shark",
+      "scientific_name": "Carcharodon carcharias",
+      "difficulty": 5,
+      "max_depth": 6,
+      "complete_bonus": 160,
+      "observe_hint": "아가미로 호흡하고 골격의 대부분이 연골이다.",
+      "design_role": "돌고래와 외형 대비",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Carcharodon+carcharias",
+      "path": [
+        "physical",
+        "living",
+        "animalia",
+        "chordata",
+        "chondrichthyes",
+        "lamniformes"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "animalia",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "animalia",
+          "correct_category_id": "chordata",
+          "distractor_category_id": "arthropoda",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "chordata",
+          "correct_category_id": "chondrichthyes",
+          "distractor_category_id": "actinopterygii",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "chondrichthyes",
+          "correct_category_id": "lamniformes",
+          "distractor_category_id": "carcharhiniformes",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": null,
+        "start_depth": null
+      },
+      "cycle2": {
+        "position": 7,
+        "start_depth": 3
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "vertebrate",
+          "value": true
+        },
+        {
+          "attribute_id": "cartilaginous_skeleton",
+          "value": true
+        },
+        {
+          "attribute_id": "gill_respiration",
+          "value": true
+        },
+        {
+          "attribute_id": "pulmonary_respiration",
+          "value": false
+        },
+        {
+          "attribute_id": "mammal",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "humpback_anglerfish",
+      "name_ko": "혹등아귀",
+      "name_en": "Humpback Anglerfish",
+      "scientific_name": "Melanocetus johnsonii",
+      "difficulty": 7,
+      "max_depth": 6,
+      "complete_bonus": 180,
+      "observe_hint": "아가미로 호흡하는 조기어류이며 등지느러미 일부가 낚싯대처럼 변형됐다.",
+      "design_role": "낯선 심해 생물 / 고난도",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Melanocetus+johnsonii",
+      "path": [
+        "physical",
+        "living",
+        "animalia",
+        "chordata",
+        "actinopterygii",
+        "lophiiformes"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "animalia",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "animalia",
+          "correct_category_id": "chordata",
+          "distractor_category_id": "arthropoda",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "chordata",
+          "correct_category_id": "actinopterygii",
+          "distractor_category_id": "chondrichthyes",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "actinopterygii",
+          "correct_category_id": "lophiiformes",
+          "distractor_category_id": "perciformes",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 20,
+        "start_depth": 3
+      },
+      "cycle2": {
+        "position": 17,
+        "start_depth": 5
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "vertebrate",
+          "value": true
+        },
+        {
+          "attribute_id": "ray_finned_fish",
+          "value": true
+        },
+        {
+          "attribute_id": "gill_respiration",
+          "value": true
+        },
+        {
+          "attribute_id": "deep_sea_adapted",
+          "value": true
+        },
+        {
+          "attribute_id": "cartilaginous_skeleton",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "common_octopus",
+      "name_ko": "참문어",
+      "name_en": "Common Octopus",
+      "scientific_name": "Octopus vulgaris",
+      "difficulty": 4,
+      "max_depth": 6,
+      "complete_bonus": 150,
+      "observe_hint": "연한 몸과 여덟 팔을 가진 두족류다.",
+      "design_role": "척추동물 편향 깨기",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Octopus+vulgaris",
+      "path": [
+        "physical",
+        "living",
+        "animalia",
+        "mollusca",
+        "cephalopoda",
+        "octopoda"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "animalia",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "animalia",
+          "correct_category_id": "mollusca",
+          "distractor_category_id": "cnidaria",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "mollusca",
+          "correct_category_id": "cephalopoda",
+          "distractor_category_id": "gastropoda",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "cephalopoda",
+          "correct_category_id": "octopoda",
+          "distractor_category_id": "teuthida",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 13,
+        "start_depth": 3
+      },
+      "cycle2": {
+        "position": 18,
+        "start_depth": 5
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "invertebrate",
+          "value": true
+        },
+        {
+          "attribute_id": "mollusc",
+          "value": true
+        },
+        {
+          "attribute_id": "cephalopod",
+          "value": true
+        },
+        {
+          "attribute_id": "eight_arms",
+          "value": true
+        },
+        {
+          "attribute_id": "vertebrate",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "stony_coral",
+      "name_ko": "돌산호",
+      "name_en": "Stony Coral",
+      "scientific_name": "Scleractinia",
+      "difficulty": 8,
+      "max_depth": 6,
+      "complete_bonus": 190,
+      "observe_hint": "폴립이 촉수와 자포세포로 먹이를 잡는 동물이다.",
+      "design_role": "식물처럼 보이는 동물 / 보스급",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Scleractinia",
+      "path": [
+        "physical",
+        "living",
+        "animalia",
+        "cnidaria",
+        "anthozoa",
+        "scleractinia"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "animalia",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "animalia",
+          "correct_category_id": "cnidaria",
+          "distractor_category_id": "mollusca",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "cnidaria",
+          "correct_category_id": "anthozoa",
+          "distractor_category_id": "scyphozoa",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "anthozoa",
+          "correct_category_id": "scleractinia",
+          "distractor_category_id": "actiniaria",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 17,
+        "start_depth": 3
+      },
+      "cycle2": {
+        "position": 14,
+        "start_depth": 5
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "animal",
+          "value": true
+        },
+        {
+          "attribute_id": "cnidarian",
+          "value": true
+        },
+        {
+          "attribute_id": "sessile_adult",
+          "value": true
+        },
+        {
+          "attribute_id": "calcium_carbonate_skeleton",
+          "value": true
+        },
+        {
+          "attribute_id": "plant",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "honey_bee",
+      "name_ko": "서양꿀벌",
+      "name_en": "Honey Bee",
+      "scientific_name": "Apis mellifera",
+      "difficulty": 3,
+      "max_depth": 6,
+      "complete_bonus": 140,
+      "observe_hint": "성체는 다리 여섯 개와 외골격을 가진다.",
+      "design_role": "절지동물 기준점",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Apis+mellifera",
+      "path": [
+        "physical",
+        "living",
+        "animalia",
+        "arthropoda",
+        "insecta",
+        "hymenoptera"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "animalia",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "animalia",
+          "correct_category_id": "arthropoda",
+          "distractor_category_id": "mollusca",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "arthropoda",
+          "correct_category_id": "insecta",
+          "distractor_category_id": "arachnida",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "insecta",
+          "correct_category_id": "hymenoptera",
+          "distractor_category_id": "diptera",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 9,
+        "start_depth": 2
+      },
+      "cycle2": {
+        "position": 19,
+        "start_depth": 5
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "arthropod",
+          "value": true
+        },
+        {
+          "attribute_id": "insect",
+          "value": true
+        },
+        {
+          "attribute_id": "six_legs",
+          "value": true
+        },
+        {
+          "attribute_id": "exoskeleton",
+          "value": true
+        },
+        {
+          "attribute_id": "eight_legs",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "spider",
+      "name_ko": "거미",
+      "name_en": "Spider",
+      "scientific_name": "Araneae",
+      "difficulty": 4,
+      "max_depth": 6,
+      "complete_bonus": 150,
+      "observe_hint": "성체는 다리 여덟 개를 가진다.",
+      "design_role": "곤충 vs 거미류",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Araneae",
+      "path": [
+        "physical",
+        "living",
+        "animalia",
+        "arthropoda",
+        "arachnida",
+        "araneae"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "animalia",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "animalia",
+          "correct_category_id": "arthropoda",
+          "distractor_category_id": "mollusca",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "arthropoda",
+          "correct_category_id": "arachnida",
+          "distractor_category_id": "insecta",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "arachnida",
+          "correct_category_id": "araneae",
+          "distractor_category_id": "scorpiones",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 12,
+        "start_depth": 3
+      },
+      "cycle2": {
+        "position": null,
+        "start_depth": null
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "arthropod",
+          "value": true
+        },
+        {
+          "attribute_id": "arachnid",
+          "value": true
+        },
+        {
+          "attribute_id": "eight_legs",
+          "value": true
+        },
+        {
+          "attribute_id": "exoskeleton",
+          "value": true
+        },
+        {
+          "attribute_id": "insect",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "sunflower",
+      "name_ko": "해바라기",
+      "name_en": "Sunflower",
+      "scientific_name": "Helianthus annuus",
+      "difficulty": 3,
+      "max_depth": 6,
+      "complete_bonus": 140,
+      "observe_hint": "꽃을 피우고 씨가 열매 안에서 발달한다.",
+      "design_role": "식물 Branch 기준점",
+      "source_url": "https://powo.science.kew.org/taxon/119003-2",
+      "path": [
+        "physical",
+        "living",
+        "plantae",
+        "vascular_plant",
+        "angiosperm",
+        "asterales"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "plantae",
+          "distractor_category_id": "fungi",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "plantae",
+          "correct_category_id": "vascular_plant",
+          "distractor_category_id": "bryophyta",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "vascular_plant",
+          "correct_category_id": "angiosperm",
+          "distractor_category_id": "gymnosperm",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "angiosperm",
+          "correct_category_id": "asterales",
+          "distractor_category_id": "poales",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 3,
+        "start_depth": 1
+      },
+      "cycle2": {
+        "position": null,
+        "start_depth": null
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "plant",
+          "value": true
+        },
+        {
+          "attribute_id": "photosynthesis",
+          "value": true
+        },
+        {
+          "attribute_id": "angiosperm",
+          "value": true
+        },
+        {
+          "attribute_id": "flowering",
+          "value": true
+        },
+        {
+          "attribute_id": "fungus",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "moss",
+      "name_ko": "이끼",
+      "name_en": "Moss",
+      "scientific_name": "Bryophyta",
+      "difficulty": 5,
+      "max_depth": 4,
+      "complete_bonus": 120,
+      "observe_hint": "관다발이 없고 꽃이나 씨 대신 포자로 번식한다.",
+      "design_role": "낮은 Depth지만 헷갈리는 완주 카드",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Bryophyta",
+      "path": [
+        "physical",
+        "living",
+        "plantae",
+        "bryophyta"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "plantae",
+          "distractor_category_id": "fungi",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "plantae",
+          "correct_category_id": "bryophyta",
+          "distractor_category_id": "vascular_plant",
+          "base_score": 40,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": null,
+        "start_depth": null
+      },
+      "cycle2": {
+        "position": 5,
+        "start_depth": 3
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "plant",
+          "value": true
+        },
+        {
+          "attribute_id": "photosynthesis",
+          "value": true
+        },
+        {
+          "attribute_id": "nonvascular",
+          "value": true
+        },
+        {
+          "attribute_id": "spore_reproduction",
+          "value": true
+        },
+        {
+          "attribute_id": "flowering",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "shiitake",
+      "name_ko": "표고버섯",
+      "name_en": "Shiitake",
+      "scientific_name": "Lentinula edodes",
+      "difficulty": 5,
+      "max_depth": 6,
+      "complete_bonus": 160,
+      "observe_hint": "광합성하지 않고 외부 유기물을 분해해 흡수한다.",
+      "design_role": "식물 직관 깨기",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Lentinula+edodes",
+      "path": [
+        "physical",
+        "living",
+        "fungi",
+        "basidiomycota",
+        "agaricomycetes",
+        "agaricales"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "fungi",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "fungi",
+          "correct_category_id": "basidiomycota",
+          "distractor_category_id": "ascomycota",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "basidiomycota",
+          "correct_category_id": "agaricomycetes",
+          "distractor_category_id": "tremellomycetes",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "agaricomycetes",
+          "correct_category_id": "agaricales",
+          "distractor_category_id": "polyporales",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 15,
+        "start_depth": 3
+      },
+      "cycle2": {
+        "position": 20,
+        "start_depth": 4
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "fungus",
+          "value": true
+        },
+        {
+          "attribute_id": "photosynthesis",
+          "value": false
+        },
+        {
+          "attribute_id": "chitin_cell_wall",
+          "value": true
+        },
+        {
+          "attribute_id": "basidiomycete",
+          "value": true
+        },
+        {
+          "attribute_id": "plant",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "bakers_yeast",
+      "name_ko": "빵효모",
+      "name_en": "Baker's Yeast",
+      "scientific_name": "Saccharomyces cerevisiae",
+      "difficulty": 7,
+      "max_depth": 6,
+      "complete_bonus": 180,
+      "observe_hint": "단세포 형태로 살아가는 균류이며 출아로 증식할 수 있다.",
+      "design_role": "버섯 형태가 아닌 균류",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Saccharomyces+cerevisiae",
+      "path": [
+        "physical",
+        "living",
+        "fungi",
+        "ascomycota",
+        "saccharomycetes",
+        "saccharomycetales"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "fungi",
+          "distractor_category_id": "plantae",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "fungi",
+          "correct_category_id": "ascomycota",
+          "distractor_category_id": "basidiomycota",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "ascomycota",
+          "correct_category_id": "saccharomycetes",
+          "distractor_category_id": "sordariomycetes",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "saccharomycetes",
+          "correct_category_id": "saccharomycetales",
+          "distractor_category_id": "eurotiales",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": null,
+        "start_depth": null
+      },
+      "cycle2": {
+        "position": 6,
+        "start_depth": 3
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "fungus",
+          "value": true
+        },
+        {
+          "attribute_id": "unicellular",
+          "value": true
+        },
+        {
+          "attribute_id": "budding",
+          "value": true
+        },
+        {
+          "attribute_id": "ascomycete",
+          "value": true
+        },
+        {
+          "attribute_id": "photosynthesis",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "e_coli",
+      "name_ko": "대장균",
+      "name_en": "E. coli",
+      "scientific_name": "Escherichia coli",
+      "difficulty": 8,
+      "max_depth": 6,
+      "complete_bonus": 190,
+      "observe_hint": "막으로 둘러싸인 핵이 없는 단세포 원핵생물이다.",
+      "design_role": "새 Branch 발견 / 후반 고난도",
+      "source_url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Escherichia+coli",
+      "path": [
+        "physical",
+        "living",
+        "bacteria",
+        "pseudomonadota",
+        "gammaproteobacteria",
+        "enterobacterales"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "living",
+          "distractor_category_id": "non_living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "living",
+          "correct_category_id": "bacteria",
+          "distractor_category_id": "fungi",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "bacteria",
+          "correct_category_id": "pseudomonadota",
+          "distractor_category_id": "bacillota",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "pseudomonadota",
+          "correct_category_id": "gammaproteobacteria",
+          "distractor_category_id": "alphaproteobacteria",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "gammaproteobacteria",
+          "correct_category_id": "enterobacterales",
+          "distractor_category_id": "pseudomonadales",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": null,
+        "start_depth": null
+      },
+      "cycle2": {
+        "position": 10,
+        "start_depth": 3
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "bacterium",
+          "value": true
+        },
+        {
+          "attribute_id": "prokaryote",
+          "value": true
+        },
+        {
+          "attribute_id": "membrane_bound_nucleus",
+          "value": false
+        },
+        {
+          "attribute_id": "unicellular",
+          "value": true
+        },
+        {
+          "attribute_id": "gram_negative",
+          "value": true
+        }
+      ]
+    },
+    {
+      "entity_id": "water",
+      "name_ko": "물",
+      "name_en": "Water",
+      "scientific_name": "H₂O",
+      "difficulty": 1,
+      "max_depth": 5,
+      "complete_bonus": 100,
+      "observe_hint": "화학식 H₂O인 분자 화합물이다.",
+      "design_role": "무생물 튜토리얼",
+      "source_url": "https://pubchem.ncbi.nlm.nih.gov/compound/962",
+      "path": [
+        "physical",
+        "non_living",
+        "matter",
+        "compound",
+        "molecular_compound"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "non_living",
+          "distractor_category_id": "living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "non_living",
+          "correct_category_id": "matter",
+          "distractor_category_id": "astronomical_object",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "matter",
+          "correct_category_id": "compound",
+          "distractor_category_id": "element",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "compound",
+          "correct_category_id": "molecular_compound",
+          "distractor_category_id": "ionic_compound",
+          "base_score": 70,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 2,
+        "start_depth": 1
+      },
+      "cycle2": {
+        "position": null,
+        "start_depth": null
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "compound",
+          "value": true
+        },
+        {
+          "attribute_id": "molecular_compound",
+          "value": true
+        },
+        {
+          "attribute_id": "formula_H2O",
+          "value": true
+        },
+        {
+          "attribute_id": "ionic_compound",
+          "value": false
+        },
+        {
+          "attribute_id": "element",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "ice",
+      "name_ko": "얼음",
+      "name_en": "Ice",
+      "scientific_name": "solid H₂O",
+      "difficulty": 3,
+      "max_depth": 5,
+      "complete_bonus": 120,
+      "observe_hint": "화학식은 물과 같은 H₂O지만 고체 결정 상태다.",
+      "design_role": "상태와 물질 정체성 구분",
+      "source_url": "https://pubchem.ncbi.nlm.nih.gov/compound/962",
+      "path": [
+        "physical",
+        "non_living",
+        "matter",
+        "compound",
+        "molecular_compound"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "non_living",
+          "distractor_category_id": "living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "non_living",
+          "correct_category_id": "matter",
+          "distractor_category_id": "astronomical_object",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "matter",
+          "correct_category_id": "compound",
+          "distractor_category_id": "element",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "compound",
+          "correct_category_id": "molecular_compound",
+          "distractor_category_id": "ionic_compound",
+          "base_score": 70,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": null,
+        "start_depth": null
+      },
+      "cycle2": {
+        "position": 1,
+        "start_depth": 2
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "compound",
+          "value": true
+        },
+        {
+          "attribute_id": "formula_H2O",
+          "value": true
+        },
+        {
+          "attribute_id": "solid_phase",
+          "value": true
+        },
+        {
+          "attribute_id": "crystalline",
+          "value": true
+        },
+        {
+          "attribute_id": "element",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "gold",
+      "name_ko": "금",
+      "name_en": "Gold",
+      "scientific_name": "Au",
+      "difficulty": 2,
+      "max_depth": 6,
+      "complete_bonus": 130,
+      "observe_hint": "원소기호 Au, 원자번호 79인 금속 원소다.",
+      "design_role": "원소 Branch 기준점",
+      "source_url": "https://pubchem.ncbi.nlm.nih.gov/element/79",
+      "path": [
+        "physical",
+        "non_living",
+        "matter",
+        "element",
+        "metal",
+        "transition_metal"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "non_living",
+          "distractor_category_id": "living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "non_living",
+          "correct_category_id": "matter",
+          "distractor_category_id": "astronomical_object",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "matter",
+          "correct_category_id": "element",
+          "distractor_category_id": "compound",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "element",
+          "correct_category_id": "metal",
+          "distractor_category_id": "nonmetal",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "metal",
+          "correct_category_id": "transition_metal",
+          "distractor_category_id": "alkali_metal",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 4,
+        "start_depth": 1
+      },
+      "cycle2": {
+        "position": null,
+        "start_depth": null
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "element",
+          "value": true
+        },
+        {
+          "attribute_id": "metal",
+          "value": true
+        },
+        {
+          "attribute_id": "transition_metal",
+          "value": true
+        },
+        {
+          "attribute_id": "symbol_Au",
+          "value": true
+        },
+        {
+          "attribute_id": "compound",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "iron",
+      "name_ko": "철",
+      "name_en": "Iron",
+      "scientific_name": "Fe",
+      "difficulty": 2,
+      "max_depth": 6,
+      "complete_bonus": 130,
+      "observe_hint": "원소기호 Fe, 원자번호 26인 금속 원소다.",
+      "design_role": "금속 기준점",
+      "source_url": "https://pubchem.ncbi.nlm.nih.gov/element/26",
+      "path": [
+        "physical",
+        "non_living",
+        "matter",
+        "element",
+        "metal",
+        "transition_metal"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "non_living",
+          "distractor_category_id": "living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "non_living",
+          "correct_category_id": "matter",
+          "distractor_category_id": "astronomical_object",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "matter",
+          "correct_category_id": "element",
+          "distractor_category_id": "compound",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "element",
+          "correct_category_id": "metal",
+          "distractor_category_id": "nonmetal",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "metal",
+          "correct_category_id": "transition_metal",
+          "distractor_category_id": "alkali_metal",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 8,
+        "start_depth": 2
+      },
+      "cycle2": {
+        "position": null,
+        "start_depth": null
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "element",
+          "value": true
+        },
+        {
+          "attribute_id": "metal",
+          "value": true
+        },
+        {
+          "attribute_id": "transition_metal",
+          "value": true
+        },
+        {
+          "attribute_id": "symbol_Fe",
+          "value": true
+        },
+        {
+          "attribute_id": "compound",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "salt",
+      "name_ko": "소금",
+      "name_en": "Sodium Chloride",
+      "scientific_name": "NaCl",
+      "difficulty": 4,
+      "max_depth": 6,
+      "complete_bonus": 150,
+      "observe_hint": "Na⁺와 Cl⁻ 이온이 격자를 이루는 이온성 화합물이다.",
+      "design_role": "분자/이온 화합물 구분",
+      "source_url": "https://pubchem.ncbi.nlm.nih.gov/compound/5234",
+      "path": [
+        "physical",
+        "non_living",
+        "matter",
+        "compound",
+        "ionic_compound",
+        "halide_salt"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "non_living",
+          "distractor_category_id": "living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "non_living",
+          "correct_category_id": "matter",
+          "distractor_category_id": "astronomical_object",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "matter",
+          "correct_category_id": "compound",
+          "distractor_category_id": "element",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "compound",
+          "correct_category_id": "ionic_compound",
+          "distractor_category_id": "molecular_compound",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "ionic_compound",
+          "correct_category_id": "halide_salt",
+          "distractor_category_id": "carbonate_salt",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": null,
+        "start_depth": null
+      },
+      "cycle2": {
+        "position": 2,
+        "start_depth": 2
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "compound",
+          "value": true
+        },
+        {
+          "attribute_id": "ionic_compound",
+          "value": true
+        },
+        {
+          "attribute_id": "formula_NaCl",
+          "value": true
+        },
+        {
+          "attribute_id": "crystalline",
+          "value": true
+        },
+        {
+          "attribute_id": "element",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "quartz",
+      "name_ko": "석영",
+      "name_en": "Quartz",
+      "scientific_name": "SiO₂",
+      "difficulty": 5,
+      "max_depth": 6,
+      "complete_bonus": 160,
+      "observe_hint": "주성분이 SiO₂인 결정성 광물이다.",
+      "design_role": "화합물 vs 광물 관점 전환",
+      "source_url": "https://www.mindat.org/min-3337.html",
+      "path": [
+        "physical",
+        "non_living",
+        "matter",
+        "mineral",
+        "oxide_mineral",
+        "silica_group"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "non_living",
+          "distractor_category_id": "living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "non_living",
+          "correct_category_id": "matter",
+          "distractor_category_id": "astronomical_object",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "matter",
+          "correct_category_id": "mineral",
+          "distractor_category_id": "element",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "mineral",
+          "correct_category_id": "oxide_mineral",
+          "distractor_category_id": "native_element_mineral",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "oxide_mineral",
+          "correct_category_id": "silica_group",
+          "distractor_category_id": "carbonate_mineral",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": null,
+        "start_depth": null
+      },
+      "cycle2": {
+        "position": 3,
+        "start_depth": 2
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "mineral",
+          "value": true
+        },
+        {
+          "attribute_id": "formula_SiO2",
+          "value": true
+        },
+        {
+          "attribute_id": "crystalline",
+          "value": true
+        },
+        {
+          "attribute_id": "oxide_mineral",
+          "value": true
+        },
+        {
+          "attribute_id": "element",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "diamond",
+      "name_ko": "다이아몬드",
+      "name_en": "Diamond",
+      "scientific_name": "C",
+      "difficulty": 6,
+      "max_depth": 6,
+      "complete_bonus": 170,
+      "observe_hint": "탄소만으로 이루어진 자연 광물이며 원자들이 3차원 격자를 이룬다.",
+      "design_role": "원소 C와 광물 Diamond의 구분",
+      "source_url": "https://www.mindat.org/min-1282.html",
+      "path": [
+        "physical",
+        "non_living",
+        "matter",
+        "mineral",
+        "native_element_mineral",
+        "carbon_mineral"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "non_living",
+          "distractor_category_id": "living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "non_living",
+          "correct_category_id": "matter",
+          "distractor_category_id": "astronomical_object",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "matter",
+          "correct_category_id": "mineral",
+          "distractor_category_id": "element",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "mineral",
+          "correct_category_id": "native_element_mineral",
+          "distractor_category_id": "oxide_mineral",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "native_element_mineral",
+          "correct_category_id": "carbon_mineral",
+          "distractor_category_id": "sulfur_mineral",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": null,
+        "start_depth": null
+      },
+      "cycle2": {
+        "position": 8,
+        "start_depth": 3
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "mineral",
+          "value": true
+        },
+        {
+          "attribute_id": "elemental_carbon",
+          "value": true
+        },
+        {
+          "attribute_id": "crystalline",
+          "value": true
+        },
+        {
+          "attribute_id": "native_element_mineral",
+          "value": true
+        },
+        {
+          "attribute_id": "compound",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "sun",
+      "name_ko": "태양",
+      "name_en": "Sun",
+      "scientific_name": "G2 V star",
+      "difficulty": 2,
+      "max_depth": 5,
+      "complete_bonus": 110,
+      "observe_hint": "스스로 빛을 내며 중심에서 수소 핵융합이 일어나는 주계열성이다.",
+      "design_role": "천체 Branch 기준점",
+      "source_url": "https://science.nasa.gov/sun/facts/",
+      "path": [
+        "physical",
+        "non_living",
+        "astronomical_object",
+        "star",
+        "main_sequence_star"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "non_living",
+          "distractor_category_id": "living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "non_living",
+          "correct_category_id": "astronomical_object",
+          "distractor_category_id": "matter",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "astronomical_object",
+          "correct_category_id": "star",
+          "distractor_category_id": "planet",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "star",
+          "correct_category_id": "main_sequence_star",
+          "distractor_category_id": "giant_star",
+          "base_score": 70,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": null,
+        "start_depth": null
+      },
+      "cycle2": {
+        "position": 9,
+        "start_depth": 3
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "astronomical_object",
+          "value": true
+        },
+        {
+          "attribute_id": "star",
+          "value": true
+        },
+        {
+          "attribute_id": "main_sequence_star",
+          "value": true
+        },
+        {
+          "attribute_id": "self_luminous",
+          "value": true
+        },
+        {
+          "attribute_id": "planet",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "earth",
+      "name_ko": "지구",
+      "name_en": "Earth",
+      "scientific_name": "Earth",
+      "difficulty": 1,
+      "max_depth": 5,
+      "complete_bonus": 100,
+      "observe_hint": "태양을 공전하고 단단한 암석 표면을 가진 행성이다.",
+      "design_role": "행성 기준점",
+      "source_url": "https://science.nasa.gov/earth/facts/",
+      "path": [
+        "physical",
+        "non_living",
+        "astronomical_object",
+        "planet",
+        "terrestrial_planet"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "non_living",
+          "distractor_category_id": "living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "non_living",
+          "correct_category_id": "astronomical_object",
+          "distractor_category_id": "matter",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "astronomical_object",
+          "correct_category_id": "planet",
+          "distractor_category_id": "natural_satellite",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "planet",
+          "correct_category_id": "terrestrial_planet",
+          "distractor_category_id": "giant_planet",
+          "base_score": 70,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": null,
+        "start_depth": null
+      },
+      "cycle2": {
+        "position": 4,
+        "start_depth": 2
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "astronomical_object",
+          "value": true
+        },
+        {
+          "attribute_id": "planet",
+          "value": true
+        },
+        {
+          "attribute_id": "terrestrial_planet",
+          "value": true
+        },
+        {
+          "attribute_id": "orbits_star",
+          "value": true
+        },
+        {
+          "attribute_id": "self_luminous",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "moon",
+      "name_ko": "달",
+      "name_en": "Moon",
+      "scientific_name": "Earth's Moon",
+      "difficulty": 2,
+      "max_depth": 5,
+      "complete_bonus": 110,
+      "observe_hint": "지구를 공전하는 자연위성이다.",
+      "design_role": "행성 vs 위성 구분",
+      "source_url": "https://science.nasa.gov/moon/facts/",
+      "path": [
+        "physical",
+        "non_living",
+        "astronomical_object",
+        "natural_satellite",
+        "rocky_satellite"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "non_living",
+          "distractor_category_id": "living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "non_living",
+          "correct_category_id": "astronomical_object",
+          "distractor_category_id": "matter",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "astronomical_object",
+          "correct_category_id": "natural_satellite",
+          "distractor_category_id": "planet",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "natural_satellite",
+          "correct_category_id": "rocky_satellite",
+          "distractor_category_id": "icy_satellite",
+          "base_score": 70,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 7,
+        "start_depth": 2
+      },
+      "cycle2": {
+        "position": null,
+        "start_depth": null
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "astronomical_object",
+          "value": true
+        },
+        {
+          "attribute_id": "natural_satellite",
+          "value": true
+        },
+        {
+          "attribute_id": "orbits_planet",
+          "value": true
+        },
+        {
+          "attribute_id": "rocky_body",
+          "value": true
+        },
+        {
+          "attribute_id": "planet",
+          "value": false
+        }
+      ]
+    },
+    {
+      "entity_id": "hammer",
+      "name_ko": "망치",
+      "name_en": "Hammer",
+      "scientific_name": "hand hammer",
+      "difficulty": 1,
+      "max_depth": 6,
+      "complete_bonus": 120,
+      "observe_hint": "사람이 손으로 들고 충격을 전달하도록 만든 도구다.",
+      "design_role": "인공물 튜토리얼",
+      "source_url": "https://www.wikidata.org/wiki/Q25294",
+      "path": [
+        "physical",
+        "non_living",
+        "artifact",
+        "tool",
+        "hand_tool",
+        "striking_tool"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "non_living",
+          "distractor_category_id": "living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "non_living",
+          "correct_category_id": "artifact",
+          "distractor_category_id": "matter",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "artifact",
+          "correct_category_id": "tool",
+          "distractor_category_id": "information_device",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "tool",
+          "correct_category_id": "hand_tool",
+          "distractor_category_id": "power_tool",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "hand_tool",
+          "correct_category_id": "striking_tool",
+          "distractor_category_id": "cutting_tool",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 6,
+        "start_depth": 2
+      },
+      "cycle2": {
+        "position": null,
+        "start_depth": null
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "artifact",
+          "value": true
+        },
+        {
+          "attribute_id": "human_made",
+          "value": true
+        },
+        {
+          "attribute_id": "tool",
+          "value": true
+        },
+        {
+          "attribute_id": "hand_tool",
+          "value": true
+        },
+        {
+          "attribute_id": "striking_tool",
+          "value": true
+        }
+      ]
+    },
+    {
+      "entity_id": "smartphone",
+      "name_ko": "스마트폰",
+      "name_en": "Smartphone",
+      "scientific_name": "smartphone",
+      "difficulty": 2,
+      "max_depth": 6,
+      "complete_bonus": 130,
+      "observe_hint": "휴대전화 기능과 연산 기능을 결합한 휴대형 컴퓨팅 기기다.",
+      "design_role": "현대 인공물 기준점",
+      "source_url": "https://www.wikidata.org/wiki/Q22645",
+      "path": [
+        "physical",
+        "non_living",
+        "artifact",
+        "information_device",
+        "mobile_computing_device",
+        "smartphone_device"
+      ],
+      "steps": [
+        {
+          "depth": 1,
+          "parent_category_id": "root",
+          "correct_category_id": "physical",
+          "distractor_category_id": "abstract",
+          "base_score": 10,
+          "is_final": false
+        },
+        {
+          "depth": 2,
+          "parent_category_id": "physical",
+          "correct_category_id": "non_living",
+          "distractor_category_id": "living",
+          "base_score": 15,
+          "is_final": false
+        },
+        {
+          "depth": 3,
+          "parent_category_id": "non_living",
+          "correct_category_id": "artifact",
+          "distractor_category_id": "matter",
+          "base_score": 25,
+          "is_final": false
+        },
+        {
+          "depth": 4,
+          "parent_category_id": "artifact",
+          "correct_category_id": "information_device",
+          "distractor_category_id": "tool",
+          "base_score": 40,
+          "is_final": false
+        },
+        {
+          "depth": 5,
+          "parent_category_id": "information_device",
+          "correct_category_id": "mobile_computing_device",
+          "distractor_category_id": "desktop_computing_device",
+          "base_score": 70,
+          "is_final": false
+        },
+        {
+          "depth": 6,
+          "parent_category_id": "mobile_computing_device",
+          "correct_category_id": "smartphone_device",
+          "distractor_category_id": "tablet_device",
+          "base_score": 120,
+          "is_final": true
+        }
+      ],
+      "cycle1": {
+        "position": 10,
+        "start_depth": 2
+      },
+      "cycle2": {
+        "position": null,
+        "start_depth": null
+      },
+      "hardmode_attributes": [
+        {
+          "attribute_id": "artifact",
+          "value": true
+        },
+        {
+          "attribute_id": "human_made",
+          "value": true
+        },
+        {
+          "attribute_id": "information_device",
+          "value": true
+        },
+        {
+          "attribute_id": "mobile_computing_device",
+          "value": true
+        },
+        {
+          "attribute_id": "smartphone_device",
+          "value": true
+        }
+      ]
+    }
+  ],
+  "currency": {
+    "currency_id": "order_shard",
+    "display_name_ko": "질서 파편(가칭)",
+    "status": "WORKING_NAME"
+  },
+  "equipment_slots": 3,
+  "materials": [
+    {
+      "material_id": "glass_shard",
+      "name_en": "Glass Shard",
+      "name_ko": "유리 파편",
+      "primary_use": "Lens 계열 강화",
+      "shop_unit_price": 50,
+      "rarity": "COMMON",
+      "cycle_drop_min": 3,
+      "cycle_drop_max": 5
+    },
+    {
+      "material_id": "broken_gear",
+      "name_en": "Broken Gear",
+      "name_ko": "부서진 기어",
+      "primary_use": "Hourglass / Bookmark 강화",
+      "shop_unit_price": 55,
+      "rarity": "COMMON",
+      "cycle_drop_min": 3,
+      "cycle_drop_max": 5
+    },
+    {
+      "material_id": "faded_ink",
+      "name_en": "Faded Ink",
+      "name_ko": "빛바랜 잉크",
+      "primary_use": "Field Notes 강화",
+      "shop_unit_price": 50,
+      "rarity": "COMMON",
+      "cycle_drop_min": 3,
+      "cycle_drop_max": 5
+    },
+    {
+      "material_id": "copper_coil",
+      "name_en": "Copper Coil",
+      "name_ko": "구리 코일",
+      "primary_use": "Stabilizer 강화",
+      "shop_unit_price": 60,
+      "rarity": "COMMON",
+      "cycle_drop_min": 3,
+      "cycle_drop_max": 5
+    },
+    {
+      "material_id": "unknown_fragment",
+      "name_en": "Unknown Fragment",
+      "name_ko": "정체불명 파편",
+      "primary_use": "+5 강화 / Hard Mode 진화",
+      "shop_unit_price": 280,
+      "rarity": "RARE",
+      "cycle_drop_min": 0,
+      "cycle_drop_max": 1
+    }
+  ],
+  "items": [
+    {
+      "item_id": "lens",
+      "name_en": "Taxonomic Lens",
+      "name_ko": "분류 렌즈",
+      "dedicated_material_id": "glass_shard",
+      "base_shop_price": 320,
+      "max_level": 5,
+      "mastery_event": "observe_effect_applied",
+      "mastery_required": 12,
+      "effects": [
+        {
+          "level": 0,
+          "effect_key": "observe_penalty_pct",
+          "effect_value": 30,
+          "display": "OBSERVE 점수 패널티 -30%"
+        },
+        {
+          "level": 1,
+          "effect_key": "observe_penalty_pct",
+          "effect_value": 27,
+          "display": "OBSERVE 점수 패널티 -27%"
+        },
+        {
+          "level": 2,
+          "effect_key": "observe_penalty_pct",
+          "effect_value": 24,
+          "display": "OBSERVE 점수 패널티 -24%"
+        },
+        {
+          "level": 3,
+          "effect_key": "observe_penalty_pct",
+          "effect_value": 21,
+          "display": "OBSERVE 점수 패널티 -21%"
+        },
+        {
+          "level": 4,
+          "effect_key": "observe_penalty_pct",
+          "effect_value": 18,
+          "display": "OBSERVE 점수 패널티 -18%"
+        },
+        {
+          "level": 5,
+          "effect_key": "observe_penalty_pct",
+          "effect_value": 15,
+          "display": "OBSERVE 점수 패널티 -15%"
+        }
+      ],
+      "hardmode_evolution": {
+        "item_id": "biosphere_scanner",
+        "name_en": "Biosphere Scanner",
+        "requires_level": 5,
+        "requires_mastery": 12,
+        "terraforming_core_fragment_qty": 3,
+        "hardmode_currency_cost": 600,
+        "cost_status": "PROVISIONAL_HM_COST"
+      }
+    },
+    {
+      "item_id": "hourglass",
+      "name_en": "Old Hourglass",
+      "name_ko": "낡은 모래시계",
+      "dedicated_material_id": "broken_gear",
+      "base_shop_price": 320,
+      "max_level": 5,
+      "mastery_event": "fast_bonus_triggered",
+      "mastery_required": 20,
+      "effects": [
+        {
+          "level": 0,
+          "effect_key": "fast_window_bonus_sec",
+          "effect_value": 0.0,
+          "display": "기본: 3초 +50% / 5초 +25%"
+        },
+        {
+          "level": 1,
+          "effect_key": "fast_window_bonus_sec",
+          "effect_value": 0.4,
+          "display": "3.4초 +50% / 5.4초 +25%"
+        },
+        {
+          "level": 2,
+          "effect_key": "fast_window_bonus_sec",
+          "effect_value": 0.8,
+          "display": "3.8초 +50% / 5.8초 +25%"
+        },
+        {
+          "level": 3,
+          "effect_key": "fast_window_bonus_sec",
+          "effect_value": 1.2,
+          "display": "4.2초 +50% / 6.2초 +25%"
+        },
+        {
+          "level": 4,
+          "effect_key": "fast_window_bonus_sec",
+          "effect_value": 1.6,
+          "display": "4.6초 +50% / 6.6초 +25%"
+        },
+        {
+          "level": 5,
+          "effect_key": "fast_window_bonus_sec",
+          "effect_value": 2.0,
+          "display": "5초 +50% / 7초 +25%"
+        }
+      ],
+      "hardmode_evolution": {
+        "item_id": "temporal_modeler",
+        "name_en": "Temporal Modeler",
+        "requires_level": 5,
+        "requires_mastery": 20,
+        "terraforming_core_fragment_qty": 3,
+        "hardmode_currency_cost": 600,
+        "cost_status": "PROVISIONAL_HM_COST"
+      }
+    },
+    {
+      "item_id": "bookmark",
+      "name_en": "Bookmark",
+      "name_ko": "책갈피",
+      "dedicated_material_id": "broken_gear",
+      "base_shop_price": 280,
+      "max_level": 5,
+      "mastery_event": "skip_effect_applied",
+      "mastery_required": 8,
+      "effects": [
+        {
+          "level": 0,
+          "effect_key": "skip_penalty",
+          "effect_value": "5s / Chaos +2",
+          "display": "SKIP: -5초 / CHAOS +2"
+        },
+        {
+          "level": 1,
+          "effect_key": "skip_penalty",
+          "effect_value": "4.5s / Chaos +2",
+          "display": "SKIP: -4.5초 / CHAOS +2"
+        },
+        {
+          "level": 2,
+          "effect_key": "skip_penalty",
+          "effect_value": "4s / Chaos +2",
+          "display": "SKIP: -4초 / CHAOS +2"
+        },
+        {
+          "level": 3,
+          "effect_key": "skip_penalty",
+          "effect_value": "3.5s / Chaos +2",
+          "display": "SKIP: -3.5초 / CHAOS +2"
+        },
+        {
+          "level": 4,
+          "effect_key": "skip_penalty",
+          "effect_value": "3s / Chaos +2",
+          "display": "SKIP: -3초 / CHAOS +2"
+        },
+        {
+          "level": 5,
+          "effect_key": "skip_penalty",
+          "effect_value": "3s / Chaos +1",
+          "display": "SKIP: -3초 / CHAOS +1"
+        }
+      ],
+      "hardmode_evolution": {
+        "item_id": "reconstruction_index",
+        "name_en": "Reconstruction Index",
+        "requires_level": 5,
+        "requires_mastery": 8,
+        "terraforming_core_fragment_qty": 3,
+        "hardmode_currency_cost": 600,
+        "cost_status": "PROVISIONAL_HM_COST"
+      }
+    },
+    {
+      "item_id": "stabilizer",
+      "name_en": "Stabilizer",
+      "name_ko": "안정화 장치",
+      "dedicated_material_id": "copper_coil",
+      "base_shop_price": 300,
+      "max_level": 5,
+      "mastery_event": "wrong_answer_mitigated",
+      "mastery_required": 10,
+      "effects": [
+        {
+          "level": 0,
+          "effect_key": "wrong_chaos",
+          "effect_value": 5.0,
+          "display": "오답 CHAOS +5"
+        },
+        {
+          "level": 1,
+          "effect_key": "wrong_chaos",
+          "effect_value": 4.5,
+          "display": "오답 CHAOS +4.5"
+        },
+        {
+          "level": 2,
+          "effect_key": "wrong_chaos",
+          "effect_value": 4.0,
+          "display": "오답 CHAOS +4"
+        },
+        {
+          "level": 3,
+          "effect_key": "wrong_chaos",
+          "effect_value": 3.5,
+          "display": "오답 CHAOS +3.5"
+        },
+        {
+          "level": 4,
+          "effect_key": "wrong_chaos",
+          "effect_value": 3.0,
+          "display": "오답 CHAOS +3"
+        },
+        {
+          "level": 5,
+          "effect_key": "wrong_chaos",
+          "effect_value": 2.0,
+          "display": "오답 CHAOS +2"
+        }
+      ],
+      "hardmode_evolution": {
+        "item_id": "planetary_stabilizer",
+        "name_en": "Planetary Stabilizer",
+        "requires_level": 5,
+        "requires_mastery": 10,
+        "terraforming_core_fragment_qty": 3,
+        "hardmode_currency_cost": 600,
+        "cost_status": "PROVISIONAL_HM_COST"
+      }
+    },
+    {
+      "item_id": "field_notes",
+      "name_en": "Field Notes",
+      "name_ko": "관찰 기록",
+      "dedicated_material_id": "faded_ink",
+      "base_shop_price": 300,
+      "max_level": 5,
+      "mastery_event": "entity_complete_with_equipped",
+      "mastery_required": 20,
+      "effects": [
+        {
+          "level": 0,
+          "effect_key": "complete_bonus_pct",
+          "effect_value": 0,
+          "display": "COMPLETE BONUS +0%"
+        },
+        {
+          "level": 1,
+          "effect_key": "complete_bonus_pct",
+          "effect_value": 5,
+          "display": "COMPLETE BONUS +5%"
+        },
+        {
+          "level": 2,
+          "effect_key": "complete_bonus_pct",
+          "effect_value": 10,
+          "display": "COMPLETE BONUS +10%"
+        },
+        {
+          "level": 3,
+          "effect_key": "complete_bonus_pct",
+          "effect_value": 15,
+          "display": "COMPLETE BONUS +15%"
+        },
+        {
+          "level": 4,
+          "effect_key": "complete_bonus_pct",
+          "effect_value": 20,
+          "display": "COMPLETE BONUS +20%"
+        },
+        {
+          "level": 5,
+          "effect_key": "complete_bonus_pct",
+          "effect_value": 25,
+          "display": "COMPLETE BONUS +25%"
+        }
+      ],
+      "hardmode_evolution": {
+        "item_id": "genome_archive",
+        "name_en": "Genome Archive",
+        "requires_level": 5,
+        "requires_mastery": 20,
+        "terraforming_core_fragment_qty": 3,
+        "hardmode_currency_cost": 600,
+        "cost_status": "PROVISIONAL_HM_COST"
+      }
+    }
+  ],
+  "upgrade_costs": [
+    {
+      "from_level": 0,
+      "to_level": 1,
+      "currency_cost": 120,
+      "dedicated_material_qty": 1,
+      "unknown_fragment_qty": 0
+    },
+    {
+      "from_level": 1,
+      "to_level": 2,
+      "currency_cost": 180,
+      "dedicated_material_qty": 2,
+      "unknown_fragment_qty": 0
+    },
+    {
+      "from_level": 2,
+      "to_level": 3,
+      "currency_cost": 280,
+      "dedicated_material_qty": 3,
+      "unknown_fragment_qty": 0
+    },
+    {
+      "from_level": 3,
+      "to_level": 4,
+      "currency_cost": 420,
+      "dedicated_material_qty": 5,
+      "unknown_fragment_qty": 0
+    },
+    {
+      "from_level": 4,
+      "to_level": 5,
+      "currency_cost": 650,
+      "dedicated_material_qty": 8,
+      "unknown_fragment_qty": 1
+    }
+  ],
+  "shop": {
+    "slots": 5,
+    "hold_slots": 1,
+    "hold_persists_across_refresh": true,
+    "hold_persists_across_cycle_shop_refresh": true,
+    "manual_refresh_costs": [
+      50,
+      100,
+      200,
+      400
+    ],
+    "manual_refresh_max_per_shop": 4,
+    "first_shop": {
+      "guaranteed_enhanced_equipment_count": 1,
+      "guaranteed_level_probabilities": {
+        "1": 70,
+        "2": 30
+      }
+    },
+    "later_shop_equipment_level_probabilities": {
+      "0": 45,
+      "1": 30,
+      "2": 15,
+      "3": 8,
+      "4": 2,
+      "5": 0
+    },
+    "enhanced_item_mastery_on_purchase": 0,
+    "max_sellable_equipment_level": 4,
+    "no_duplicate_equipment_item_id_per_shop": true,
+    "slot_archetypes": [
+      {
+        "slot": 1,
+        "type": "equipment",
+        "equipment_pct": 100,
+        "material_pct": 0,
+        "unknown_fragment_pct": 0
+      },
+      {
+        "slot": 2,
+        "type": "flex",
+        "equipment_pct": 70,
+        "material_pct": 30,
+        "unknown_fragment_pct": 0
+      },
+      {
+        "slot": 3,
+        "type": "flex",
+        "equipment_pct": 50,
+        "material_pct": 50,
+        "unknown_fragment_pct": 0
+      },
+      {
+        "slot": 4,
+        "type": "material",
+        "equipment_pct": 0,
+        "material_pct": 100,
+        "unknown_fragment_pct": 0
+      },
+      {
+        "slot": 5,
+        "type": "rare_flex",
+        "equipment_pct": 35,
+        "material_pct": 60,
+        "unknown_fragment_pct": 5
+      }
+    ],
+    "shop_price_level_multipliers": {
+      "0": 1.0,
+      "1": 1.5,
+      "2": 2.3,
+      "3": 3.5,
+      "4": 5.0
+    }
+  },
+  "economy": {
+    "cycle_reward_currency": [
+      350,
+      500
+    ],
+    "high_performance_currency_max": 650,
+    "cycle_common_materials": [
+      3,
+      5
+    ],
+    "high_performance_common_material_max": 7,
+    "unknown_fragment_per_cycle": [
+      0,
+      1
+    ],
+    "material_farming_intensity": "NORMAL",
+    "upgrade_failure": false
+  }
+}
