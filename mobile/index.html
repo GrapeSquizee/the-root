@@ -13,7 +13,7 @@
   --line: #2f3f36;
   --text: #e9efe7;
   --dim: #9aaa9f;
-  --root: #6fd3c1;      /* 이음, 스크린 */
+  --root: #6fd3c1;      /* 실타래, 스크린 */
   --gold: #e3c46b;      /* 기록, 보상 */
   --yellow: #f2d64b;    /* 서린의 노란 실 */
   --red: #e0524f;       /* 붉은 줄 */
@@ -118,19 +118,19 @@ h1 { font-size: 20px; margin: 4px 0; letter-spacing: -0.02em; }
   <!-- 홈 -->
   <section id="home" class="screen on">
     <div class="hud">
-      <span class="chip">이음 <b id="hIeum">0</b></span>
+      <span class="chip">실타래 <b id="hIeum">0</b></span>
       <span class="chip gold">기록 <b id="hLore">0/12</b></span>
       <span class="spacer"></span>
       <span class="chip">안정화율 <b id="hStab">0.003%</b></span>
     </div>
     <div class="row"><h1 id="hTitle" style="flex:1">기록 천 — 정착지</h1>
       <button class="ghost-btn" id="chBtn" style="display:none;padding:6px 10px;font-size:13px"></button></div>
-    <div class="sub" id="hSub">빛나는 조각을 눌러 이음으로 기록을 연다. 고른 답이 세계 기록으로 남는다.</div>
+    <div class="sub" id="hSub">빛나는 조각을 눌러 실타래로 기록을 연다. 고른 답이 세계 기록으로 남는다.</div>
     <div id="map"></div>
     <div id="idle">
       <div style="font-size:26px">🌳</div>
       <div class="grow">
-        <div id="idleText">나무가 이음을 모으는 중 <b id="idleRate" style="color:var(--root)">0</b>/분</div>
+        <div id="idleText">나무가 실타래를 모으는 중 <b id="idleRate" style="color:var(--root)">0</b>/분</div>
         <div class="bar"><i id="idleBar"></i></div>
       </div>
       <button class="ghost-btn" id="collectBtn">받기 <b id="idleAmt">0</b></button>
@@ -147,7 +147,7 @@ h1 { font-size: 20px; margin: 4px 0; letter-spacing: -0.02em; }
   <!-- 낮 -->
   <section id="day" class="screen">
     <div class="hud">
-      <span class="chip">이음 <b id="dIeum">0</b></span>
+      <span class="chip">실타래 <b id="dIeum">0</b></span>
       <span class="chip" style="color:var(--red)">붉은 줄 <b id="dRed" style="color:var(--red)">0</b></span>
       <span class="spacer"></span>
       <span class="chip"><b id="dCount">1/8</b></span>
@@ -168,8 +168,8 @@ h1 { font-size: 20px; margin: 4px 0; letter-spacing: -0.02em; }
       <button class="choice" id="optR"></button>
     </div>
     <div class="row" style="margin-top:10px">
-      <button class="ghost-btn" id="observeBtn" style="flex:1">관찰 (이음 절반)</button>
-      <button class="ghost-btn" id="lockBtn" style="flex:1">여기서 확정</button>
+      <button class="ghost-btn" id="observeBtn" style="flex:1">단서 보기 (실타래 절반)</button>
+      <button class="ghost-btn" id="lockBtn" style="flex:1">여기서 멈추기</button>
     </div>
   </section>
 
@@ -187,16 +187,16 @@ h1 { font-size: 20px; margin: 4px 0; letter-spacing: -0.02em; }
       <span class="chip">밤 <b id="nTime">20</b></span>
       <span class="chip">기록 천 <b id="nHp">♥♥♥</b></span>
       <span class="spacer"></span>
-      <span class="chip">흩은 해체자 <b id="nKill">0</b></span>
+      <span class="chip">쫓아낸 해체자 <b id="nKill">0</b></span>
     </div>
-    <div class="sub" style="margin:6px 0">사각거리는 실밥을 눌러 흩어라. 붉은 줄에 걸린 곳으로 먼저 몰려든다.</div>
+    <div class="sub" style="margin:6px 0">사각거리는 실밥을 눌러 쫓아내라. 붉은 줄에 걸린 곳으로 먼저 몰려든다.</div>
     <canvas id="nCanvas"></canvas>
   </section>
 
   <!-- 세계 기록 -->
   <section id="codex" class="screen">
     <div class="row"><h1 style="flex:1">세계 기록</h1><button class="ghost-btn" id="codexBack">닫기</button></div>
-    <div class="sub" style="margin-bottom:10px">조각마다 갈래가 둘이다. 다른 답을 골라야 나머지 기록이 열린다.</div>
+    <div class="sub" style="margin-bottom:10px">조각마다 선택지가 둘이다. 다른 답을 골라야 나머지 기록이 열린다.</div>
     <div class="list" id="codexList"></div>
   </section>
 
@@ -261,32 +261,32 @@ const SETTLE_NODES = [
       '마루가 검은 매듭을 지은 밧줄을 내밀었다.',
       '<span class="say">“어제는 일곱 개 반이었어. 오늘은 여덟 번째까지 내려갔어~”</span>' ],
     opts: [
-      { t: '마루와 매듭을 같이 센다', h: '나무가 이음을 더 모은다', lore: '우물 — 수위는 마루의 검은 매듭으로 잰다. 마루는 매듭을 손가락으로 짚으며 센다.', reward: { idle: 1 } },
-      { t: '돌벽의 틈부터 본다', h: '이음을 얻는다', lore: '우물 — 물은 마른 게 아니라 돌벽 틈으로 샌다. 수면의 흙가루가 옆으로 사라지는 쪽에 틈이 있다.', reward: { ieum: 40 } } ] },
+      { t: '마루와 매듭을 같이 센다', h: '나무가 실타래를 더 모은다', lore: '우물 — 수위는 마루의 검은 매듭으로 잰다. 마루는 매듭을 손가락으로 짚으며 센다.', reward: { idle: 1 } },
+      { t: '돌벽의 틈부터 본다', h: '실타래를 얻는다', lore: '우물 — 물은 마른 게 아니라 돌벽 틈으로 샌다. 수면의 흙가루가 옆으로 사라지는 쪽에 틈이 있다.', reward: { ieum: 40 } } ] },
   { id: 'yarn', name: '노란 실', icon: '🧶', cost: 80, scene: [
       '끊어진 길 앞에 노란 실이 가로질러 걸려 있었다. 서린이 매듭을 다시 조였다.',
       '<span class="say">“넘어오지 마. 아래가 비었어.”</span>' ],
     opts: [
       { t: '실 앞에서 멈춘다', h: '밤에 해체자가 느려진다', lore: '노란 실 — 위험한 곳에 남기는 표시다. 주민들은 실 너머로 들어가지 않는다.', reward: { slow: 1 } },
-      { t: '“아래를 같이 봐도 돼요?”', h: '이음을 얻는다', lore: '서린 — 길이 불안하면 직접 밟아 보고 나서 남을 통과시킨다. “발은 내가 밟은 데만.”', reward: { ieum: 60 } } ] },
+      { t: '“아래를 같이 봐도 돼요?”', h: '실타래를 얻는다', lore: '서린 — 길이 불안하면 직접 밟아 보고 나서 남을 통과시킨다. “발은 내가 밟은 데만.”', reward: { ieum: 60 } } ] },
   { id: 'pot', name: '솥뚜껑', icon: '🍲', cost: 130, scene: [
       '나무 아래에서 한 남자가 솥뚜껑을 닦고 있었다. 연우가 비탈길 쪽으로 걸음을 옮기자 남자가 손을 들었다.',
       '<span class="say">“그쪽 길은 안 돼. 어제 *딸꾹* 무너졌어.”</span>' ],
     opts: [
-      { t: '다른 길을 묻는다', h: '나무가 이음을 더 모은다', lore: '나무 아래 남자 — 딸꾹질을 하면서도 위험한 길은 끝까지 막는다.', reward: { idle: 1 } },
+      { t: '다른 길을 묻는다', h: '나무가 실타래를 더 모은다', lore: '나무 아래 남자 — 딸꾹질을 하면서도 위험한 길은 끝까지 막는다.', reward: { idle: 1 } },
       { t: '솥뚜껑 닦는 걸 돕는다', h: '기록 천이 단단해진다', lore: '정착지 — 사람들은 나무 아래에 모여 산다. 솥 하나를 여럿이 나눠 쓴다.', reward: { hp: 1 } } ] },
   { id: 'white', name: '흰다리', icon: '🦌', cost: 190, scene: [
       '흰 앞발의 짐승이 머리를 털었다. 뿔 끝의 은빛 가루가 비에 젖은 돌 위로 흩어졌다.',
       '짐승은 연우를 한 번 돌아보더니 나무 쪽으로 몇 걸음 걸었다.' ],
     opts: [
-      { t: '나무까지 따라간다', h: '이음을 얻는다', lore: '흰다리 — 등에 잎이 난 짐승이다. 빛을 받아 살고 포자로 번식한다.', reward: { ieum: 100 } },
-      { t: '손을 내밀지 않고 기다린다', h: '나무가 이음을 더 모은다', lore: '흰다리 — 말이 없어도 관계는 이어진다. 먼저 손을 뻗지 않아야 곁에 남는다.', reward: { idle: 1 } } ] },
+      { t: '나무까지 따라간다', h: '실타래를 얻는다', lore: '흰다리 — 등에 잎이 난 짐승이다. 빛을 받아 살고 포자로 번식한다.', reward: { ieum: 100 } },
+      { t: '손을 내밀지 않고 기다린다', h: '나무가 실타래를 더 모은다', lore: '흰다리 — 말이 없어도 관계는 이어진다. 먼저 손을 뻗지 않아야 곁에 남는다.', reward: { idle: 1 } } ] },
   { id: 'red', name: '붉은 줄', icon: '🟥', cost: 260, scene: [
       '틀린 답을 고른 자리에 붉은 줄이 남아 있었다. 다른 사람들은 그 줄을 보지 못했다.',
       '서린이 연우의 시선이 머문 곳을 따라 봤다.',
       '<span class="say">“거기 뭐가 있어?”</span>' ],
     opts: [
-      { t: '“아무것도 아니에요.”', h: '이음을 얻는다', lore: '붉은 줄 — 틀린 답이 남긴 줄이다. 그 줄은 연우만 본다.', reward: { ieum: 140 } },
+      { t: '“아무것도 아니에요.”', h: '실타래를 얻는다', lore: '붉은 줄 — 틀린 답이 남긴 줄이다. 그 줄은 연우만 본다.', reward: { ieum: 140 } },
       { t: '“제가 틀린 데예요.”', h: '밤에 해체자가 느려진다', lore: '붉은 줄 — 해체자는 붉은 줄에 걸린 것부터 노린다. 말해 두면 함께 지킬 수 있다.', reward: { slow: 1 } } ] },
   { id: 'cloth', name: '기록 천', icon: '📜', cost: 340, scene: [
       '은솔이 접어 둔 천을 펼쳤다. 집과 사람의 이름이 숯으로 적혀 있었다.',
@@ -294,7 +294,7 @@ const SETTLE_NODES = [
       '몇 줄은 비어 있었다. 무엇을 적어야 할지 아무도 몰랐던 자리였다.' ],
     opts: [
       { t: '아는 이름을 빈칸에 적는다', h: '기록 천이 단단해진다', lore: '기록 천 — 이름 있던 때의 모양이 적힌 천이다. 해체자가 가장 먼저 노린다.', reward: { hp: 1 } },
-      { t: '빈칸에 ‘모름’이라고 적는다', h: '나무가 이음을 더 모은다', lore: '기록 천 — ‘모름’도 기록이다. 비워 둔 칸은 지워진 칸과 다르다.', reward: { idle: 1 } } ] },
+      { t: '빈칸에 ‘모름’이라고 적는다', h: '나무가 실타래를 더 모은다', lore: '기록 천 — ‘모름’도 기록이다. 비워 둔 칸은 지워진 칸과 다르다.', reward: { idle: 1 } } ] },
 ];
 
 // 2장 볕마을(소설 21~30화). 일곱 해 전 서린이 통째로 고정한 골짜기 마을.
@@ -304,7 +304,7 @@ const BYEOT_NODES = [
       '<span class="say">“여기서 자. 안에서 자면 그 하루에 붙어.”</span>',
       '이쪽은 벌써 해가 기울었다. 풀 한 줄 너머의 마을에는 아직 늦은 오후의 볕이 들어 있었다.' ],
     opts: [
-      { t: '경계의 풀에 손을 넣어 본다', h: '이음을 얻는다', lore: '볕마을 경계 — 풀 한 줄을 사이에 두고 바람이 끊긴다. 안에는 늦은 오후의 볕이 한 각도로 멈춰 있다.', reward: { ieum: 120 } },
+      { t: '경계의 풀에 손을 넣어 본다', h: '실타래를 얻는다', lore: '볕마을 경계 — 풀 한 줄을 사이에 두고 바람이 끊긴다. 안에는 늦은 오후의 볕이 한 각도로 멈춰 있다.', reward: { ieum: 120 } },
       { t: '정류장 바닥에 눕는다', h: '기록 천이 단단해진다', lore: '볕마을 — 바깥 사람도 안에서 자면 고정한 하루에 붙는다. 그래서 연우와 서린은 경계 밖 정류장에서 잔다.', reward: { hp: 1 } } ] },
   { id: 'stair', name: '계단', icon: '🪜', cost: 460, scene: [
       '양쪽으로 머리를 묶은 다섯 살 아이, 보리가 계단을 뛰어 내려오다 발을 헛디뎠다. 연우가 손을 뻗기도 전에 보리는 바닥에 엎어졌다.',
@@ -312,17 +312,17 @@ const BYEOT_NODES = [
       '<span class="say">“오빠는 누구야?”</span>' ],
     opts: [
       { t: '무릎부터 살핀다', h: '밤에 해체자가 느려진다', lore: '볕마을 — 안에서는 넘어져도 상처가 나지 않고 울지도 않는다. 키도 자라지 않는다.', reward: { slow: 1 } },
-      { t: '“어제도 만났잖아.”', h: '나무가 이음을 더 모은다', lore: '보리 — 다섯 살. 자고 나면 고정한 날로 돌아가서 연우를 매일 처음 본다. 연우를 ‘오빠’라고 부른다.', reward: { idle: 1 } } ] },
+      { t: '“어제도 만났잖아.”', h: '나무가 실타래를 더 모은다', lore: '보리 — 다섯 살. 자고 나면 고정한 날로 돌아가서 연우를 매일 처음 본다. 연우를 ‘오빠’라고 부른다.', reward: { idle: 1 } } ] },
   { id: 'jar', name: '항아리', icon: '🏺', cost: 560, scene: [
       '머리를 천 끈으로 묶은 여자가 앞치마의 밀가루를 털며 나왔다. 보리의 엄마 가람이었다. 가람은 서린을 보자 반갑게 웃었다.',
       '<span class="say">“벌써 왔어? 아까 나가더니 금방 왔네.”</span>',
       '가람을 따라 집에 들어서자 부엌의 항아리가 보였다. 물이 목까지 찰랑였다. 가람이 나무 그릇을 들어 보였다.',
       '<span class="say">“오늘 보리가 처음으로 혼자 물을 떠 왔어. 이걸로.”</span>' ],
     opts: [
-      { t: '처음 듣는 이야기처럼 듣는다', h: '나무가 이음을 더 모은다', lore: '가람 — 고정한 날의 이야기를 매일 ‘오늘 일’로 한다. 고정한 날은 보리가 처음 혼자 물을 떠 온 날이다.', reward: { idle: 1 } },
-      { t: '항아리를 들여다본다', h: '이음을 얻는다', lore: '볕마을 — 항아리는 아침마다 고정한 날의 양만큼 다시 찬다. 새 숯 금이나 매듭은 더해지지 않는다.', reward: { ieum: 200 } } ] },
+      { t: '처음 듣는 이야기처럼 듣는다', h: '나무가 실타래를 더 모은다', lore: '가람 — 고정한 날의 이야기를 매일 ‘오늘 일’로 한다. 고정한 날은 보리가 처음 혼자 물을 떠 온 날이다.', reward: { idle: 1 } },
+      { t: '항아리를 들여다본다', h: '실타래를 얻는다', lore: '볕마을 — 항아리는 아침마다 고정한 날의 양만큼 다시 찬다. 새 숯 금이나 매듭은 더해지지 않는다.', reward: { ieum: 200 } } ] },
   { id: 'cutname', name: '잘린 이름', icon: '✂️', cost: 680, scene: [
-      '모임터 나무에 큰 자루천이 걸려 있었다. 천에는 집마다 칸이 나뉘어 식구의 이름이 적혀 있었고, 맨 위에는 ‘붙잡은 사람, 서린’이라고 쓰여 있었다.',
+      '모임터 나무에 큰 자루 천이 걸려 있었다. 천에는 집마다 칸이 나뉘어 식구의 이름이 적혀 있었고, 맨 위에는 ‘붙잡은 사람, 서린’이라고 쓰여 있었다.',
       '그 아래 한 자리가 손가락 두 마디만큼 반듯하게 잘려 나가 있었다. 서린이 엄지로 가장자리를 눌러 보다가 손을 뗐다.',
       '<span class="say">“잘려서 가져갔어. 이름째.”</span>' ],
     opts: [
@@ -333,8 +333,8 @@ const BYEOT_NODES = [
       '<span class="say">“잎 하나 펴면 해가 오고, 잎 둘 펴면 물이 오고. 자장자장 우리 아가, 셋째 잎엔 누가 오나.”</span>',
       '가람이 같은 구절을 한 번 더 불러 끝나 갈 때, 숨소리에 가까운 목소리가 뒤를 이었다. 문틀에 기대앉은 서린이었다.' ],
     opts: [
-      { t: '가람에게 노래를 어디서 배웠는지 묻는다', h: '나무가 이음을 더 모은다', lore: '볕마을 자장가 — 가람은 고정한 날 ‘함께 적은 사람’에게 앞 구절을 배웠다. 그 사람도 거기까지만 불렀다.', reward: { idle: 1 } },
-      { t: '서린의 노래를 끝까지 듣는다', h: '이음을 얻는다', lore: '볕마을 자장가 — “셋째 잎엔 네가 크고, 넷째 잎엔 손을 놓지.” 뒤 구절은 서린만 안다. 서린은 자기가 왜 아는지 모른다.', reward: { ieum: 300 } } ] },
+      { t: '가람에게 노래를 어디서 배웠는지 묻는다', h: '나무가 실타래를 더 모은다', lore: '볕마을 자장가 — 가람은 고정한 날 ‘함께 적은 사람’에게 앞 구절을 배웠다. 그 사람도 거기까지만 불렀다.', reward: { idle: 1 } },
+      { t: '서린의 노래를 끝까지 듣는다', h: '실타래를 얻는다', lore: '볕마을 자장가 — “셋째 잎엔 네가 크고, 넷째 잎엔 손을 놓지.” 뒤 구절은 서린만 안다. 서린은 자기가 왜 아는지 모른다.', reward: { ieum: 300 } } ] },
   { id: 'frame', name: '문틀', icon: '📏', cost: 1000, scene: [
       '가람의 집 문틀에 보리의 키를 잰 숯 금이 그어져 있었다. 맨 위의 금은 일곱 해째 같은 자리였다.',
       '도시에서 점검을 온 기록관이 줄 끝에 단 작은 추를 들어 보였다. 둥근 안경을 쓴 해담이었다. 볕마을에는 도시의 동쪽 길 셋이 묶여 있었다.',
@@ -342,7 +342,7 @@ const BYEOT_NODES = [
       '<div class="screen-text">표본 06 — 문틀의 눈금</div>' ],
     opts: [
       { t: '해담의 추를 본다', h: '기록 천이 단단해진다', lore: '해담 — 다섯 해 전 북쪽 둑길에서 주민이 원해 고정선 한 줄을 풀자 열한 명이 돌아가지 못했고, 넷은 아직 찾지 못했다. “자라지 않는 것은 죽는 것이 아닙니다. 보존입니다.”', reward: { hp: 1 } },
-      { t: '문틀의 숯 금을 본다', h: '나무가 이음을 훨씬 더 모은다', lore: '문틀의 눈금 — 이어지는 기록. 보리 한 사람의 고정이 풀렸다. 보리는 넘어져 일곱 해 만에 울었고, 다음 날 숯 금 하나 두께만큼 자랐다.', reward: { idle: 2 } } ] },
+      { t: '문틀의 숯 금을 본다', h: '나무가 실타래를 훨씬 더 모은다', lore: '문틀의 눈금 — 이어지는 기록. 보리 한 사람의 고정이 풀렸다. 보리는 넘어져 일곱 해 만에 울었고, 다음 날 숯 금 하나 두께만큼 자랐다.', reward: { idle: 2 } } ] },
 ];
 const BYEOT_INTRO = [
   '정착지에서 해 뜨는 쪽으로 끊어진 도로를 따라 반나절을 걸었다. 판자 다리 하나를 건너자 골짜기가 나왔다.',
@@ -372,16 +372,16 @@ const TUTORIAL = {
     steps: [
       '물방울 하나가 위로 올라간다. 방금 손끝에 묻었던 차가운 물이다. 물은 살아 있는 걸까?',
       '갈라진 도로 가장자리에 하늘색 선이 나타났다. 그런데 물방울이 다시 위로 올라간다. 한 번 고른 것으로 끝나지 않았다.' ],
-    done: '<h2>톡.</h2><div class="sub">물방울이 아스팔트에 떨어졌다. 톡, 톡, 토독. 이곳에서 처음 들은 빗소리였다.<br>갈라진 아스팔트 조각이 하나씩 제자리를 찾았다.</div><div class="screen-text" style="margin-top:12px">표본의 관계가 안정화되었습니다.<br>영역 안정화율 0.003%.</div>' },
+    done: '<h2>톡.</h2><div class="sub">물방울이 아스팔트에 떨어졌다. 톡, 톡, 토독. 이곳에서 처음 들은 빗소리였다.<br>갈라진 아스팔트 조각이 하나씩 맞물려 들어갔다.</div><div class="screen-text" style="margin-top:12px">표본이 제자리를 찾았습니다.<br>영역 안정화율 0.003%.</div>' },
   heuindari: {
     steps: [
       '골목에서 튀어나온 짐승이 갈라진 틈에 흰 앞발을 걸쳤다. 옆구리가 빠르게 오르내린다.',
-      '짐승을 길 위로 끌어올렸다. 그런데 몸이 흐려진다. <b>관찰</b>을 누르면 단서가 보인다. 대신 이음은 절반이다.',
+      '짐승을 길 위로 끌어올렸다. 그런데 몸이 흐려진다. <b>단서 보기</b>를 눌러도 된다. 대신 실타래는 절반만 받는다.',
       '뿔 끝에서 은빛 가루가 떨어진다. 가루가 닿은 돌에 흰 점이 여럿 생겼다.' ],
     done: '<h2>분류 완료</h2><div class="sub">흰 앞발의 색이 더는 흐려지지 않는다. 짐승은 다친 뿔을 나무 쪽으로 돌렸다.<br>한 걸음 내딛고 발밑이 버티는지 확인한 뒤에야 다음 발을 옮긴다.</div>' },
 };
 const TUT_WRONG = '틀린 답은 <b style="color:var(--red)">붉은 줄</b>로 남는다. 이번만은 다시 고를 수 있다.';
-const TUT_WAIT = '숫자가 0이 됐다. 원래는 <b>흐릿한 선택</b>으로 남지만, 이번만은 스크린이 기다린다.';
+const TUT_WAIT = '숫자가 0이 됐다. 원래는 <b>시간 초과</b>로 끝나지만, 이번만은 스크린이 기다린다.';
 
 // ───────────────────────── 상태 ─────────────────────────
 const SAVE_KEY = 'theroot_mobile_v1';
@@ -486,7 +486,7 @@ function renderHome() {
   $('streak').textContent = S.streak;
   $('idleText').innerHTML = S.fixed
     ? '<span style="color:var(--yellow)">볕마을이 고정돼 정착지 나무에 새 잎이 나지 않는다</span>'
-    : `나무가 이음을 모으는 중 <b style="color:var(--root)">${idleRate()}</b>/분`;
+    : `나무가 실타래를 모으는 중 <b style="color:var(--root)">${idleRate()}</b>/분`;
   const other = CHAPTERS[S.ch === 0 ? 1 : 0];
   $('chBtn').style.display = S.unlocked >= 1 ? '' : 'none';
   $('chBtn').textContent = '⇄ ' + other.name;
@@ -496,8 +496,8 @@ function renderHome() {
     : '🍃 볕마을 고정 풀림 — <span style="color:var(--dim)">밤이 온다 · 나무가 자란다</span>';
   const opened = nodes.filter(n => S.nodes[n.id] != null).length;
   $('hSub').textContent = opened === nodes.length
-    ? ch.name + '의 기록 천이 모두 이어졌다. 다른 갈래를 골라 남은 기록을 채울 수 있다.'
-    : '빛나는 조각을 눌러 이음으로 기록을 연다. 고른 답이 세계 기록으로 남는다.';
+    ? ch.name + '의 기록 천이 모두 이어졌다. 다른 선택지를 골라 남은 기록을 채울 수 있다.'
+    : '빛나는 조각을 눌러 실타래로 기록을 연다. 고른 답이 세계 기록으로 남는다.';
   drawMap();
 }
 function tickIdle() {
@@ -520,7 +520,7 @@ function setFixed(on) {
   save(); renderHome(); tickIdle();
 }
 $('fixBtn').onclick = () => {
-  if (S.fixed) modal(`<h2>고정을 푼다</h2><div class="sub">바람이 볕마을로 들어온다. 정착지 나무에 다시 새 잎이 나고 이음이 모인다.<br><br>대신 볕마을에도 밤이 온다. 해체자가 볕마을의 기록 천으로 온다.</div>`,
+  if (S.fixed) modal(`<h2>고정을 푼다</h2><div class="sub">바람이 볕마을로 들어온다. 정착지 나무에 다시 새 잎이 나고 실타래가 모인다.<br><br>대신 볕마을에도 밤이 온다. 해체자가 볕마을의 기록 천으로 온다.</div>`,
     [['푼다', () => { setFixed(false); SFX.lore(); }, true], ['그대로 둔다']]);
   else modal(`<h2>다시 붙잡는다</h2><div class="sub">볕마을에 밤이 오지 않는다. 해체자와 싸우지 않고 아침을 맞는다.<br><br>대신 정착지 나무가 멈추고, 그날 밤에는 안정화율이 오르지 않는다.</div>`,
     [['붙잡는다', () => { setFixed(true); SFX.lock(); }, true], ['그대로 둔다']]);
@@ -556,7 +556,7 @@ function drawMap() {
         ${afford && !open ? '<animate attributeName="r" values="29;33;29" dur="1.4s" repeatCount="indefinite"/>' : ''}</circle>
       <text x="${n.x}" y="${n.y + 8}" font-size="22" text-anchor="middle" opacity="${open || afford ? 1 : .35}">${n.icon}</text>
       <text class="node-label" x="${n.x}" y="${n.y + 46}">${n.name}</text>
-      ${open ? '' : `<text class="node-cost" x="${n.x}" y="${n.y + 60}">이음 ${n.cost}</text>`}
+      ${open ? '' : `<text class="node-cost" x="${n.x}" y="${n.y + 60}">실타래 ${n.cost}</text>`}
     </g>`;
   });
   svg += '</svg>';
@@ -570,16 +570,16 @@ function openNode(id) {
   const both = (S.lore[id] || []).length >= 2;
   if (both) { show('codex'); renderCodex(); return; }
   if (!open && S.ieum < n.cost) {
-    modal(`<h2>${n.name}</h2><div class="sub">이음이 ${n.cost - Math.floor(S.ieum)} 모자란다. 낮에 분류하거나 나무에서 받아 오자.</div>`, [['확인']]);
+    modal(`<h2>${n.name}</h2><div class="sub">실타래가 ${n.cost - Math.floor(S.ieum)} 모자란다. 낮에 분류하거나 나무에서 받아 오자.</div>`, [['확인']]);
     return;
   }
   const replayCost = Math.ceil(n.cost * 1.5);
   if (open) {
     if (S.ieum < replayCost) {
-      modal(`<h2>${n.name} — 다른 갈래</h2><div class="sub">다른 답을 고르려면 이음이 ${replayCost} 필요하다.</div>`, [['확인']]);
+      modal(`<h2>${n.name} — 다른 선택지</h2><div class="sub">다른 답을 고르려면 실타래가 ${replayCost} 필요하다.</div>`, [['확인']]);
       return;
     }
-    modal(`<h2>${n.name} — 다른 갈래</h2><div class="sub">이 장면을 다시 열고 아직 고르지 않은 답을 고른다. (이음 ${replayCost})</div>`,
+    modal(`<h2>${n.name} — 다른 선택지</h2><div class="sub">이 장면을 다시 열고 아직 고르지 않은 답을 고른다. (실타래 ${replayCost})</div>`,
       [['다시 열기', () => { S.ieum -= replayCost; playStory(n, true); }, true], ['그만두기']]);
     return;
   }
@@ -622,8 +622,8 @@ function chooseStory(n, k) {
   S.nodes[n.id] = S.nodes[n.id] ?? k;
   (S.lore[n.id] = S.lore[n.id] || []).push(k);
   const r = o.reward; let gain = '';
-  if (r.ieum) { S.ieum += r.ieum; gain = `이음 +${r.ieum}`; }
-  if (r.idle) { S.idle += r.idle; gain = `나무가 모으는 이음 +${r.idle}/분`; }
+  if (r.ieum) { S.ieum += r.ieum; gain = `실타래 +${r.ieum}`; }
+  if (r.idle) { S.idle += r.idle; gain = `나무가 모으는 실타래 +${r.idle}/분`; }
   if (r.slow) { S.slow += r.slow; gain = '밤에 해체자가 느려진다'; }
   if (r.hp) { S.hpBonus += r.hp; gain = '기록 천 +1'; }
   S.stab += 0.004; save();
@@ -641,7 +641,7 @@ function checkChapter() {
   if (S.done[ch.id] || !ch.nodes.every(n => S.nodes[n.id] != null)) return;
   S.done[ch.id] = true; S.stab += 0.05 * (S.ch + 1); save(); renderHome();
   if (ch.id === 'settle') {
-    modal(`<h2>정착지의 기록 천이 이어졌다</h2><div class="sub">영역 안정화율 ${S.stab.toFixed(3)}%<br><br>서린이 해 뜨는 쪽을 가리켰다. 그쪽에 일곱 해 전 서린이 붙잡은 마을이 있다.<br>남은 갈래를 고르면 정착지의 숨은 기록이 열린다.</div>`,
+    modal(`<h2>정착지의 기록 천이 이어졌다</h2><div class="sub">영역 안정화율 ${S.stab.toFixed(3)}%<br><br>서린이 해 뜨는 쪽을 가리켰다. 그쪽에 일곱 해 전 서린이 붙잡은 마을이 있다.<br>남은 선택지를 고르면 정착지의 숨은 기록이 열린다.</div>`,
       [['볕마을로', unlockByeot, true]]);
   } else {
     modal(`<h2>볕마을의 기록 천이 이어졌다</h2><div class="sub">영역 안정화율 ${S.stab.toFixed(3)}%<br><br>해담의 추가 동쪽으로 흔들린다. 다음 기록: 중심 도시 (준비 중)</div>`, [['확인', null, true]]);
@@ -654,13 +654,13 @@ function renderCodex() {
     `<h4 style="color:var(--dim);margin:12px 0 6px">${ch.name} · ${loreCount(ch)}/${ch.nodes.length * 2}</h4>` + ch.nodes.map(n => {
     const taken = S.lore[n.id] || [];
     if (!taken.length) return `<div class="entry locked"><h4>${n.icon} ${n.name}</h4>아직 열지 않은 조각</div>`;
-    return `<div class="entry"><h4>${n.icon} ${n.name} · 갈래 ${taken.length}/2</h4>` +
-      n.opts.map((o, k) => taken.includes(k) ? `<div>${o.lore}</div>` : `<div class="alt">— 고르지 않은 갈래 —</div>`).join('') + '</div>';
+    return `<div class="entry"><h4>${n.icon} ${n.name} · 선택지 ${taken.length}/2</h4>` +
+      n.opts.map((o, k) => taken.includes(k) ? `<div>${o.lore}</div>` : `<div class="alt">— 고르지 않은 선택지 —</div>`).join('') + '</div>';
   }).join('')).join('');
 }
 $('codexBtn').onclick = () => { renderCodex(); show('codex'); };
 $('codexBack').onclick = () => { show('home'); renderHome(); };
-$('streakBtn').onclick = () => modal(`<h2>마루의 매듭</h2><div class="sub">하루에 한 번 낮을 마치면 마루가 매듭을 하나 짓는다. 매듭이 이어질수록 아침에 받는 이음이 늘어난다.<br><br>지금 매듭: ${S.streak}개</div>`, [['확인']]);
+$('streakBtn').onclick = () => modal(`<h2>마루의 매듭</h2><div class="sub">하루에 한 번 낮을 마치면 마루가 매듭을 하나 짓는다. 매듭이 이어질수록 아침에 받는 실타래가 늘어난다.<br><br>지금 매듭: ${S.streak}개</div>`, [['확인']]);
 
 // ───────────────────────── 낮: 분류 ─────────────────────────
 const DAY_CARDS = 8;
@@ -680,7 +680,7 @@ function startDay(tutorial) {
   show('day'); nextCard();
 }
 function coach(html, warn) { $('cCoach').innerHTML = html; $('cCoach').classList.toggle('warn', !!warn); }
-function cardTime(sp) { return sp.deep ? 2.0 : 4.0; }  // 깊은 표본은 적응 구간 뒤의 2.0
+function cardTime(sp) { return sp.deep ? 2.0 : 4.0; }  // 깊은 표본은 튜토리얼 뒤의 2.0
 function nextCard() {
   if (D.idx >= D.deck.length) return endDay();
   const sp = D.deck[D.idx]; D.step = 0; D.observed = false; D.path = [];
@@ -760,25 +760,25 @@ function choose(side, ev) {
   }
 }
 function timeout() {
-  // 시간이 다 되면 정답도 오답도 아닌 흐릿한 선택으로 남는다
+  // 시간이 다 되면 정답도 오답도 아닌 시간 초과로 남는다
   timerId = null; D.combo = 0; D.blur++;
-  flash('flash-blur'); SFX.blur(); pop('흐릿한 선택', 'var(--dim)', innerWidth / 2, innerHeight / 2);
+  flash('flash-blur'); SFX.blur(); pop('시간 초과', 'var(--dim)', innerWidth / 2, innerHeight / 2);
   finishCard(false);
 }
 function finishCard(ok) {
   const sp = D.deck[D.idx];
   if (ok) {
     D.correct++;
-    if (S.red['sp_' + sp.id]) { delete S.red['sp_' + sp.id]; pop('붉은 줄이 이음으로', 'var(--gold)', innerWidth / 2, innerHeight / 3); }
+    if (S.red['sp_' + sp.id]) { delete S.red['sp_' + sp.id]; pop('붉은 줄이 실타래로', 'var(--gold)', innerWidth / 2, innerHeight / 3); }
   }
   D.idx++;
   if (D.tutorial && ok) { setTimeout(() => modal(TUTORIAL[sp.id].done, [['계속', nextCard, true]]), 420); return; }
   setTimeout(nextCard, ok ? 420 : 650);
 }
-function lockHere(ev) {  // 한 단계 이상 맞힌 뒤 여기서 확정: 안전하게 마무리
+function lockHere(ev) {  // 한 단계 이상 맞힌 뒤 여기서 멈추기: 안전하게 마무리
   if (D.step === 0 || timerId == null) return;
   clearInterval(timerId); timerId = null;
-  pop('확정', 'var(--gold)', ev.clientX, ev.clientY - 20); buzz(10); SFX.lock();
+  pop('멈춤', 'var(--gold)', ev.clientX, ev.clientY - 20); buzz(10); SFX.lock();
   finishCard(true);
 }
 function showCombo() {
@@ -822,12 +822,12 @@ function endDay() {
   S.day++; save();
   modal(`<h2>해가 진다</h2>
     <div class="stat"><span>맞힌 표본</span><b>${D.correct}/${D.deck.length}</b></div>
-    <div class="stat"><span>얻은 이음</span><b>${fmt(D.earned)}</b></div>
+    <div class="stat"><span>얻은 실타래</span><b>${fmt(D.earned)}</b></div>
     <div class="stat"><span>최고 연속</span><b>${D.maxCombo}</b></div>
     <div class="stat"><span>붉은 줄</span><b style="color:var(--red)">${D.red}</b></div>
-    <div class="stat"><span>흐릿한 선택</span><b style="color:var(--dim)">${D.blur}</b></div>
+    <div class="stat"><span>시간 초과</span><b style="color:var(--dim)">${D.blur}</b></div>
     <div class="sub" style="margin-top:10px">${D.tutorial
-      ? '밤에는 해체자가 기록 천으로 이어진 줄을 끊으러 온다. 사각거리는 실밥을 눌러 흩어라.'
+      ? '밤에는 해체자가 기록 천으로 이어진 줄을 끊으러 온다. 사각거리는 실밥을 눌러 쫓아내라.'
       : fixedHere() ? '볕마을은 고정돼 있다. 바깥이 어두워져도 안에는 밤이 오지 않는다.'
       : '붉은 줄이 남은 곳으로 해체자가 먼저 온다.'}</div>`,
     [[fixedHere() ? '저녁을 맞는다' : '밤을 맞는다', startNight, true]]);
@@ -948,18 +948,18 @@ function endNight() {
   // 첫 5분에는 광고를 권하지 않는다
   if (S.onboarded) buttons.unshift(['광고 보고 아침 보상 두 배 (시험용: 바로 지급)', () => { S.ieum += morning; save(); goHome(); }]);
   modal(`<h2>새벽</h2><div class="sub">${result}</div>
-    <div class="stat"><span>흩은 해체자</span><b>${N.kills}</b></div>
+    <div class="stat"><span>쫓아낸 해체자</span><b>${N.kills}</b></div>
     <div class="stat"><span>끊긴 줄</span><b style="color:var(--red)">${lostNames}</b></div>
-    <div class="stat"><span>마루의 매듭 보너스</span><b>이음 +${morning}</b></div>
-    ${gift ? `<div class="stat"><span>나무가 보탠 이음</span><b>+${gift}</b></div>` : ''}
+    <div class="stat"><span>마루의 매듭 보너스</span><b>실타래 +${morning}</b></div>
+    ${gift ? `<div class="stat"><span>나무 수확</span><b>+${gift}</b></div>` : ''}
     <div class="stat"><span>영역 안정화율</span><b>${S.stab.toFixed(3)}%</b></div>`, buttons);
 }
 function fixedDawn() {  // 고정된 볕마을: 밤 없이 아침. 매듭 보너스는 받지만 안정화율은 그대로다
   const morning = 5 + Math.min(S.streak, 7) * 2;
   S.ieum += morning; save();
   SFX.dawn(true);
-  modal(`<h2>멈춘 저녁</h2><div class="sub">바깥에는 밤이 왔다. 볕마을 안은 늦은 오후 그대로였다. 주민들은 저녁이라며 잠들었다.<br>기록 천은 한 올도 변하지 않았다.</div>
-    <div class="stat"><span>마루의 매듭 보너스</span><b>이음 +${morning}</b></div>
+  modal(`<h2>밤 없는 저녁</h2><div class="sub">바깥에는 밤이 왔다. 볕마을 안은 늦은 오후 그대로였다. 주민들은 저녁이라며 잠들었다.<br>기록 천은 한 올도 변하지 않았다.</div>
+    <div class="stat"><span>마루의 매듭 보너스</span><b>실타래 +${morning}</b></div>
     <div class="stat"><span>영역 안정화율</span><b>${S.stab.toFixed(3)}% (그대로)</b></div>`,
     [['광고 보고 아침 보상 두 배 (시험용: 바로 지급)', () => { S.ieum += morning; save(); goHome(); }], ['아침으로', goHome, true]]);
 }
@@ -967,7 +967,7 @@ function goHome() {
   show('home'); renderHome(); tickIdle();
   if (!S.onboarded) {
     S.onboarded = true; save();
-    modal(`<h2>기록 천</h2><div class="sub">모은 이음으로 기록 천의 조각을 연다. 조각마다 갈래가 둘이고, 고른 쪽이 이 세계의 기록으로 남는다.<br><br>빛나는 <b style="color:var(--gold)">우물</b>을 눌러 보자.</div>`, [['확인', null, true]]);
+    modal(`<h2>기록 천</h2><div class="sub">모은 실타래로 기록 천의 조각을 연다. 조각마다 선택지가 둘이고, 고른 쪽이 이 세계의 기록으로 남는다.<br><br>빛나는 <b style="color:var(--gold)">우물</b>을 눌러 보자.</div>`, [['확인', null, true]]);
   }
 }
 
@@ -980,7 +980,7 @@ renderHome(); tickIdle();
 if (S.seen && !S.onboarded) { S.onboarded = true; save(); }
 function startTutorial() {
   $('sSkip').style.display = 'none';
-  modal(`<h2>표본 01 — 물</h2><div class="sub">스크린은 연우에게만 보인다. 둘 중 하나를 눌러라. 맞히면 <b style="color:var(--root)">이음</b>이 모인다.<br>버튼 대신 카드를 좌우로 밀어도 된다.</div>`,
+  modal(`<h2>표본 01 — 물</h2><div class="sub">스크린은 연우에게만 보인다. 둘 중 하나를 눌러라. 맞히면 <b style="color:var(--root)">실타래</b>가 모인다.<br>버튼 대신 카드를 좌우로 밀어도 된다.</div>`,
     [['분류한다', () => startDay(true), true]]);
 }
 if (!S.onboarded) {

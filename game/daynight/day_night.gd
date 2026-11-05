@@ -11,7 +11,7 @@ const DIM := Color("#8a8f98")
 const SKY := Color("#7fd3f2")      # 정답·복원의 하늘색 선
 const RED := Color("#d9574a")      # 연우만 보는 붉은 줄
 const YELLOW := Color("#e8c547")   # 서린의 노란 실
-const BLUR := Color("#9a8fb0")     # 시간 초과의 흐릿한 선택
+const BLUR := Color("#9a8fb0")     # 시간 초과 표시
 const UNDOER := Color("#cfc9bd")   # 회백색 해체자
 const CLOTH := Color("#c9b48a")
 const NIGHT_TINT := Color(0.03, 0.04, 0.09, 0.55)
@@ -59,7 +59,7 @@ func _build_ui() -> void:
 	left_button = _button(Vector2(1060, 430), Vector2(200, 52), func(): logic.choose(0))
 	right_button = _button(Vector2(1060, 490), Vector2(200, 52), func(): logic.choose(1))
 	lock_button = _button(Vector2(1060, 560), Vector2(200, 40), func(): logic.lock())
-	lock_button.text = "여기서 확정"
+	lock_button.text = "여기서 멈추기"
 	action_button = _button(Vector2(1060, 620), Vector2(200, 52), _on_action)
 	fix_button = _button(Vector2(1060, 560), Vector2(200, 46), func(): logic.fix())
 
@@ -164,8 +164,8 @@ func _refresh() -> void:
 	match ph:
 		"title":
 			top_label.text = "THE ROOT — 낮과 밤 프로토타입"
-			info_label.text = "낮에는 분류해서 이음을 모으고, 밤에는 해체자를 막아 이름을 지킨다."
-			feedback_label.text = "낮: ←/→ 분류, ↓ 여기서 확정 · 저녁: 선 클릭 = 노란 실 · 밤: 집 클릭 = 이음, Space/우클릭 = 여유(느린 시간), F = 고정"
+			info_label.text = "낮에는 분류해서 실타래를 모으고, 밤에는 해체자를 막아 이름을 지킨다."
+			feedback_label.text = "낮: ←/→ 분류, ↓ 여기서 멈추기 · 저녁: 선 클릭 = 노란 실 · 밤: 집 클릭 = 잇기, Space/우클릭 = 집중(느린 시간), F = 고정"
 			action_button.text = "시작 (Enter)"
 		"day":
 			var s := logic.step()
@@ -177,10 +177,10 @@ func _refresh() -> void:
 		"evening":
 			top_label.text = "%d일째 저녁" % logic.day
 			action_button.text = "밤을 맞는다 (Enter)"
-			feedback_label.text = "점선은 해체자가 올 길이다. 선을 눌러 노란 실을 건다(이음 1). 고정은 이번 밤 이름을 지키지만 내일은 자라는 것이 멈춘다."
+			feedback_label.text = "점선은 해체자가 올 길이다. 선을 눌러 노란 실을 건다(실타래 1). 고정은 이번 밤 이름을 지키지만 내일은 자라는 것이 멈춘다."
 		"night":
 			top_label.text = "%d일째 밤" % logic.day
-			feedback_label.text = "사각거리는 소리가 들린다. 끊기는 집을 눌러 다시 잇는다(이음 1)."
+			feedback_label.text = "사각거리는 소리가 들린다. 끊기는 집을 눌러 다시 잇는다(실타래 1)."
 		"dawn":
 			var r: Dictionary = logic.dawn_report
 			top_label.text = "%d일째 새벽" % r["day"]
@@ -206,7 +206,7 @@ func _refresh() -> void:
 
 
 func _refresh_dynamic() -> void:
-	info_label.text = "이음 %d   여유 %.1f   서린의 손 %d/%d   기록 천 %d   남은 이름 %d   새 잎 %d   영역 안정화율 %.3f%%" % [
+	info_label.text = "실타래 %d   집중 %.1f   서린의 손 %d/%d   기록 천 %d   남은 이름 %d   새 잎 %d   영역 안정화율 %.3f%%" % [
 		logic.ieum, logic.yeoyu, logic.hand, Logic.HAND_LIMIT, logic.cloth_hp, logic.names_left(), logic.leaves, logic.stability]
 	if logic.phase == "day":
 		var c := logic.card()
@@ -219,7 +219,7 @@ func _refresh_dynamic() -> void:
 			txt += c["note"] + "\n\n"
 		txt += "걸린 곳: %s\n\n" % Logic.NODES[c["house"]]["label"]
 		if logic.adaptation_notice and logic.card_index == 0 and logic.step_index == 0:
-			txt += "적응 구간 종료.\n"
+			txt += "튜토리얼 종료.\n"
 		txt += "분류:" if logic.step_index < c["steps"].size() - 1 else "최종 분류:"
 		card_label.text = txt
 	elif logic.phase == "night":

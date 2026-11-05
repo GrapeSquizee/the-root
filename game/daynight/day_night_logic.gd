@@ -75,8 +75,8 @@ var day := 1
 var stability := 0.003
 
 # 자원
-var ieum := 0          # 이음: 정답으로 쌓이는 방어 자원
-var yeoyu := 0.0       # 여유: 빠른 정답으로 쌓이는 느린 시간(초)
+var ieum := 0          # 실타래: 정답으로 쌓이는 방어 자원
+var yeoyu := 0.0       # 집중: 빠른 정답으로 쌓이는 느린 시간(초)
 var hand := 0          # 서린의 손 굳기
 var fix_cooldown := 0
 var fixed_tonight := false
@@ -172,7 +172,7 @@ func start_day() -> void:
 	fixed_tonight = false
 	day_log = {"correct": 0, "wrong": 0, "blur": 0, "locked": 0}
 	yeoyu = 0.0
-	# 첫날은 적응 구간(4.0), 둘째 날부터 2.0. 소설 9화의 `적응 구간 종료.`와 같은 자리다.
+	# 첫날은 튜토리얼(4.0), 둘째 날부터 2.0. 소설 9화의 `튜토리얼 종료.`와 같은 자리다.
 	time_limit = TUTORIAL_LIMIT if day == 1 else ADAPTED_LIMIT
 	adaptation_notice = day == 2
 	var pool: Array = CARDS.duplicate()
@@ -233,7 +233,7 @@ func choose(side: int) -> bool:
 	return correct
 
 
-## 여기서 확정(LOCK). 맞힌 깊이까지만 이음으로 남기고 더 내려가지 않는다.
+## 여기서 멈추기(LOCK). 맞힌 깊이까지만 실타래로 남기고 더 내려가지 않는다.
 func lock() -> bool:
 	if phase != "day" or step_index == 0:
 		return false
@@ -250,7 +250,7 @@ func _finish_card(outcome: String) -> void:
 			last_feedback = "%s — 하늘색 선이 이어졌다." % c["name"]
 		"locked":
 			day_log["locked"] += 1
-			last_feedback = "%s — 여기서 확정했다." % c["name"]
+			last_feedback = "%s — 여기서 멈췄다." % c["name"]
 		"wrong":
 			day_log["wrong"] += 1
 			# 깊이 욕심을 내다 틀리면 굵은 붉은 줄이 남는다(13번 문서 4.2절).
@@ -259,9 +259,9 @@ func _finish_card(outcome: String) -> void:
 			last_feedback = "%s — 틀렸다. %s에 붉은 줄이 남았다." % [c["name"], NODES[c["house"]]["label"]]
 		"blur":
 			day_log["blur"] += 1
-			# 시간 초과는 오답이 아니라 흐릿한 선택으로 남는다(세계 규칙 2.4절).
+			# 시간 초과는 오답으로 치지 않는다(세계 규칙 2.4절).
 			h["blur"] = true
-			last_feedback = "%s — 숫자가 0이 되었다. 선택이 흐릿하게 번졌다." % c["name"]
+			last_feedback = "%s — 숫자가 0이 되었다. 시간 초과로 스크린이 번졌다." % c["name"]
 	card_index += 1
 	step_index = 0
 	timer = time_limit
@@ -471,7 +471,7 @@ func _cut_time(house: String) -> float:
 	return CUT_TIME / (1.0 + houses[house]["red"])
 
 
-## 이음: 끊기는 곳을 다시 잇는다. 주변의 해체자가 한꺼번에 흩어진다(소설 16화).
+## 잇기: 끊기는 곳을 다시 잇는다. 주변의 해체자가 한꺼번에 흩어진다(소설 16화).
 func mend(node_id: String) -> bool:
 	if phase != "night" or ieum < 1:
 		return false
