@@ -98,6 +98,11 @@ h1 { font-size: 20px; margin: 4px 0; letter-spacing: -0.02em; }
 
 /* 밤 */
 #night canvas { flex: 1; width: 100%; border-radius: 16px; background: #090c0b; touch-action: none; }
+.tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+.tool { padding: 9px 4px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); font-size: 14px; line-height: 1.3; }
+.tool small { display: block; color: var(--dim); font-size: 11px; }
+.tool.armed { border-color: var(--yellow); box-shadow: 0 0 0 2px rgba(242,214,75,.35) inset; }
+.tool:disabled { opacity: .35; }
 /* 기록 */
 #codex .list { flex: 1; overflow: auto; }
 .entry { padding: 10px 12px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); margin-bottom: 8px; font-size: 14px; line-height: 1.5; }
@@ -189,8 +194,13 @@ h1 { font-size: 20px; margin: 4px 0; letter-spacing: -0.02em; }
       <span class="spacer"></span>
       <span class="chip">흩은 해체자 <b id="nKill">0</b></span>
     </div>
-    <div class="sub" style="margin:6px 0">사각거리는 실밥을 눌러 흩어라. 붉은 줄에 걸린 곳으로 먼저 몰려든다.</div>
+    <div class="sub" id="nHint" style="margin:6px 0">사각거리는 실밥을 눌러 흩어라. 붉은 줄에 걸린 곳으로 먼저 몰려든다.</div>
     <canvas id="nCanvas"></canvas>
+    <div class="tools" id="nTools">
+      <button class="tool" id="tYarn" style="color:var(--yellow)">🧶 노란 실<small id="tYarnSub">이음 12</small></button>
+      <button class="tool" id="tCut">✂️ 끊기<small id="tCutSub">하룻밤 한 번</small></button>
+      <button class="tool" id="tFix">🔒 고정<small id="tFixSub">서린의 손 0</small></button>
+    </div>
   </section>
 
   <!-- 세계 기록 -->
@@ -386,7 +396,8 @@ const TUT_WAIT = '숫자가 0이 됐다. 원래는 <b>흐릿한 선택</b>으로
 // ───────────────────────── 상태 ─────────────────────────
 const SAVE_KEY = 'theroot_mobile_v1';
 const fresh = () => ({ ieum: 0, stab: 0.003, day: 0, nodes: {}, lore: {}, red: {}, idle: 1, slow: 0, hpBonus: 0,
-  lastCollect: Date.now(), streak: 0, lastDay: '', best: 0, ch: 0, unlocked: 0, done: {}, fixed: false, fixedAt: 0 });
+  lastCollect: Date.now(), streak: 0, lastDay: '', best: 0, ch: 0, unlocked: 0, done: {}, fixed: false, fixedAt: 0,
+  hand: 0, stiff: 0, toolSeen: {} });  // hand: 서린의 손 굳기(0~100), stiff: 손이 굳어 쉬는 남은 밤
 let S = fresh();
 function load() { try { const raw = localStorage.getItem(SAVE_KEY); if (raw) S = Object.assign(fresh(), JSON.parse(raw)); } catch (e) {} }
 function save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) {} }
@@ -463,6 +474,8 @@ const SFX = (() => {
     scatter: () => { hiss(.12, 1800, .8, .16); tone(660, .08, 'triangle', .07, 990); },
     cut: () => { tone(120, .35, 'sawtooth', .1, 60); hiss(.3, 700, .8, .1); },
     hurt: () => { tone(220, .5, 'sine', .2, 110); tone(233, .5, 'sine', .12, 116); },
+    yarn: () => { tone(330, .25, 'triangle', .12, 440); tone(660, .12, 'sine', .05, null, .05); },
+    fix: () => { [196, 247, 294].forEach((f, i) => tone(f, .9, 'sine', .1, null, i * .03)); hiss(.5, 300, .5, .05); },
     dawn: (kept) => (kept ? [392, 494, 587, 784] : [392, 370, 330]).forEach((f, i) => tone(f, .6, 'sine', .1, null, i * .14)),
   };
 })();
@@ -819,6 +832,7 @@ function endDay() {
     const y = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
     S.streak = S.lastDay === y ? S.streak + 1 : 1; S.lastDay = today;
   }
+  S.hand = Math.max(0, S.hand - D.correct * 2);  // 낮에 번 여유가 서린의 손을 푼다
   S.day++; save();
   modal(`<h2>해가 진다</h2>
     <div class="stat"><span>맞힌 표본</span><b>${D.correct}/${D.deck.length}</b></div>
@@ -834,9 +848,32 @@ function endDay() {
 }
 
 // ───────────────────────── 밤: 해체자 ─────────────────────────
+// 밤의 수단(docs/13 5.3절): 노란 실은 줄 하나를 느리게, 끊기는 줄 하나를 내주고 해체자를 모으며,
+// 고정은 구역 전체를 잠깐 멈추는 대신 서린의 손을 굳게 한다.
+const YARN_COST = 12;      // 노란 실 한 줄의 이음
+const YARN_SLOW = .45;     // 실 앞(바깥 구간)에서의 속도 배율
+const BAIT_DUR = 5;        // 끊은 끝으로 해체자가 몰리는 시간(내부 값)
+const FIX_DUR = 3;         // 고정으로 멈추는 시간(내부 값)
+const FIX_HAND = 45;       // 고정 한 번에 굳는 정도
+const HAND_DAWN = 15;      // 새벽마다 풀리는 정도(볕마을을 붙잡고 있으면 풀리지 않는다)
+const STIFF_NIGHTS = 2;    // 손이 다 굳으면 쉬는 밤
+const TOOLS = [
+  { id: 'yarn', ok: () => S.nodes.yarn != null, title: '노란 실',
+    text: `<b style="color:var(--yellow)">노란 실</b> — 서린이 위험한 곳 앞에 거는 실이다. 줄 하나를 눌러 실을 걸면, 그 줄로 오는 해체자가 실 앞에서 느려진다. 한 줄에 이음 ${YARN_COST}.` },
+  { id: 'cut', ok: () => S.nodes.red != null, title: '끊기',
+    text: '<b>끊기</b> — 약한 줄 하나를 먼저 끊는다. 해체자가 잠깐 끊긴 끝으로 몰려 한데 뭉친다. 그 줄은 잃는다. 하룻밤에 한 번.' },
+  { id: 'fix', ok: () => S.unlocked >= 1, title: '고정',
+    text: '<b>고정</b> — 서린이 이곳을 이름 있던 때의 모양으로 붙잡는다. 잠깐 해체자가 모두 멈춘다. 대신 그 밤에는 안정화율이 오르지 않고, 서린의 손이 굳어 간다. 손이 다 굳으면 이틀 밤 동안 노란 실도 고정도 쓸 수 없다.' },
+];
 let N = null;
 function startNight() {
   if (fixedHere()) return fixedDawn();
+  const fresh = TOOLS.filter(t => t.ok() && !S.toolSeen[t.id]);
+  if (!fresh.length) return beginNight();
+  fresh.forEach(t => { S.toolSeen[t.id] = true; }); save();
+  modal(`<h2>밤의 수단</h2><div class="sub">${fresh.map(t => t.text).join('<br><br>')}</div>`, [['밤을 맞는다', beginNight, true]]);
+}
+function beginNight() {
   show('night');
   const NODES = curNodes();
   const cv = $('nCanvas'), dpr = devicePixelRatio || 1;
@@ -850,108 +887,211 @@ function startNight() {
   NODES.forEach((n, i) => { S.red[n.id] = i === (S.day % NODES.length) ? redTotal : 0; });
   const spokes = NODES.map((n, i) => {
     const ang = -Math.PI / 2 + i * Math.PI * 2 / NODES.length;
-    return { n, ang, x: cx + Math.cos(ang) * R, y: cy + Math.sin(ang) * R, ox: cx + Math.cos(ang) * OUT, oy: cy + Math.sin(ang) * OUT, cut: false, red: S.red[n.id] };
+    return { n, ang, x: cx + Math.cos(ang) * R, y: cy + Math.sin(ang) * R, ox: cx + Math.cos(ang) * OUT, oy: cy + Math.sin(ang) * OUT,
+      cut: false, red: S.red[n.id], yarn: false, flash: 0 };
   });
   const hpMax = 3 + S.hpBonus;
-  N = { ctx, W, H, cx, cy, spokes, foes: [], parts: [], t: 0, dur: 20, hp: hpMax, hpMax, kills: 0, cuts: 0, spawnAcc: 0, last: performance.now(), weights, over: false };
+  N = { ctx, W, H, cx, cy, spokes, foes: [], parts: [], t: 0, dur: 20, hp: hpMax, hpMax, kills: 0, cuts: 0, spawnAcc: 0, last: performance.now(), weights, over: false,
+    armed: null, bait: null, freeze: 0, cutUsed: false, fixUsed: false, yarns: 0, stiff: S.stiff > 0 };
+  if (N.stiff) { S.stiff--; if (!S.stiff) S.hand = 40; }  // 쉬고 나면 손이 조금 풀린 채로 돌아온다
+  save();
   const level = 1 + S.day * 0.15;
   N.rate = 1.1 * level;         // 초당 등장 수
   N.speed = 34 * Math.min(level, 2.2) * (1 - Math.min(S.slow, 3) * .12);
   if (!S.onboarded) { N.dur = 12; N.rate *= .6; }  // 첫 밤은 짧고 느슨하게
   cv.onpointerdown = (e) => {
-    const r = cv.getBoundingClientRect(); const x = e.clientX - r.left, y = e.clientY - r.top;
-    let hit = false;
-    N.foes.forEach(f => { if (!f.dead && Math.hypot(f.x - x, f.y - y) < 34) { f.dead = true; hit = true; N.kills++; burst(f.x, f.y, '#c9c3b6'); } });
-    if (hit) { buzz(8); SFX.scatter(); S.ieum += 1; }
+    const r = cv.getBoundingClientRect(); nightTap(e.clientX - r.left, e.clientY - r.top, e.clientX, e.clientY);
   };
+  renderTools();
   requestAnimationFrame(nightLoop);
 }
+function nightTap(x, y, px, py) {
+  if (!N || N.over) return;
+  if (N.armed) return applyTool(N.armed, nearestSpoke(x, y), px, py);
+  let hit = 0;
+  N.foes.forEach(f => { if (!f.dead && Math.hypot(f.x - x, f.y - y) < 34) { f.dead = true; hit++; N.kills++; burst(f.x, f.y, '#c9c3b6'); } });
+  if (hit) {
+    buzz(hit > 2 ? [8, 20, 8] : 8); SFX.scatter(); S.ieum += hit;
+    if (hit > 2) { S.ieum += hit; pop('한꺼번에 ' + hit, 'var(--gold)', px, py - 24); }  // 뭉친 것을 한 번에 흩으면 이음을 두 배로
+  }
+}
+function nearestSpoke(x, y) {  // 누른 곳의 방향에 가장 가까운 줄
+  const a = Math.atan2(y - N.cy, x - N.cx);
+  let best = 0, bd = 9;
+  N.spokes.forEach((s, i) => { const d = Math.abs(Math.atan2(Math.sin(a - s.ang), Math.cos(a - s.ang))); if (d < bd) { bd = d; best = i; } });
+  return best;
+}
+function toolState(id) {  // 쓸 수 없으면 그 이유, 쓸 수 있으면 ''
+  const t = TOOLS.find(x => x.id === id);
+  if (!t.ok()) return 'locked';
+  if (id === 'yarn') return N.stiff ? '서린의 손이 굳었다' : S.ieum < YARN_COST ? '이음이 모자란다' : '';
+  if (id === 'cut') return N.cutUsed ? '오늘 밤은 썼다' : '';
+  return N.stiff ? '서린의 손이 굳었다' : N.fixUsed ? '오늘 밤은 썼다' : '';
+}
+function renderTools() {
+  const any = TOOLS.some(t => t.ok());
+  $('nTools').style.display = any ? '' : 'none';
+  [['yarn', 'tYarn', 'tYarnSub'], ['cut', 'tCut', 'tCutSub'], ['fix', 'tFix', 'tFixSub']].forEach(([id, b, sub]) => {
+    const st = toolState(id);
+    $(b).style.visibility = st === 'locked' ? 'hidden' : '';
+    $(b).disabled = !!st && st !== 'locked' && N.armed !== id;
+    $(b).classList.toggle('armed', N.armed === id);
+    $(sub).textContent = st && st !== 'locked' ? st
+      : id === 'yarn' ? '이음 ' + YARN_COST : id === 'cut' ? '하룻밤 한 번' : '서린의 손 ' + Math.round(S.hand);
+  });
+  $('nHint').textContent = N.armed === 'yarn' ? '노란 실을 걸 줄 쪽을 누른다.'
+    : N.armed === 'cut' ? '끊을 줄 쪽을 누른다. 해체자가 잠깐 그 끝으로 몰린다.'
+    : N.t < N.freeze ? '서린이 붙잡았다. 해체자가 멈췄다.'
+    : '사각거리는 실밥을 눌러 흩어라. 붉은 줄에 걸린 곳으로 먼저 몰려든다.';
+}
+function armTool(id) {
+  if (!N || N.over || toolState(id)) return;
+  if (id === 'fix') return applyTool('fix');
+  N.armed = N.armed === id ? null : id; SFX.page(); renderTools();
+}
+function applyTool(id, i, px, py) {
+  N.armed = null;
+  const s = i != null ? N.spokes[i] : null;
+  if (id === 'yarn') {
+    if (s.yarn || s.cut) { pop(s.cut ? '끊긴 줄' : '이미 걸었다', 'var(--dim)', px, py); renderTools(); return; }
+    S.ieum -= YARN_COST; s.yarn = true; N.yarns++; SFX.yarn(); buzz(10);
+    pop('노란 실', 'var(--yellow)', px, py - 20);
+  } else if (id === 'cut') {
+    if (s.cut) { pop('이미 끊겼다', 'var(--dim)', px, py); renderTools(); return; }
+    s.cut = true; N.cuts++; N.cutUsed = true; N.bait = { s: i, until: N.t + BAIT_DUR };
+    burst(s.x, s.y, '#e0524f'); SFX.cut(); buzz(25);
+    pop('끊었다', 'var(--red)', px, py - 20);
+  } else if (id === 'fix') {
+    N.fixUsed = true; N.freeze = N.t + FIX_DUR; S.hand = Math.min(100, S.hand + FIX_HAND); SFX.fix(); buzz([20, 40, 20]);
+    if (S.hand >= 100) {
+      S.stiff = STIFF_NIGHTS;
+      setTimeout(() => pop('“손이 안 펴져. 당분간 못 붙잡아.”', 'var(--yellow)', innerWidth / 2, innerHeight * .35), 300);
+    }
+  }
+  save(); renderTools();
+}
+$('tYarn').onclick = () => armTool('yarn');
+$('tCut').onclick = () => armTool('cut');
+$('tFix').onclick = () => armTool('fix');
 function burst(x, y, c) { for (let i = 0; i < 10; i++) N.parts.push({ x, y, vx: (Math.random() - .5) * 220, vy: (Math.random() - .5) * 220, life: .5, c }); }
 function pickSpoke() {
+  if (N.bait && N.t < N.bait.until) return N.bait.s;  // 끊은 끝으로 몰린다
   const tot = N.weights.reduce((a, b) => a + b, 0); let r = Math.random() * tot;
   for (let i = 0; i < N.weights.length; i++) { r -= N.weights[i]; if (r <= 0) return i; } return 0;
 }
 function nightLoop(now) {
   if (!N || N.over) return;
-  const dt = Math.min(.05, (now - N.last) / 1000); N.last = now; N.t += dt;
-  N.spawnAcc += dt * N.rate * (1 + N.t / N.dur);
-  while (N.spawnAcc >= 1) {
-    N.spawnAcc -= 1; const i = pickSpoke(), s = N.spokes[i];
-    N.foes.push({ s: i, p: 0, x: s.ox, y: s.oy, sp: N.speed * (s.red ? 1.3 : 1) * (.85 + Math.random() * .3), wob: Math.random() * 6 });
+  const dt = Math.min(.05, Math.max(0, (now - N.last) / 1000)); N.last = now; N.t += dt;
+  const frozen = N.t < N.freeze, baiting = N.bait && N.t < N.bait.until;
+  if (!frozen) {
+    N.spawnAcc += dt * N.rate * (1 + N.t / N.dur);
+    while (N.spawnAcc >= 1) {
+      N.spawnAcc -= 1; const i = pickSpoke(), s = N.spokes[i];
+      if (s.yarn) s.flash = .35;  // 노란 실이 걸린 줄은 해체자가 들어올 때 빛나 미리 알린다
+      N.foes.push({ s: i, p: 0, x: s.ox, y: s.oy, sp: N.speed * (s.red ? 1.3 : 1) * (.85 + Math.random() * .3), wob: Math.random() * 6 });
+    }
   }
   N.foes.forEach(f => {
     if (f.dead) return;
     const s = N.spokes[f.s];
     const L1 = Math.hypot(s.ox - s.x, s.oy - s.y), L2 = Math.hypot(s.x - N.cx, s.y - N.cy);
-    f.p += f.sp * dt;
+    if (!frozen) f.p += f.sp * dt * (s.yarn && f.p < L1 ? YARN_SLOW : 1);
+    if (baiting && f.s === N.bait.s && f.p > L1) f.p = L1;  // 끊긴 끝에 모여 갉는다
     if (f.p < L1) { const k = f.p / L1; f.x = s.ox + (s.x - s.ox) * k; f.y = s.oy + (s.y - s.oy) * k; }
     else {
       if (!s.cut) { s.cut = true; N.cuts++; burst(s.x, s.y, '#e0524f'); buzz(25); SFX.cut(); }
       const k = Math.min(1, (f.p - L1) / L2); f.x = s.x + (N.cx - s.x) * k; f.y = s.y + (N.cy - s.y) * k;
       if (k >= 1) { f.dead = true; N.hp--; burst(N.cx, N.cy, '#e3c46b'); buzz([40, 30, 40]); SFX.hurt(); }
     }
-    f.x += Math.sin(N.t * 9 + f.wob) * 1.2;
+    if (!frozen) f.x += Math.sin(N.t * 9 + f.wob) * 1.2;
   });
-  // 해체자의 사각거림: 많을수록 자주, 크게
-  N.scratchAcc = (N.scratchAcc || 0) + dt * N.foes.length * 2.5;
-  if (N.scratchAcc >= 1) { N.scratchAcc = 0; SFX.scratch(N.foes.length); }
+  N.spokes.forEach(s => { s.flash = Math.max(0, s.flash - dt); });
+  // 해체자의 사각거림: 많을수록 자주, 크게. 고정 중에는 조용하다
+  if (!frozen) {
+    N.scratchAcc = (N.scratchAcc || 0) + dt * N.foes.length * 2.5;
+    if (N.scratchAcc >= 1) { N.scratchAcc = 0; SFX.scratch(N.foes.length); }
+  }
   N.foes = N.foes.filter(f => !f.dead);
   N.parts.forEach(p => { p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt; }); N.parts = N.parts.filter(p => p.life > 0);
-  drawNight();
+  drawNight(frozen, baiting);
   $('nTime').textContent = Math.max(0, Math.ceil(N.dur - N.t));
   $('nHp').textContent = '♥'.repeat(Math.max(0, N.hp)) + '♡'.repeat(Math.max(0, N.hpMax - N.hp));
   $('nKill').textContent = N.kills;
+  renderTools();
   if (N.t >= N.dur || N.hp <= 0) return endNight();
   requestAnimationFrame(nightLoop);
 }
-function drawNight() {
+function drawNight(frozen, baiting) {
   const { ctx, W, H, cx, cy } = N;
   ctx.clearRect(0, 0, W, H);
-  N.spokes.forEach(s => {
+  N.spokes.forEach((s, i) => {
     ctx.strokeStyle = s.cut ? '#3a2422' : s.red ? '#e0524f' : (S.nodes[s.n.id] != null ? '#6fd3c1' : '#2f3f36');
     ctx.lineWidth = s.red ? 2 + Math.min(s.red, 4) : 2;
     ctx.setLineDash(s.cut ? [3, 7] : []);
     ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(s.x, s.y); ctx.stroke();
     ctx.strokeStyle = '#1f2a24'; ctx.setLineDash([2, 8]); ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.ox, s.oy); ctx.stroke();
     ctx.setLineDash([]);
+    if (s.yarn) {  // 바깥 구간을 가로지르는 노란 실
+      const mx = s.x + (s.ox - s.x) * .45, my = s.y + (s.oy - s.y) * .45, px = -Math.sin(s.ang) * 13, py = Math.cos(s.ang) * 13;
+      ctx.strokeStyle = '#f2d64b'; ctx.lineWidth = 2.5 + s.flash * 8;
+      ctx.beginPath(); ctx.moveTo(mx - px, my - py); ctx.lineTo(mx + px, my + py); ctx.stroke();
+    }
+    if (baiting && i === N.bait.s) {  // 해체자가 몰리는 끊긴 끝
+      ctx.strokeStyle = 'rgba(224,82,79,.6)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(s.x, s.y, 30 + Math.sin(N.t * 10) * 4, 0, Math.PI * 2); ctx.stroke();
+    }
     ctx.font = '22px sans-serif'; ctx.textAlign = 'center'; ctx.globalAlpha = s.cut ? .3 : 1;
     ctx.fillText(s.n.icon, s.x, s.y + 8); ctx.globalAlpha = 1;
   });
   ctx.fillStyle = '#16231d'; ctx.strokeStyle = '#e3c46b'; ctx.lineWidth = 2;
   ctx.beginPath(); ctx.arc(cx, cy, 26, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
   ctx.font = '24px sans-serif'; ctx.fillText('📜', cx, cy + 8);
-  N.foes.forEach(f => {  // 회백색 실밥 뭉치
+  N.foes.forEach(f => {  // 회백색 실밥 뭉치. 고정 중에는 움직이지 않는다
     ctx.strokeStyle = '#c9c3b6'; ctx.lineWidth = 1.4;
+    const tt = frozen ? N.freeze - FIX_DUR : N.t;
     for (let k = 0; k < 6; k++) {
-      const a = k + N.t * 4 + f.wob; ctx.beginPath();
+      const a = k + tt * 4 + f.wob; ctx.beginPath();
       ctx.moveTo(f.x, f.y); ctx.lineTo(f.x + Math.cos(a) * 9, f.y + Math.sin(a * 1.3) * 9); ctx.stroke();
     }
     ctx.fillStyle = '#e8e2d4'; ctx.beginPath(); ctx.arc(f.x, f.y, 4.5, 0, Math.PI * 2); ctx.fill();
   });
   N.parts.forEach(p => { ctx.globalAlpha = Math.max(0, p.life * 2); ctx.fillStyle = p.c; ctx.fillRect(p.x, p.y, 3, 3); });
   ctx.globalAlpha = 1;
+  if (frozen) { ctx.fillStyle = 'rgba(227,196,107,.08)'; ctx.fillRect(0, 0, W, H); }
+}
+function dawnHand() {  // 새벽마다 서린의 손이 조금 풀린다. 볕마을을 붙잡고 있으면 풀리지 않는다
+  if (S.fixed || S.stiff) return false;
+  S.hand = Math.max(0, S.hand - HAND_DAWN); return true;
+}
+function handStat() {
+  if (!TOOLS[2].ok() || (!S.hand && !S.stiff)) return '';
+  return `<div class="stat"><span>서린의 손</span><b style="color:var(--yellow)">${S.stiff ? '굳음 · 남은 밤 ' + S.stiff : Math.round(S.hand) + (S.fixed ? ' (볕마을을 붙잡고 있다)' : '')}</b></div>`;
 }
 function endNight() {
-  N.over = true;
+  N.over = true; N.armed = null;
   const lostNames = N.cuts, kept = N.hp > 0;
   const morning = 5 + Math.min(S.streak, 7) * 2;  // 마루의 매듭 보너스
   S.ieum += morning;
   // 첫 새벽에는 첫 조각을 반드시 열 수 있게 나무가 모자란 만큼 채운다
   const gift = S.onboarded ? 0 : Math.max(0, SETTLE_NODES[0].cost - Math.floor(S.ieum));
   S.ieum += gift;
-  S.stab = Math.max(0, S.stab + (kept ? 0.002 : -0.002) - lostNames * 0.0005);
+  // 고정한 밤에는 지켜도 안정화율이 오르지 않는다(자라나는 것이 멈춘다)
+  const keptGain = kept ? (N.fixUsed ? 0 : 0.002) : -0.002;
+  S.stab = Math.max(0, S.stab + keptGain - lostNames * 0.0005);
   curNodes().forEach(n => { S.red[n.id] = 0; });
+  dawnHand();
   save();
   SFX.dawn(kept);
   const result = kept ? (lostNames ? '기록 천은 지켰다. 끊긴 줄이 있다.' : '한 줄도 끊기지 않았다.') : '기록 천이 찢겼다. 그래도 아침은 온다.';
   const buttons = [['아침으로', goHome, true]];
   // 첫 5분에는 광고를 권하지 않는다
   if (S.onboarded) buttons.unshift(['광고 보고 아침 보상 두 배 (시험용: 바로 지급)', () => { S.ieum += morning; save(); goHome(); }]);
-  modal(`<h2>새벽</h2><div class="sub">${result}</div>
+  modal(`<h2>새벽</h2><div class="sub">${result}${N.fixUsed && kept ? '<br>붙잡은 밤이었다. 아무것도 자라지 않았다.' : ''}</div>
     <div class="stat"><span>흩은 해체자</span><b>${N.kills}</b></div>
     <div class="stat"><span>끊긴 줄</span><b style="color:var(--red)">${lostNames}</b></div>
     <div class="stat"><span>마루의 매듭 보너스</span><b>이음 +${morning}</b></div>
     ${gift ? `<div class="stat"><span>나무가 보탠 이음</span><b>+${gift}</b></div>` : ''}
+    ${handStat()}
     <div class="stat"><span>영역 안정화율</span><b>${S.stab.toFixed(3)}%</b></div>`, buttons);
 }
 function fixedDawn() {  // 고정된 볕마을: 밤 없이 아침. 매듭 보너스는 받지만 안정화율은 그대로다
@@ -960,6 +1100,7 @@ function fixedDawn() {  // 고정된 볕마을: 밤 없이 아침. 매듭 보너
   SFX.dawn(true);
   modal(`<h2>멈춘 저녁</h2><div class="sub">바깥에는 밤이 왔다. 볕마을 안은 늦은 오후 그대로였다. 주민들은 저녁이라며 잠들었다.<br>기록 천은 한 올도 변하지 않았다.</div>
     <div class="stat"><span>마루의 매듭 보너스</span><b>이음 +${morning}</b></div>
+    ${handStat()}
     <div class="stat"><span>영역 안정화율</span><b>${S.stab.toFixed(3)}% (그대로)</b></div>`,
     [['광고 보고 아침 보상 두 배 (시험용: 바로 지급)', () => { S.ieum += morning; save(); goHome(); }], ['아침으로', goHome, true]]);
 }
