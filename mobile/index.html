@@ -848,7 +848,7 @@ function endDay() {
 }
 
 // ───────────────────────── 밤: 해체자 ─────────────────────────
-// 밤의 수단(docs/13 5.3절): 노란 실은 줄 하나를 느리게, 끊기는 줄 하나를 내주고 해체자를 모으며,
+// 밤의 수단(docs/13 5.3절): 노란 실은 줄 하나를 느리게 하고, 끊기는 줄 하나를 내주고 해체자를 모으며,
 // 고정은 구역 전체를 잠깐 멈추는 대신 서린의 손을 굳게 한다.
 const YARN_COST = 12;      // 노란 실 한 줄의 이음
 const YARN_SLOW = .45;     // 실 앞(바깥 구간)에서의 속도 배율
@@ -939,8 +939,8 @@ function renderTools() {
     $(sub).textContent = st && st !== 'locked' ? st
       : id === 'yarn' ? '이음 ' + YARN_COST : id === 'cut' ? '하룻밤 한 번' : '서린의 손 ' + Math.round(S.hand);
   });
-  $('nHint').textContent = N.armed === 'yarn' ? '노란 실을 걸 줄 쪽을 누른다.'
-    : N.armed === 'cut' ? '끊을 줄 쪽을 누른다. 해체자가 잠깐 그 끝으로 몰린다.'
+  $('nHint').textContent = N.armed === 'yarn' ? '노란 실을 걸 줄을 눌러라.'
+    : N.armed === 'cut' ? '끊을 줄을 눌러라. 해체자가 잠깐 그 끝으로 몰린다.'
     : N.t < N.freeze ? '서린이 붙잡았다. 해체자가 멈췄다.'
     : '사각거리는 실밥을 눌러 흩어라. 붉은 줄에 걸린 곳으로 먼저 몰려든다.';
 }
@@ -960,7 +960,7 @@ function applyTool(id, i, px, py) {
     if (s.cut) { pop('이미 끊겼다', 'var(--dim)', px, py); renderTools(); return; }
     s.cut = true; N.cuts++; N.cutUsed = true; N.bait = { s: i, until: N.t + BAIT_DUR };
     burst(s.x, s.y, '#e0524f'); SFX.cut(); buzz(25);
-    pop('끊었다', 'var(--red)', px, py - 20);
+    pop('끊었다', 'var(--undo)', px, py - 20);
   } else if (id === 'fix') {
     N.fixUsed = true; N.freeze = N.t + FIX_DUR; S.hand = Math.min(100, S.hand + FIX_HAND); SFX.fix(); buzz([20, 40, 20]);
     if (S.hand >= 100) {
@@ -1037,7 +1037,7 @@ function drawNight(frozen, baiting) {
       ctx.beginPath(); ctx.moveTo(mx - px, my - py); ctx.lineTo(mx + px, my + py); ctx.stroke();
     }
     if (baiting && i === N.bait.s) {  // 해체자가 몰리는 끊긴 끝
-      ctx.strokeStyle = 'rgba(224,82,79,.6)'; ctx.lineWidth = 2;
+      ctx.strokeStyle = 'rgba(201,195,182,.6)'; ctx.lineWidth = 2;
       ctx.beginPath(); ctx.arc(s.x, s.y, 30 + Math.sin(N.t * 10) * 4, 0, Math.PI * 2); ctx.stroke();
     }
     ctx.font = '22px sans-serif'; ctx.textAlign = 'center'; ctx.globalAlpha = s.cut ? .3 : 1;
@@ -1086,7 +1086,7 @@ function endNight() {
   const buttons = [['아침으로', goHome, true]];
   // 첫 5분에는 광고를 권하지 않는다
   if (S.onboarded) buttons.unshift(['광고 보고 아침 보상 두 배 (시험용: 바로 지급)', () => { S.ieum += morning; save(); goHome(); }]);
-  modal(`<h2>새벽</h2><div class="sub">${result}${N.fixUsed && kept ? '<br>붙잡은 밤이었다. 아무것도 자라지 않았다.' : ''}</div>
+  modal(`<h2>새벽</h2><div class="sub">${result}${N.fixUsed && kept ? '<br>붙잡은 밤이었다. 안정화율은 오르지 않았다.' : ''}</div>
     <div class="stat"><span>흩은 해체자</span><b>${N.kills}</b></div>
     <div class="stat"><span>끊긴 줄</span><b style="color:var(--red)">${lostNames}</b></div>
     <div class="stat"><span>마루의 매듭 보너스</span><b>이음 +${morning}</b></div>
