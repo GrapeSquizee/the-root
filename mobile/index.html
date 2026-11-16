@@ -135,7 +135,7 @@ h1 { font-size: 20px; margin: 4px 0; letter-spacing: -0.02em; }
     <div id="idle">
       <div style="font-size:26px">🌳</div>
       <div class="grow">
-        <div id="idleText">나무가 이음을 모으는 중 <b id="idleRate" style="color:var(--root)">0</b>/분</div>
+        <div id="idleText">나무가 이음을 모으는 중 <b id="idleRate" style="color:var(--root)">0</b>/시간</div>
         <div class="bar"><i id="idleBar"></i></div>
       </div>
       <button class="ghost-btn" id="collectBtn">받기 <b id="idleAmt">0</b></button>
@@ -393,6 +393,17 @@ const TUTORIAL = {
 const TUT_WRONG = '틀린 답은 <b style="color:var(--red)">붉은 줄</b>로 남는다. 이번만은 다시 고를 수 있다.';
 const TUT_WAIT = '숫자가 0이 됐다. 원래는 <b>흐릿한 선택</b>으로 남지만, 이번만은 스크린이 기다린다.';
 
+// ───────────────────────── 수치 ─────────────────────────
+// 조정할 수치를 한곳에 모은다. 근거와 시험 결과는 docs/19_THE_ROOT_모바일_수치_조정표.md에 있다.
+const BAL = {
+  idlePerHour: 12,   // 나무 수준 하나가 한 시간에 모으는 이음
+  idleCapMin: 480,   // 오프라인 적립 상한 8시간
+  nightGrow: .08,    // 지낸 날 하나마다 오르는 밤의 세기
+  nightCap: 1.6,     // 밤의 세기가 오르는 상한(낮을 20번 마치면 닿는다)
+  byeotNight: .2,    // 고정을 푼 볕마을의 밤은 조금 더 세다
+  yarnCost: 8,       // 노란 실 한 줄의 이음
+};
+
 // ───────────────────────── 상태 ─────────────────────────
 const SAVE_KEY = 'theroot_mobile_v1';
 const fresh = () => ({ ieum: 0, stab: 0.003, day: 0, nodes: {}, lore: {}, red: {}, idle: 1, slow: 0, hpBonus: 0,
@@ -483,8 +494,9 @@ const SFX = (() => {
 document.addEventListener('pointerdown', () => SFX.unlock(), { once: true });
 
 // ───────────────────────── 홈 ─────────────────────────
-const IDLE_CAP_MIN = 480;  // 오프라인 적립 상한 8시간
-const idleRate = () => S.idle;  // 분당 이음
+const IDLE_CAP_MIN = BAL.idleCapMin;
+const idleRate = () => S.idle * BAL.idlePerHour / 60;  // 분당 이음
+const idleHour = () => S.idle * BAL.idlePerHour;      // 화면에는 시간당으로 보인다
 // 볕마을을 고정해 두는 동안 나무는 자라지 않는다(서린의 손 하나가 두 곳을 함께 붙잡고 있다)
 const idleNow = () => S.fixed ? S.fixedAt : Date.now();
 const idleMin = () => Math.max(0, Math.min((idleNow() - S.lastCollect) / 60000, IDLE_CAP_MIN));
@@ -499,13 +511,13 @@ function renderHome() {
   $('streak').textContent = S.streak;
   $('idleText').innerHTML = S.fixed
     ? '<span style="color:var(--yellow)">볕마을이 고정돼 정착지 나무에 새 잎이 나지 않는다</span>'
-    : `나무가 이음을 모으는 중 <b style="color:var(--root)">${idleRate()}</b>/분`;
+    : `나무가 이음을 모으는 중 <b style="color:var(--root)">${idleHour()}</b>/시간`;
   const other = CHAPTERS[S.ch === 0 ? 1 : 0];
   $('chBtn').style.display = S.unlocked >= 1 ? '' : 'none';
   $('chBtn').textContent = '⇄ ' + other.name;
   $('fixBtn').style.display = S.unlocked >= 1 ? '' : 'none';
   $('fixBtn').innerHTML = S.fixed
-    ? '🔒 볕마을 고정 중 — <span style="color:var(--dim)">밤이 오지 않는다 · 나무가 멈춘다</span>'
+    ? '🔒 볕마을 고정 중 — <span style="color:var(--dim)">밤이 오지 않는다 · 같은 낮이 돌아온다 · 나무가 멈춘다</span>'
     : '🍃 볕마을 고정 풀림 — <span style="color:var(--dim)">밤이 온다 · 나무가 자란다</span>';
   const opened = nodes.filter(n => S.nodes[n.id] != null).length;
   $('hSub').textContent = opened === nodes.length
@@ -529,7 +541,7 @@ $('chBtn').onclick = () => { S.ch = S.ch === 0 ? 1 : 0; save(); SFX.page(); rend
 function setFixed(on) {
   if (on === S.fixed) return;
   if (on) { S.fixed = true; S.fixedAt = Date.now(); }
-  else { S.lastCollect += Date.now() - S.fixedAt; S.fixed = false; }
+  else { S.lastCollect += Date.now() - S.fixedAt; S.fixed = false; delete S.sameDay; }
   save(); renderHome(); tickIdle();
 }
 $('fixBtn').onclick = () => {
@@ -543,7 +555,7 @@ function unlockByeot() {  // 정착지를 마치면 볕마을이 열리고, 처�
   S.unlocked = 1; S.ch = 1; setFixed(true); save();
   tapScene('2장 — 볕마을', BYEOT_INTRO, () => {
     show('home'); renderHome(); tickIdle();
-    modal(`<h2>볕마을</h2><div class="sub">볕마을은 고정돼 있다. 밤이 오지 않아 기록 천이 다치지 않는다. 대신 정착지 나무에 새 잎이 나지 않는다.<br><br>아래의 <b style="color:var(--yellow)">고정</b> 버튼으로 풀 수 있다. 붙잡을지 놓을지는 매일 고른다.</div>`, [['확인', null, true]]);
+    modal(`<h2>볕마을</h2><div class="sub">볕마을은 고정돼 있다. 밤이 오지 않아 기록 천이 다치지 않고, 낮에는 같은 표본이 같은 순서로 되풀이된다. 대신 정착지 나무에 새 잎이 나지 않는다.<br><br>아래의 <b style="color:var(--yellow)">고정</b> 버튼으로 풀 수 있다. 붙잡을지 놓을지는 매일 고른다.</div>`, [['확인', null, true]]);
   });
 }
 if (S.done.settle && S.unlocked < 1) { S.unlocked = 1; S.fixed = true; S.fixedAt = Date.now(); save(); }  // v0.2에서 정착지를 마친 저장
@@ -636,7 +648,7 @@ function chooseStory(n, k) {
   (S.lore[n.id] = S.lore[n.id] || []).push(k);
   const r = o.reward; let gain = '';
   if (r.ieum) { S.ieum += r.ieum; gain = `이음 +${r.ieum}`; }
-  if (r.idle) { S.idle += r.idle; gain = `나무가 모으는 이음 +${r.idle}/분`; }
+  if (r.idle) { S.idle += r.idle; gain = `나무가 모으는 이음 +${r.idle * BAL.idlePerHour}/시간`; }
   if (r.slow) { S.slow += r.slow; gain = '밤에 해체자가 느려진다'; }
   if (r.hp) { S.hpBonus += r.hp; gain = '기록 천 +1'; }
   S.stab += 0.004; save();
@@ -683,9 +695,14 @@ function startDay(tutorial) {
   // 붉은 줄이 남은 표본을 먼저 다시 낸다(틀린 것을 배워 고치기)
   const retry = pool.filter(s => S.red['sp_' + s.id]);
   const rest = pool.filter(s => !S.red['sp_' + s.id]).sort(() => Math.random() - .5);
-  const deck = tutorial === true
+  let deck = tutorial === true
     ? Object.keys(TUTORIAL).map(id => pool.find(s => s.id === id))
     : retry.concat(rest).slice(0, DAY_CARDS).sort(() => Math.random() - .5);
+  // 고정된 볕마을은 같은 하루를 되풀이한다: 붙잡은 첫날의 표본이 같은 순서로 다시 나온다
+  if (tutorial !== true && fixedHere()) {
+    const same = (S.sameDay || []).map(id => pool.find(s => s.id === id)).filter(Boolean);
+    if (same.length === DAY_CARDS) deck = same; else { S.sameDay = deck.map(s => s.id); save(); }
+  }
   D = { deck, idx: 0, step: 0, earned: 0, red: 0, blur: 0, combo: 0, maxCombo: 0, observed: false, correct: 0, path: [],
     tutorial: tutorial === true, waiting: false };
   $('cCoach').classList.toggle('on', D.tutorial);
@@ -842,7 +859,7 @@ function endDay() {
     <div class="stat"><span>흐릿한 선택</span><b style="color:var(--dim)">${D.blur}</b></div>
     <div class="sub" style="margin-top:10px">${D.tutorial
       ? '밤에는 해체자가 기록 천으로 이어진 줄을 끊으러 온다. 사각거리는 실밥을 눌러 흩어라.'
-      : fixedHere() ? '볕마을은 고정돼 있다. 바깥이 어두워져도 안에는 밤이 오지 않는다.'
+      : fixedHere() ? '볕마을은 고정돼 있다. 바깥이 어두워져도 안에는 밤이 오지 않는다. 내일 낮에도 오늘과 같은 표본이 같은 순서로 나온다.'
       : '붉은 줄이 남은 곳으로 해체자가 먼저 온다.'}</div>`,
     [[fixedHere() ? '저녁을 맞는다' : '밤을 맞는다', startNight, true]]);
 }
@@ -850,7 +867,7 @@ function endDay() {
 // ───────────────────────── 밤: 해체자 ─────────────────────────
 // 밤의 수단(docs/13 5.3절): 노란 실은 줄 하나를 느리게 하고, 끊기는 줄 하나를 내주고 해체자를 모으며,
 // 고정은 구역 전체를 잠깐 멈추는 대신 서린의 손을 굳게 한다.
-const YARN_COST = 12;      // 노란 실 한 줄의 이음
+const YARN_COST = BAL.yarnCost;  // 노란 실 한 줄의 이음
 const YARN_SLOW = .45;     // 실 앞(바깥 구간)에서의 속도 배율
 const BAIT_DUR = 5;        // 끊은 끝으로 해체자가 몰리는 시간(내부 값)
 const FIX_DUR = 3;         // 고정으로 멈추는 시간(내부 값)
@@ -895,7 +912,8 @@ function beginNight() {
     armed: null, bait: null, freeze: 0, cutUsed: false, fixUsed: false, yarns: 0, stiff: S.stiff > 0 };
   if (N.stiff) { S.stiff--; if (!S.stiff) S.hand = 40; }  // 쉬고 나면 손이 조금 풀린 채로 돌아온다
   save();
-  const level = 1 + S.day * 0.15;
+  // 밤은 날마다 조금씩 세지다가 상한에서 멈춘다. 고정을 푼 볕마을은 조금 더 세다
+  const level = 1 + Math.min(S.day * BAL.nightGrow, BAL.nightCap) + (curCh().id === 'byeot' ? BAL.byeotNight : 0);
   N.rate = 1.1 * level;         // 초당 등장 수
   N.speed = 34 * Math.min(level, 2.2) * (1 - Math.min(S.slow, 3) * .12);
   if (!S.onboarded) { N.dur = 12; N.rate *= .6; }  // 첫 밤은 짧고 느슨하게
