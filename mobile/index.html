@@ -402,6 +402,8 @@ const BAL = {
   nightCap: 1.6,     // 밤의 세기에 더해지는 양의 상한(낮을 20번 마치면 닿는다)
   byeotNight: .2,    // 고정을 푼 볕마을의 밤은 조금 더 세다
   yarnCost: 8,       // 노란 실 한 줄의 이음
+  yarnRedSlow: .7,   // 붉은 줄이 걸린 줄에서는 노란 실이 덜 듣는다(붉은 줄이 당긴다)
+  redBait: 3,        // 붉은 줄이 걸린 줄을 끊으면 해체자가 그만큼 더 오래 몰린다
 };
 
 // ───────────────────────── 상태 ─────────────────────────
@@ -876,7 +878,7 @@ const HAND_DAWN = 15;      // 새벽마다 풀리는 정도(볕마을을 붙잡�
 const STIFF_NIGHTS = 2;    // 손이 다 굳으면 쉬는 밤
 const TOOLS = [
   { id: 'yarn', ok: () => S.nodes.yarn != null, title: '노란 실',
-    text: `<b style="color:var(--yellow)">노란 실</b> — 서린이 위험한 곳 앞에 거는 실이다. 줄 하나를 눌러 실을 걸면, 그 줄로 오는 해체자가 실 앞에서 느려진다. 한 줄에 이음 ${YARN_COST}.` },
+    text: `<b style="color:var(--yellow)">노란 실</b> — 서린이 위험한 곳 앞에 거는 실이다. 줄 하나를 눌러 실을 걸면, 그 줄로 오는 해체자가 실 앞에서 느려진다. 붉은 줄이 걸린 줄에서는 덜 느려진다. 한 줄에 이음 ${YARN_COST}.` },
   { id: 'cut', ok: () => S.nodes.red != null, title: '끊기',
     text: '<b>끊기</b> — 약한 줄 하나를 먼저 끊는다. 해체자가 잠깐 끊긴 끝으로 몰려 한데 뭉친다. 그 줄은 잃는다. 하룻밤에 한 번.' },
   { id: 'fix', ok: () => S.unlocked >= 1, title: '고정',
@@ -925,7 +927,11 @@ function beginNight() {
 }
 function nightTap(x, y, px, py) {
   if (!N || N.over) return;
-  if (N.armed) return applyTool(N.armed, nearestSpoke(x, y), px, py);
+  // 수단을 고른 뒤의 탭도 손가락 밑의 해체자는 흩는다. 줄을 고르는 탭과 흩는 탭이 서로를 지우지 않게 한다
+  if (N.armed) {
+    if (Math.hypot(x - N.cx, y - N.cy) < 30) { N.armed = null; pop('그만뒀다', 'var(--dim)', px, py - 20); renderTools(); }
+    else applyTool(N.armed, nearestSpoke(x, y), px, py);
+  }
   let hit = 0;
   N.foes.forEach(f => { if (!f.dead && Math.hypot(f.x - x, f.y - y) < 34) { f.dead = true; hit++; N.kills++; burst(f.x, f.y, '#c9c3b6'); } });
   if (hit) {
@@ -957,8 +963,8 @@ function renderTools() {
     $(sub).textContent = st && st !== 'locked' ? st
       : id === 'yarn' ? '이음 ' + YARN_COST : id === 'cut' ? '하룻밤 한 번' : '서린의 손 ' + Math.round(S.hand);
   });
-  $('nHint').textContent = N.armed === 'yarn' ? '노란 실을 걸 줄을 눌러라.'
-    : N.armed === 'cut' ? '끊을 줄을 눌러라. 해체자가 잠깐 그 끝으로 몰린다.'
+  $('nHint').textContent = N.armed === 'yarn' ? '노란 실을 걸 줄을 눌러라. 붉은 줄 쪽에는 실이 덜 듣는다. 가운데를 누르면 그만둔다.'
+    : N.armed === 'cut' ? '끊을 줄을 눌러라. 붉은 줄 쪽을 끊으면 붉은 줄은 남고 해체자가 더 오래 몰린다. 가운데를 누르면 그만둔다.'
     : N.t < N.freeze ? '서린이 붙잡았다. 해체자가 멈췄다.'
     : '사각거리는 실밥을 눌러 흩어라. 붉은 줄에 걸린 곳으로 먼저 몰려든다.';
 }
@@ -976,9 +982,10 @@ function applyTool(id, i, px, py) {
     pop('노란 실', 'var(--yellow)', px, py - 20);
   } else if (id === 'cut') {
     if (s.cut) { pop('이미 끊겼다', 'var(--dim)', px, py); renderTools(); return; }
-    s.cut = true; N.cuts++; N.cutUsed = true; N.bait = { s: i, until: N.t + BAIT_DUR };
+    // 붉은 줄은 해체자가 건드리지 못한다(원고 16화·72화). 끊기에도 같은 제한을 둔다(게임 규칙). 옆의 가는 줄만 끊기고, 남은 붉은 줄이 해체자를 더 오래 당긴다
+    s.cut = true; N.cuts++; N.cutUsed = true; N.bait = { s: i, until: N.t + BAIT_DUR + (s.red ? BAL.redBait : 0) };
     burst(s.x, s.y, '#e0524f'); SFX.cut(); buzz(25);
-    pop('끊었다', 'var(--undo)', px, py - 20);
+    pop(s.red ? '붉은 줄은 남았다' : '끊었다', s.red ? 'var(--red)' : 'var(--undo)', px, py - 20);
   } else if (id === 'fix') {
     N.fixUsed = true; N.freeze = N.t + FIX_DUR; S.hand = Math.min(100, S.hand + FIX_HAND); SFX.fix(); buzz([20, 40, 20]);
     if (S.hand >= 100) {
@@ -1013,7 +1020,7 @@ function nightLoop(now) {
     if (f.dead) return;
     const s = N.spokes[f.s];
     const L1 = Math.hypot(s.ox - s.x, s.oy - s.y), L2 = Math.hypot(s.x - N.cx, s.y - N.cy);
-    if (!frozen) f.p += f.sp * dt * (s.yarn && f.p < L1 ? YARN_SLOW : 1);
+    if (!frozen) f.p += f.sp * dt * (s.yarn && f.p < L1 ? (s.red ? BAL.yarnRedSlow : YARN_SLOW) : 1);
     if (baiting && f.s === N.bait.s && f.p > L1) f.p = L1;  // 끊긴 끝에 모여 갉는다
     if (f.p < L1) { const k = f.p / L1; f.x = s.ox + (s.x - s.ox) * k; f.y = s.oy + (s.y - s.oy) * k; }
     else {
@@ -1043,10 +1050,20 @@ function drawNight(frozen, baiting) {
   const { ctx, W, H, cx, cy } = N;
   ctx.clearRect(0, 0, W, H);
   N.spokes.forEach((s, i) => {
+    if (N.armed) {  // 수단을 고르면 걸 수 있는 줄의 몫이 밝아진다
+      const ok = N.armed === 'yarn' ? !s.yarn && !s.cut : !s.cut, half = Math.PI / N.spokes.length;
+      ctx.fillStyle = ok ? (N.armed === 'yarn' ? 'rgba(242,214,75,.07)' : 'rgba(201,195,182,.06)') : 'rgba(0,0,0,0)';
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, Math.hypot(s.ox - cx, s.oy - cy) + 20, s.ang - half + .04, s.ang + half - .04); ctx.closePath(); ctx.fill();
+    }
     ctx.strokeStyle = s.cut ? '#3a2422' : s.red ? '#e0524f' : (S.nodes[s.n.id] != null ? '#6fd3c1' : '#2f3f36');
-    ctx.lineWidth = s.red ? 2 + Math.min(s.red, 4) : 2;
+    ctx.lineWidth = s.red && !s.cut ? 2 + Math.min(s.red, 4) : 2;
     ctx.setLineDash(s.cut ? [3, 7] : []);
     ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(s.x, s.y); ctx.stroke();
+    if (s.cut && s.red) {  // 옆의 가는 줄은 끊겨도 붉은 줄은 그대로 남는다
+      const px = -Math.sin(s.ang) * 3, py = Math.cos(s.ang) * 3;
+      ctx.setLineDash([]); ctx.strokeStyle = '#e0524f'; ctx.lineWidth = 1.5 + Math.min(s.red, 4) * .5;
+      ctx.beginPath(); ctx.moveTo(cx + px, cy + py); ctx.lineTo(s.x + px, s.y + py); ctx.stroke();
+    }
     ctx.strokeStyle = '#1f2a24'; ctx.setLineDash([2, 8]); ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.ox, s.oy); ctx.stroke();
     ctx.setLineDash([]);
     if (s.yarn) {  // 바깥 구간을 가로지르는 노란 실
