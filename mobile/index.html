@@ -19,6 +19,7 @@
   --red: #e0524f;       /* 붉은 줄 */
   --blue: #5d8fe0;      /* 마루의 파란 헝겊 */
   --undo: #c9c3b6;      /* 해체자 */
+  --sky: #8fd3f5;       /* 하늘색 선: 정답과 복원 */
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
@@ -58,7 +59,16 @@ h1 { font-size: 20px; margin: 4px 0; letter-spacing: -0.02em; }
   display: flex; flex-direction: column; transition: transform .18s ease, opacity .18s ease; touch-action: none; }
 #card .tag { font-size: 12px; color: var(--root); letter-spacing: .08em; }
 #card .name { font-size: 26px; font-weight: 800; margin: 6px 0 2px; }
-#card .glyph { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 84px; filter: drop-shadow(0 0 18px rgba(111,211,193,.35)); }
+#card .glyph { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 84px; min-height: 0; padding: 6px 0; }
+#card .glyph svg { width: 100%; height: 100%; max-width: 320px; max-height: 240px; border-radius: 12px;
+  box-shadow: 0 0 0 1px #2c4a43, 0 8px 22px rgba(0,0,0,.45); transition: filter .25s, opacity .25s; }
+#card .glyph .emoji { font-size: 84px; filter: drop-shadow(0 0 18px rgba(111,211,193,.35)); }
+#card .glyph .trace { display: none; }
+#card .glyph.traced .trace { display: inline; }
+#card .glyph .trace * { fill: none; stroke: var(--sky); stroke-width: 1.6; opacity: 1; stroke-dasharray: 420; stroke-dashoffset: 420; animation: trace .38s ease-out forwards; }
+#card .glyph.traced svg { filter: drop-shadow(0 0 8px rgba(143,211,245,.55)); }
+#card .glyph.smudge svg { filter: blur(3px); opacity: .55; }
+@keyframes trace { to { stroke-dashoffset: 0; } }
 #card .clue { min-height: 40px; color: var(--dim); font-size: 13px; line-height: 1.5; }
 #card .path { font-size: 12px; color: var(--root); min-height: 18px; }
 .prompt { font-size: 14px; color: var(--text); margin-bottom: 8px; }
@@ -98,6 +108,11 @@ h1 { font-size: 20px; margin: 4px 0; letter-spacing: -0.02em; }
 
 /* 밤 */
 #night canvas { flex: 1; width: 100%; border-radius: 16px; background: #090c0b; touch-action: none; }
+.tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+.tool { padding: 9px 4px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); font-size: 14px; line-height: 1.3; }
+.tool small { display: block; color: var(--dim); font-size: 11px; }
+.tool.armed { border-color: var(--yellow); box-shadow: 0 0 0 2px rgba(242,214,75,.35) inset; }
+.tool:disabled { opacity: .35; }
 /* 기록 */
 #codex .list { flex: 1; overflow: auto; }
 .entry { padding: 10px 12px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); margin-bottom: 8px; font-size: 14px; line-height: 1.5; }
@@ -130,7 +145,7 @@ h1 { font-size: 20px; margin: 4px 0; letter-spacing: -0.02em; }
     <div id="idle">
       <div style="font-size:26px">🌳</div>
       <div class="grow">
-        <div id="idleText">나무가 실타래를 모으는 중 <b id="idleRate" style="color:var(--root)">0</b>/분</div>
+        <div id="idleText">나무가 이음을 모으는 중 <b id="idleRate" style="color:var(--root)">0</b>/시간</div>
         <div class="bar"><i id="idleBar"></i></div>
       </div>
       <button class="ghost-btn" id="collectBtn">받기 <b id="idleAmt">0</b></button>
@@ -157,7 +172,7 @@ h1 { font-size: 20px; margin: 4px 0; letter-spacing: -0.02em; }
       <div class="tag" id="cTag">표본 01</div>
       <div class="name" id="cName">물</div>
       <div class="path" id="cPath"></div>
-      <div class="glyph" id="cGlyph">💧</div>
+      <div class="glyph" id="cGlyph"></div>
       <div class="clue" id="cClue"></div>
     </div>
     <div class="coach" id="cCoach"></div>
@@ -189,8 +204,13 @@ h1 { font-size: 20px; margin: 4px 0; letter-spacing: -0.02em; }
       <span class="spacer"></span>
       <span class="chip">쫓아낸 해체자 <b id="nKill">0</b></span>
     </div>
-    <div class="sub" style="margin:6px 0">사각거리는 실밥을 눌러 쫓아내라. 붉은 줄에 걸린 곳으로 먼저 몰려든다.</div>
+    <div class="sub" id="nHint" style="margin:6px 0">사각거리는 실밥을 눌러 흩어라. 붉은 줄에 걸린 곳으로 먼저 몰려든다.</div>
     <canvas id="nCanvas"></canvas>
+    <div class="tools" id="nTools">
+      <button class="tool" id="tYarn" style="color:var(--yellow)">🧶 노란 실<small id="tYarnSub">이음 12</small></button>
+      <button class="tool" id="tCut">✂️ 끊기<small id="tCutSub">하룻밤 한 번</small></button>
+      <button class="tool" id="tFix">🔒 고정<small id="tFixSub">서린의 손 0</small></button>
+    </div>
   </section>
 
   <!-- 세계 기록 -->
@@ -252,6 +272,122 @@ const SPECIMENS = [
     { o: ['살아 있는 것', '살아 있지 않은 것'], a: 0 },
     { o: ['뼈가 있는 것', '뼈가 없는 것'], a: 1 } ] },
 ];
+// ───────────────────────── 표본 그림 ─────────────────────────
+// 시각 초안(docs/character_art)의 방향: 어둡고 젖은 바탕, 안개, 뿌리, 낮은 채도.
+// 노란색·붉은색·파란색·하늘색·연한 분홍은 세계에서 뜻이 있으므로 그림의 바탕과 대상에는 쓰지 않는다.
+// 하늘색은 분류를 맞혔을 때 대상을 따라 뻗는 선(.trace, 대상의 윤곽을 한 번 더 그린 것)에만 쓴다(세계 규칙 3절).
+const INK = 'stroke="#0a0f0c" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"';
+const plate = (inner, ground = true) => `<svg viewBox="0 0 200 160" role="img" aria-hidden="true">
+<defs><radialGradient id="pMist" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#2a3a33" stop-opacity=".9"/><stop offset="1" stop-color="#0d1411" stop-opacity="0"/></radialGradient>
+<linearGradient id="pWet" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2621"/><stop offset="1" stop-color="#0c120f"/></linearGradient></defs>
+<rect width="200" height="160" rx="12" fill="#101814"/>
+<ellipse cx="100" cy="70" rx="120" ry="80" fill="url(#pMist)"/>
+<path d="M-4 30 C40 44 70 20 104 34 S170 60 206 40 M-4 112 C30 96 60 120 96 104 S160 86 206 102" fill="none" stroke="#33463c" stroke-width="5" opacity=".45"/>
+<path d="M20 0 C30 30 18 50 34 76 M178 0 C166 26 184 48 170 80" fill="none" stroke="#2c3d34" stroke-width="3" opacity=".5"/>
+${ground ? '<path d="M0 132 C50 124 150 126 200 132 L200 160 L0 160Z" fill="url(#pWet)"/><path d="M30 136 h22 M120 140 h30 M70 146 h18" stroke="#3a4d44" stroke-width="1.2" opacity=".6"/>' : ''}
+<g class="subj">${inner}</g><g class="trace">${inner}</g>
+<g fill="#cfe0d8" opacity=".18"><circle cx="24" cy="52" r="1"/><circle cx="160" cy="34" r="1.2"/><circle cx="140" cy="96" r=".9"/><circle cx="52" cy="104" r="1.1"/></g>
+</svg>`;
+const ART = {
+  // 4화의 놋그릇에 담긴 물과 그 위의 물방울(표본은 1화)
+  water: plate(`<path d="M58 104 Q100 150 142 104 Z" fill="#7a6a45" ${INK}/>
+<ellipse cx="100" cy="104" rx="42" ry="8" fill="#5f7e7c" ${INK}/>
+<ellipse cx="92" cy="103" rx="16" ry="2.4" fill="#9fb8b2" opacity=".55"/>
+<path d="M104 46 C96 60 92 66 92 72 a12 12 0 0 0 24 0 C116 66 112 60 104 46 Z" fill="#6f908d" ${INK}/>
+<path d="M99 66 q-2 5 1 9" stroke="#c9dad5" stroke-width="2" fill="none" stroke-linecap="round"/>`),
+  // 흰다리: 개만 한 네발짐승, 진갈색 젖은 털, 등의 작은 잎, 이마의 가는 뿔 둘, 큰 검은 눈.
+  // 오른쪽을 보는 옆모습이라 화면 앞쪽(관람자 쪽) 앞발이 짐승의 왼쪽 앞발이다. 그 발만 발목까지 희다.
+  heuindari: plate(`<path d="M44 98 C40 80 56 70 80 70 L118 68 C130 60 136 50 142 46 L152 44 C162 46 168 54 166 62 C164 70 156 72 148 74 C142 84 136 94 128 100 C112 108 70 110 44 98 Z" fill="#4a3526" ${INK}/>
+<path d="M46 88 C36 88 30 94 30 102" fill="none" stroke="#4a3526" stroke-width="9" stroke-linecap="round"/>
+<path d="M56 98 L52 132 M70 100 L70 132 M114 96 L112 132" stroke="#3b2a1e" stroke-width="9" stroke-linecap="round"/>
+<path d="M128 94 L130 116" stroke="#4a3526" stroke-width="9" stroke-linecap="round"/>
+<path d="M130 116 L131 132" stroke="#e8e4da" stroke-width="9.5" stroke-linecap="round"/>
+<path d="M146 46 C144 34 142 28 136 22 M154 44 C156 32 158 26 162 20" fill="none" stroke="#2a1d14" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M140 50 L130 42 L138 56Z" fill="#3b2a1e" ${INK}/>
+<circle cx="153" cy="54" r="4.2" fill="#07090a"/><circle cx="154.5" cy="52.5" r="1.2" fill="#dfe8e4"/>
+<g fill="#4f7a4a" ${INK}><ellipse cx="66" cy="70" rx="7" ry="3.6" transform="rotate(-25 66 70)"/><ellipse cx="82" cy="66" rx="6" ry="3.2" transform="rotate(20 82 66)"/><ellipse cx="98" cy="67" rx="7" ry="3.4" transform="rotate(-15 98 67)"/><ellipse cx="112" cy="64" rx="5" ry="2.8" transform="rotate(30 112 64)"/><ellipse cx="74" cy="74" rx="5" ry="2.6" transform="rotate(10 74 74)"/></g>
+<g fill="#dfe6ea" opacity=".75"><circle cx="134" cy="28" r="1.1"/><circle cx="138" cy="36" r=".8"/><circle cx="164" cy="28" r="1"/><circle cx="160" cy="36" r=".7"/><circle cx="131" cy="40" r=".7"/></g>`),
+  // 줄어드는 우물물: 돌벽의 틈으로 흙가루가 빨려 들어가고, 어제의 물 자국은 수면보다 위에 있다(6화)
+  well: plate(`<path d="M40 30 L40 140 L160 140 L160 30" fill="#1a2420" stroke="#55615a" stroke-width="2"/>
+<g fill="#3f4a44" ${INK}><rect x="28" y="24" width="20" height="14" rx="3"/><rect x="28" y="40" width="14" height="16" rx="3"/><rect x="28" y="58" width="16" height="14" rx="3"/><rect x="152" y="24" width="20" height="14" rx="3"/><rect x="158" y="40" width="14" height="16" rx="3"/><rect x="156" y="58" width="16" height="14" rx="3"/></g>
+<path d="M44 64 H156" stroke="#9aaa9f" stroke-width="1.4" stroke-dasharray="4 4" opacity=".7"/>
+<rect x="44" y="96" width="112" height="44" fill="#2c4442"/>
+<path d="M44 96 H156" stroke="#7f9e9b" stroke-width="1.6"/>
+<path d="M156 70 L150 84 L156 94 L149 112 L156 128" fill="none" stroke="#07090a" stroke-width="3"/>
+<g fill="#8c7a5c"><circle cx="70" cy="95" r="1.6"/><circle cx="92" cy="95.5" r="1.4"/><circle cx="114" cy="95" r="1.7"/><circle cx="130" cy="95.5" r="1.4"/><circle cx="142" cy="95" r="1.2"/><circle cx="148" cy="97" r="1"/></g>
+<path d="M84 99 q30 -2 60 2" stroke="#8c7a5c" stroke-width="1" fill="none" opacity=".6" stroke-dasharray="2 3"/>`, false),
+  // 낙엽 모양의 물체: 굵은 뿌리 위의 낙엽, 그 밑에서 펴진 여섯 다리. 뒷다리 하나의 발끝이 흐리다(7화)
+  leafbug: plate(`<path d="M-4 128 C40 120 70 96 110 88 C140 82 170 70 206 50 L206 84 C170 100 140 108 112 114 C76 122 46 140 -4 150Z" fill="#3a2e24" ${INK}/>
+<path d="M30 132 C60 120 90 104 130 96" stroke="#4d3f31" stroke-width="2" fill="none"/>
+<g stroke="#07090a" stroke-width="2" fill="none" stroke-linecap="round"><path d="M86 92 l-8 10 M96 90 l-4 12 M108 88 l2 12 M118 86 l6 10 M124 84 l10 8"/></g>
+<path d="M78 88 l-12 8" stroke="#07090a" stroke-width="2" stroke-linecap="round" opacity=".25"/>
+<path d="M74 84 C88 64 122 60 140 72 C128 88 98 96 74 84 Z" fill="#7a5a34" ${INK}/>
+<path d="M76 84 C98 78 120 74 140 72 M96 80 l6 -8 M112 77 l6 -8 M100 81 l8 6 M118 76 l6 6" stroke="#4e3a22" stroke-width="1.2" fill="none"/>
+<path d="M140 72 l8 -2" stroke="#4e3a22" stroke-width="1.6"/>`),
+  // 거울토끼: 회색 토끼, 가장자리가 거울처럼 빛나는 투명한 옆구리, 그 안에 반대쪽을 보며 웅크린 작은 토끼. 뒷발이 흐리다(9화)
+  mirrorhare: plate(`<path d="M50 112 C44 92 58 76 84 74 C104 72 120 76 132 82 C140 70 150 66 158 70 C166 74 166 86 158 92 C152 98 146 100 140 104 C132 116 100 122 76 120 C64 120 54 118 50 112 Z" fill="#7f8682" ${INK}/>
+<path d="M146 70 C138 50 136 34 142 28 C148 36 150 54 152 68 M154 68 C156 50 162 36 168 34 C170 44 164 58 158 70" fill="#7f8682" ${INK}/>
+<circle cx="157" cy="80" r="3.6" fill="#07090a"/><circle cx="158.2" cy="78.8" r="1" fill="#dfe8e4"/>
+<path d="M164 86 l10 -2 M164 88 l10 2" stroke="#cfd6d2" stroke-width=".8"/>
+<ellipse cx="96" cy="98" rx="27" ry="17" fill="#121b17" stroke="#d6dee0" stroke-width="2.2"/>
+<ellipse cx="96" cy="98" rx="27" ry="17" fill="none" stroke="#ffffff" stroke-width=".8" opacity=".5" stroke-dasharray="10 30"/>
+<path d="M112 104 C108 92 98 88 88 92 C80 96 80 106 88 108 C96 110 108 110 112 104 Z" fill="#8a918d" ${INK}/>
+<path d="M84 96 C76 92 74 86 78 84 C82 88 84 92 86 94" fill="#8a918d" ${INK}/>
+<path d="M88 99 a2 2 0 0 0 4 0" stroke="#07090a" stroke-width="1.2" fill="none"/>
+<path d="M120 116 L124 130 L138 132" fill="none" stroke="#7f8682" stroke-width="7" stroke-linecap="round"/>
+<path d="M64 118 L60 132 L46 134" fill="none" stroke="#7f8682" stroke-width="7" stroke-linecap="round" opacity=".28"/>
+<path d="M42 128 l14 -4 l-4 10 z" fill="#5a4a3c" opacity=".7"/>`),
+  cat: plate(`<path d="M60 130 C52 104 58 78 76 70 C70 58 72 48 76 40 L86 54 C92 52 100 52 106 54 L116 40 C120 50 120 60 114 70 C130 80 136 106 128 130 Z" fill="#3c3f3d" ${INK}/>
+<path d="M128 124 C150 126 160 112 150 100" fill="none" stroke="#3c3f3d" stroke-width="7" stroke-linecap="round"/>
+<path d="M84 66 l6 2 M102 68 l6 -2" stroke="#b9c4a8" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M70 132 C68 120 76 112 86 114 C96 116 98 126 94 132 Z" fill="#5a5d5a" ${INK}/>
+<path d="M74 116 l2 -6 l4 5 M84 114 l4 -5 l1 6" fill="#5a5d5a" ${INK}/>`),
+  platypus: plate(`<path d="M30 104 C26 96 40 86 60 88 L68 90 C82 80 120 80 138 92 C150 100 150 112 138 118 C120 124 84 124 70 116 L60 112 C42 116 32 112 30 104 Z" fill="#5b4532" ${INK}/>
+<path d="M30 104 C22 102 14 100 10 104 C14 110 24 110 32 108" fill="#3a3a38" ${INK}/>
+<path d="M138 96 C160 92 178 98 180 106 C176 114 158 116 140 114" fill="#4a3828" ${INK}/>
+<path d="M146 100 l26 4 M146 108 l26 0" stroke="#3a2a1e" stroke-width="1.2"/>
+<circle cx="56" cy="96" r="2.2" fill="#07090a"/>
+<path d="M78 118 l-6 12 l8 0 M120 118 l2 12 l8 0" fill="none" stroke="#3a3a38" stroke-width="3" stroke-linecap="round"/>
+<path d="M150 132 C156 118 176 116 186 132 Z" fill="#07090a" opacity=".8"/>`),
+  moss: plate(`<path d="M30 132 C34 100 64 84 100 84 C140 84 168 100 172 132 Z" fill="#4a524c" ${INK}/>
+<path d="M44 106 C56 96 74 92 88 94 C96 88 116 88 126 94 C142 92 156 100 160 110 C140 104 110 102 80 104 C66 104 54 106 44 106 Z" fill="#46663e" ${INK}/>
+<g fill="#5c7f4c"><circle cx="60" cy="102" r="4"/><circle cx="72" cy="98" r="5"/><circle cx="88" cy="96" r="4.5"/><circle cx="104" cy="94" r="5"/><circle cx="120" cy="96" r="4.5"/><circle cx="136" cy="98" r="4.5"/><circle cx="148" cy="104" r="3.6"/></g>
+<g stroke="#6b5b3c" stroke-width="1.3"><path d="M80 96 L78 74 M100 94 L102 70 M124 96 L128 76"/></g>
+<g fill="#7d6a46" ${INK}><ellipse cx="78" cy="72" rx="2.6" ry="4" transform="rotate(-10 78 72)"/><ellipse cx="102" cy="68" rx="2.6" ry="4" transform="rotate(8 102 68)"/><ellipse cx="128" cy="74" rx="2.6" ry="4" transform="rotate(14 128 74)"/></g>`),
+  salt: plate(`<path d="M50 132 C50 112 150 112 150 132 Z" fill="#3a3530" ${INK}/>
+<g fill="#d8dcd6" ${INK}><path d="M76 116 l10 -6 l10 6 l-10 6z"/><path d="M76 116 v10 l10 6 v-10z" fill="#aeb3ad"/><path d="M96 116 v10 l-10 6 v-10z" fill="#c4c9c3"/>
+<path d="M100 110 l8 -5 l8 5 l-8 5z"/><path d="M100 110 v8 l8 5 v-8z" fill="#aeb3ad"/><path d="M116 110 v8 l-8 5 v-8z" fill="#c4c9c3"/>
+<path d="M112 122 l6 -3.5 l6 3.5 l-6 3.5z"/><path d="M112 122 v6 l6 3.5 v-6z" fill="#aeb3ad"/><path d="M124 122 v6 l-6 3.5 v-6z" fill="#c4c9c3"/></g>
+<path d="M84 96 C78 84 90 78 84 66 M104 92 C98 80 110 74 104 60 M122 96 C116 86 126 80 122 70" fill="none" stroke="#9aaa9f" stroke-width="1.6" stroke-linecap="round" opacity=".45"/>`),
+  // 무지개: 세계에서 뜻이 있는 색을 피해, 안개 속의 엷은 띠로만 그린다
+  rainbow: plate(`<g fill="none" stroke-width="7" opacity=".42" stroke-linecap="round">
+<path d="M26 132 A74 74 0 0 1 174 132" stroke="#b9a7c8"/><path d="M34 132 A66 66 0 0 1 166 132" stroke="#a9c4b0"/><path d="M42 132 A58 58 0 0 1 158 132" stroke="#d4c2a6"/><path d="M50 132 A50 50 0 0 1 150 132" stroke="#b5ad98"/></g>
+<path d="M0 120 C40 112 70 124 100 118 S160 110 200 120 L200 140 L0 140Z" fill="#2a3a33" opacity=".7"/>`),
+  whale: plate(`<rect x="0" y="96" width="200" height="64" fill="#1c2c2a"/>
+<path d="M0 96 C30 92 50 100 80 96 S140 92 200 96" stroke="#5f7e7c" stroke-width="1.6" fill="none"/>
+<path d="M36 104 C40 84 70 74 110 76 C140 78 156 88 160 100 C150 104 130 106 110 106 C80 108 56 108 36 104 Z" fill="#42505a" ${INK}/>
+<path d="M36 104 C24 98 14 92 10 84 C18 86 26 88 32 92 C30 84 30 78 34 72 C38 82 40 92 40 100" fill="#42505a" ${INK}/>
+<circle cx="140" cy="92" r="2" fill="#07090a"/>
+<path d="M124 76 C120 62 112 54 104 50 M124 76 C126 62 132 54 140 50 M124 76 C124 62 124 52 124 44" fill="none" stroke="#a9bcb9" stroke-width="1.6" stroke-linecap="round" opacity=".7"/>`, false),
+  bat: plate(`<path d="M100 74 C88 70 70 56 44 54 C50 62 50 68 44 74 C54 74 60 78 62 86 C68 80 76 80 82 84 C86 80 92 80 96 84 Z" fill="#2e2a2c" ${INK}/>
+<path d="M100 74 C112 70 130 56 156 54 C150 62 150 68 156 74 C146 74 140 78 138 86 C132 80 124 80 118 84 C114 80 108 80 104 84 Z" fill="#2e2a2c" ${INK}/>
+<ellipse cx="100" cy="82" rx="9" ry="13" fill="#3e3638" ${INK}/>
+<path d="M93 70 l2 -10 l4 7 M107 70 l-2 -10 l-4 7" fill="#3e3638" ${INK}/>
+<circle cx="96.5" cy="74" r="1.3" fill="#dfe8e4"/><circle cx="103.5" cy="74" r="1.3" fill="#dfe8e4"/>`),
+  // 휴대전화: 연우의 주머니에 있던 것. 날짜 자리에 ??만 뜬다(1화)
+  phone: plate(`<rect x="72" y="34" width="56" height="100" rx="9" fill="#1b1d1f" ${INK}/>
+<rect x="77" y="42" width="46" height="82" rx="4" fill="#26302d"/>
+<text x="100" y="74" text-anchor="middle" font-size="16" font-weight="800" fill="#c9d4cf" font-family="system-ui, sans-serif">??</text>
+<path d="M86 84 h28" stroke="#4a5853" stroke-width="2"/>
+<path d="M118 46 L104 66 L110 72 L96 96" fill="none" stroke="#7d8a85" stroke-width="1" opacity=".7"/>
+<g stroke="#8fa39d" stroke-width="1" opacity=".5"><path d="M60 40 v6 M150 60 v7 M54 96 v5 M146 108 v6"/></g>`),
+  jelly: plate(`<rect x="0" y="0" width="200" height="160" fill="#14201f" opacity=".6"/>
+<path d="M66 82 C66 50 134 50 134 82 C122 88 78 88 66 82 Z" fill="#8a9fa0" opacity=".75" ${INK}/>
+<path d="M80 74 C86 62 114 62 120 74" stroke="#d0dcd9" stroke-width="1.2" fill="none" opacity=".6"/>
+<g fill="none" stroke="#9fb3b1" stroke-width="1.6" stroke-linecap="round" opacity=".7"><path d="M76 86 C72 104 82 116 74 136 M90 88 C88 108 96 120 90 140 M110 88 C114 106 104 122 112 142 M124 86 C128 102 120 116 128 134"/></g>
+<g fill="#cfe0d8" opacity=".35"><circle cx="40" cy="120" r="2"/><circle cx="160" cy="110" r="1.6"/><circle cx="150" cy="40" r="1.4"/></g>`, false),
+};
+const artOf = (sp) => ART[sp.id] || `<span class="emoji">${sp.glyph}</span>`;
 
 // 기록 천 조각: 열면 이야기 장면과 두 갈래. 고른 갈래가 세계 기록으로 남는다.
 const SETTLE_NODES = [
@@ -383,10 +519,24 @@ const TUTORIAL = {
 const TUT_WRONG = '틀린 답은 <b style="color:var(--red)">붉은 줄</b>로 남는다. 이번만은 다시 고를 수 있다.';
 const TUT_WAIT = '숫자가 0이 됐다. 원래는 <b>시간 초과</b>로 끝나지만, 이번만은 스크린이 기다린다.';
 
+// ───────────────────────── 수치 ─────────────────────────
+// 조정할 수치를 한곳에 모은다. 근거와 시험 결과는 docs/19_THE_ROOT_모바일_수치_조정표.md에 있다.
+const BAL = {
+  idlePerHour: 12,   // 나무 수준 하나가 한 시간에 모으는 이음
+  idleCapMin: 480,   // 오프라인 적립 상한 8시간
+  nightGrow: .08,    // 지낸 날 하나마다 오르는 밤의 세기
+  nightCap: 1.6,     // 밤의 세기에 더해지는 양의 상한(낮을 20번 마치면 닿는다)
+  byeotNight: .2,    // 고정을 푼 볕마을의 밤은 조금 더 세다
+  yarnCost: 8,       // 노란 실 한 줄의 이음
+  yarnRedSlow: .7,   // 붉은 줄이 걸린 줄에서는 노란 실이 덜 듣는다(붉은 줄이 당긴다)
+  redBait: 3,        // 붉은 줄이 걸린 줄을 끊으면 해체자가 그만큼 더 오래 몰린다
+};
+
 // ───────────────────────── 상태 ─────────────────────────
 const SAVE_KEY = 'theroot_mobile_v1';
 const fresh = () => ({ ieum: 0, stab: 0.003, day: 0, nodes: {}, lore: {}, red: {}, idle: 1, slow: 0, hpBonus: 0,
-  lastCollect: Date.now(), streak: 0, lastDay: '', best: 0, ch: 0, unlocked: 0, done: {}, fixed: false, fixedAt: 0 });
+  lastCollect: Date.now(), streak: 0, lastDay: '', best: 0, ch: 0, unlocked: 0, done: {}, fixed: false, fixedAt: 0,
+  hand: 0, stiff: 0, toolSeen: {} });  // hand: 서린의 손 굳기(0~100), stiff: 손이 굳어 쉬는 남은 밤
 let S = fresh();
 function load() { try { const raw = localStorage.getItem(SAVE_KEY); if (raw) S = Object.assign(fresh(), JSON.parse(raw)); } catch (e) {} }
 function save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) {} }
@@ -463,6 +613,8 @@ const SFX = (() => {
     scatter: () => { hiss(.12, 1800, .8, .16); tone(660, .08, 'triangle', .07, 990); },
     cut: () => { tone(120, .35, 'sawtooth', .1, 60); hiss(.3, 700, .8, .1); },
     hurt: () => { tone(220, .5, 'sine', .2, 110); tone(233, .5, 'sine', .12, 116); },
+    yarn: () => { tone(330, .25, 'triangle', .12, 440); tone(660, .12, 'sine', .05, null, .05); },
+    fix: () => { [196, 247, 294].forEach((f, i) => tone(f, .9, 'sine', .1, null, i * .03)); hiss(.5, 300, .5, .05); },
     dawn: (kept) => (kept ? [392, 494, 587, 784] : [392, 370, 330]).forEach((f, i) => tone(f, .6, 'sine', .1, null, i * .14)),
   };
 })();
@@ -470,8 +622,9 @@ const SFX = (() => {
 document.addEventListener('pointerdown', () => SFX.unlock(), { once: true });
 
 // ───────────────────────── 홈 ─────────────────────────
-const IDLE_CAP_MIN = 480;  // 오프라인 적립 상한 8시간
-const idleRate = () => S.idle;  // 분당 이음
+const IDLE_CAP_MIN = BAL.idleCapMin;
+const idleRate = () => S.idle * BAL.idlePerHour / 60;  // 분당 이음
+const idleHour = () => S.idle * BAL.idlePerHour;      // 화면에는 시간당으로 보인다
 // 볕마을을 고정해 두는 동안 나무는 자라지 않는다(서린의 손 하나가 두 곳을 함께 붙잡고 있다)
 const idleNow = () => S.fixed ? S.fixedAt : Date.now();
 const idleMin = () => Math.max(0, Math.min((idleNow() - S.lastCollect) / 60000, IDLE_CAP_MIN));
@@ -486,13 +639,13 @@ function renderHome() {
   $('streak').textContent = S.streak;
   $('idleText').innerHTML = S.fixed
     ? '<span style="color:var(--yellow)">볕마을이 고정돼 정착지 나무에 새 잎이 나지 않는다</span>'
-    : `나무가 실타래를 모으는 중 <b style="color:var(--root)">${idleRate()}</b>/분`;
+    : `나무가 이음을 모으는 중 <b style="color:var(--root)">${idleHour()}</b>/시간`;
   const other = CHAPTERS[S.ch === 0 ? 1 : 0];
   $('chBtn').style.display = S.unlocked >= 1 ? '' : 'none';
   $('chBtn').textContent = '⇄ ' + other.name;
   $('fixBtn').style.display = S.unlocked >= 1 ? '' : 'none';
   $('fixBtn').innerHTML = S.fixed
-    ? '🔒 볕마을 고정 중 — <span style="color:var(--dim)">밤이 오지 않는다 · 나무가 멈춘다</span>'
+    ? '🔒 볕마을 고정 중 — <span style="color:var(--dim)">밤이 오지 않는다 · 같은 낮이 돌아온다 · 나무가 멈춘다</span>'
     : '🍃 볕마을 고정 풀림 — <span style="color:var(--dim)">밤이 온다 · 나무가 자란다</span>';
   const opened = nodes.filter(n => S.nodes[n.id] != null).length;
   $('hSub').textContent = opened === nodes.length
@@ -516,7 +669,7 @@ $('chBtn').onclick = () => { S.ch = S.ch === 0 ? 1 : 0; save(); SFX.page(); rend
 function setFixed(on) {
   if (on === S.fixed) return;
   if (on) { S.fixed = true; S.fixedAt = Date.now(); }
-  else { S.lastCollect += Date.now() - S.fixedAt; S.fixed = false; }
+  else { S.lastCollect += Date.now() - S.fixedAt; S.fixed = false; delete S.sameDay; }
   save(); renderHome(); tickIdle();
 }
 $('fixBtn').onclick = () => {
@@ -530,7 +683,7 @@ function unlockByeot() {  // 정착지를 마치면 볕마을이 열리고, 처�
   S.unlocked = 1; S.ch = 1; setFixed(true); save();
   tapScene('2장 — 볕마을', BYEOT_INTRO, () => {
     show('home'); renderHome(); tickIdle();
-    modal(`<h2>볕마을</h2><div class="sub">볕마을은 고정돼 있다. 밤이 오지 않아 기록 천이 다치지 않는다. 대신 정착지 나무에 새 잎이 나지 않는다.<br><br>아래의 <b style="color:var(--yellow)">고정</b> 버튼으로 풀 수 있다. 붙잡을지 놓을지는 매일 고른다.</div>`, [['확인', null, true]]);
+    modal(`<h2>볕마을</h2><div class="sub">볕마을은 고정돼 있다. 밤이 오지 않아 기록 천이 다치지 않고, 낮에는 같은 표본이 같은 순서로 되풀이된다. 대신 정착지 나무에 새 잎이 나지 않는다.<br><br>아래의 <b style="color:var(--yellow)">고정</b> 버튼으로 풀 수 있다. 붙잡을지 놓을지는 매일 고른다.</div>`, [['확인', null, true]]);
   });
 }
 if (S.done.settle && S.unlocked < 1) { S.unlocked = 1; S.fixed = true; S.fixedAt = Date.now(); save(); }  // v0.2에서 정착지를 마친 저장
@@ -622,8 +775,8 @@ function chooseStory(n, k) {
   S.nodes[n.id] = S.nodes[n.id] ?? k;
   (S.lore[n.id] = S.lore[n.id] || []).push(k);
   const r = o.reward; let gain = '';
-  if (r.ieum) { S.ieum += r.ieum; gain = `실타래 +${r.ieum}`; }
-  if (r.idle) { S.idle += r.idle; gain = `나무가 모으는 실타래 +${r.idle}/분`; }
+  if (r.ieum) { S.ieum += r.ieum; gain = `이음 +${r.ieum}`; }
+  if (r.idle) { S.idle += r.idle; gain = `나무가 모으는 이음 +${r.idle * BAL.idlePerHour}/시간`; }
   if (r.slow) { S.slow += r.slow; gain = '밤에 해체자가 느려진다'; }
   if (r.hp) { S.hpBonus += r.hp; gain = '기록 천 +1'; }
   S.stab += 0.004; save();
@@ -670,9 +823,14 @@ function startDay(tutorial) {
   // 붉은 줄이 남은 표본을 먼저 다시 낸다(틀린 것을 배워 고치기)
   const retry = pool.filter(s => S.red['sp_' + s.id]);
   const rest = pool.filter(s => !S.red['sp_' + s.id]).sort(() => Math.random() - .5);
-  const deck = tutorial === true
+  let deck = tutorial === true
     ? Object.keys(TUTORIAL).map(id => pool.find(s => s.id === id))
     : retry.concat(rest).slice(0, DAY_CARDS).sort(() => Math.random() - .5);
+  // 고정된 볕마을은 같은 하루를 되풀이한다: 붙잡은 첫날의 표본이 같은 순서로 다시 나온다
+  if (tutorial !== true && fixedHere()) {
+    const same = (S.sameDay || []).map(id => pool.find(s => s.id === id)).filter(Boolean);
+    if (same.length === DAY_CARDS) deck = same; else { S.sameDay = deck.map(s => s.id); save(); }
+  }
   D = { deck, idx: 0, step: 0, earned: 0, red: 0, blur: 0, combo: 0, maxCombo: 0, observed: false, correct: 0, path: [],
     tutorial: tutorial === true, waiting: false };
   $('cCoach').classList.toggle('on', D.tutorial);
@@ -685,7 +843,8 @@ function nextCard() {
   if (D.idx >= D.deck.length) return endDay();
   const sp = D.deck[D.idx]; D.step = 0; D.observed = false; D.path = [];
   $('cTag').textContent = '표본 ' + String(D.idx + 1).padStart(2, '0');
-  $('cName').textContent = sp.name; $('cGlyph').textContent = sp.glyph;
+  $('cName').textContent = sp.name;
+  $('cGlyph').className = 'glyph'; $('cGlyph').innerHTML = artOf(sp);
   $('cClue').textContent = ''; $('cPath').textContent = '';
   $('dCount').textContent = (D.idx + 1) + '/' + D.deck.length;
   $('observeBtn').disabled = false; $('observeBtn').style.opacity = 1;
@@ -762,14 +921,15 @@ function choose(side, ev) {
 function timeout() {
   // 시간이 다 되면 정답도 오답도 아닌 시간 초과로 남는다
   timerId = null; D.combo = 0; D.blur++;
-  flash('flash-blur'); SFX.blur(); pop('시간 초과', 'var(--dim)', innerWidth / 2, innerHeight / 2);
+  $('cGlyph').classList.add('smudge');  // 스크린은 번진 채 대상 위에 남는다
+  flash('flash-blur'); SFX.blur(); pop('흐릿한 선택', 'var(--dim)', innerWidth / 2, innerHeight / 2);
   finishCard(false);
 }
 function finishCard(ok) {
   const sp = D.deck[D.idx];
   if (ok) {
-    D.correct++;
-    if (S.red['sp_' + sp.id]) { delete S.red['sp_' + sp.id]; pop('붉은 줄이 실타래로', 'var(--gold)', innerWidth / 2, innerHeight / 3); }
+    D.correct++; $('cGlyph').classList.add('traced');  // 맞히면 하늘색 선이 대상을 따라 뻗는다
+    if (S.red['sp_' + sp.id]) { delete S.red['sp_' + sp.id]; pop('붉은 줄이 이음으로', 'var(--gold)', innerWidth / 2, innerHeight / 3); }
   }
   D.idx++;
   if (D.tutorial && ok) { setTimeout(() => modal(TUTORIAL[sp.id].done, [['계속', nextCard, true]]), 420); return; }
@@ -819,6 +979,7 @@ function endDay() {
     const y = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
     S.streak = S.lastDay === y ? S.streak + 1 : 1; S.lastDay = today;
   }
+  S.hand = Math.max(0, S.hand - D.correct * 2);  // 낮에 번 여유가 서린의 손을 푼다
   S.day++; save();
   modal(`<h2>해가 진다</h2>
     <div class="stat"><span>맞힌 표본</span><b>${D.correct}/${D.deck.length}</b></div>
@@ -827,16 +988,39 @@ function endDay() {
     <div class="stat"><span>붉은 줄</span><b style="color:var(--red)">${D.red}</b></div>
     <div class="stat"><span>시간 초과</span><b style="color:var(--dim)">${D.blur}</b></div>
     <div class="sub" style="margin-top:10px">${D.tutorial
-      ? '밤에는 해체자가 기록 천으로 이어진 줄을 끊으러 온다. 사각거리는 실밥을 눌러 쫓아내라.'
-      : fixedHere() ? '볕마을은 고정돼 있다. 바깥이 어두워져도 안에는 밤이 오지 않는다.'
+      ? '밤에는 해체자가 기록 천으로 이어진 줄을 끊으러 온다. 사각거리는 실밥을 눌러 흩어라.'
+      : fixedHere() ? '볕마을은 고정돼 있다. 바깥이 어두워져도 안에는 밤이 오지 않는다. 내일 낮에도 오늘과 같은 표본이 같은 순서로 나온다.'
       : '붉은 줄이 남은 곳으로 해체자가 먼저 온다.'}</div>`,
     [[fixedHere() ? '저녁을 맞는다' : '밤을 맞는다', startNight, true]]);
 }
 
 // ───────────────────────── 밤: 해체자 ─────────────────────────
+// 밤의 수단(docs/13 5.3절): 노란 실은 줄 하나를 느리게 하고, 끊기는 줄 하나를 내주고 해체자를 모으며,
+// 고정은 구역 전체를 잠깐 멈추는 대신 서린의 손을 굳게 한다.
+const YARN_COST = BAL.yarnCost;  // 노란 실 한 줄의 이음
+const YARN_SLOW = .45;     // 실 앞(바깥 구간)에서의 속도 배율
+const BAIT_DUR = 5;        // 끊은 끝으로 해체자가 몰리는 시간(내부 값)
+const FIX_DUR = 3;         // 고정으로 멈추는 시간(내부 값)
+const FIX_HAND = 45;       // 고정 한 번에 굳는 정도
+const HAND_DAWN = 15;      // 새벽마다 풀리는 정도(볕마을을 붙잡고 있으면 풀리지 않는다)
+const STIFF_NIGHTS = 2;    // 손이 다 굳으면 쉬는 밤
+const TOOLS = [
+  { id: 'yarn', ok: () => S.nodes.yarn != null, title: '노란 실',
+    text: `<b style="color:var(--yellow)">노란 실</b> — 서린이 위험한 곳 앞에 거는 실이다. 줄 하나를 눌러 실을 걸면, 그 줄로 오는 해체자가 실 앞에서 느려진다. 붉은 줄이 걸린 줄에서는 덜 느려진다. 한 줄에 이음 ${YARN_COST}.` },
+  { id: 'cut', ok: () => S.nodes.red != null, title: '끊기',
+    text: '<b>끊기</b> — 약한 줄 하나를 먼저 끊는다. 해체자가 잠깐 끊긴 끝으로 몰려 한데 뭉친다. 그 줄은 잃는다. 하룻밤에 한 번.' },
+  { id: 'fix', ok: () => S.unlocked >= 1, title: '고정',
+    text: '<b>고정</b> — 서린이 이곳을 이름 있던 때의 모양으로 붙잡는다. 잠깐 해체자가 모두 멈춘다. 대신 그 밤에는 안정화율이 오르지 않고, 서린의 손이 굳어 간다. 손이 다 굳으면 이틀 밤 동안 노란 실도 고정도 쓸 수 없다.' },
+];
 let N = null;
 function startNight() {
   if (fixedHere()) return fixedDawn();
+  const fresh = TOOLS.filter(t => t.ok() && !S.toolSeen[t.id]);
+  if (!fresh.length) return beginNight();
+  fresh.forEach(t => { S.toolSeen[t.id] = true; }); save();
+  modal(`<h2>밤의 수단</h2><div class="sub">${fresh.map(t => t.text).join('<br><br>')}</div>`, [['밤을 맞는다', beginNight, true]]);
+}
+function beginNight() {
   show('night');
   const NODES = curNodes();
   const cv = $('nCanvas'), dpr = devicePixelRatio || 1;
@@ -850,116 +1034,236 @@ function startNight() {
   NODES.forEach((n, i) => { S.red[n.id] = i === (S.day % NODES.length) ? redTotal : 0; });
   const spokes = NODES.map((n, i) => {
     const ang = -Math.PI / 2 + i * Math.PI * 2 / NODES.length;
-    return { n, ang, x: cx + Math.cos(ang) * R, y: cy + Math.sin(ang) * R, ox: cx + Math.cos(ang) * OUT, oy: cy + Math.sin(ang) * OUT, cut: false, red: S.red[n.id] };
+    return { n, ang, x: cx + Math.cos(ang) * R, y: cy + Math.sin(ang) * R, ox: cx + Math.cos(ang) * OUT, oy: cy + Math.sin(ang) * OUT,
+      cut: false, red: S.red[n.id], yarn: false, flash: 0 };
   });
   const hpMax = 3 + S.hpBonus;
-  N = { ctx, W, H, cx, cy, spokes, foes: [], parts: [], t: 0, dur: 20, hp: hpMax, hpMax, kills: 0, cuts: 0, spawnAcc: 0, last: performance.now(), weights, over: false };
-  const level = 1 + S.day * 0.15;
+  N = { ctx, W, H, cx, cy, spokes, foes: [], parts: [], t: 0, dur: 20, hp: hpMax, hpMax, kills: 0, cuts: 0, spawnAcc: 0, last: performance.now(), weights, over: false,
+    armed: null, bait: null, freeze: 0, cutUsed: false, fixUsed: false, yarns: 0, stiff: S.stiff > 0 };
+  if (N.stiff) { S.stiff--; if (!S.stiff) S.hand = 40; }  // 쉬고 나면 손이 조금 풀린 채로 돌아온다
+  save();
+  // 밤은 날마다 조금씩 세지다가 상한에서 멈춘다. 고정을 푼 볕마을은 조금 더 세다
+  const level = 1 + Math.min(S.day * BAL.nightGrow, BAL.nightCap) + (curCh().id === 'byeot' ? BAL.byeotNight : 0);
   N.rate = 1.1 * level;         // 초당 등장 수
   N.speed = 34 * Math.min(level, 2.2) * (1 - Math.min(S.slow, 3) * .12);
   if (!S.onboarded) { N.dur = 12; N.rate *= .6; }  // 첫 밤은 짧고 느슨하게
   cv.onpointerdown = (e) => {
-    const r = cv.getBoundingClientRect(); const x = e.clientX - r.left, y = e.clientY - r.top;
-    let hit = false;
-    N.foes.forEach(f => { if (!f.dead && Math.hypot(f.x - x, f.y - y) < 34) { f.dead = true; hit = true; N.kills++; burst(f.x, f.y, '#c9c3b6'); } });
-    if (hit) { buzz(8); SFX.scatter(); S.ieum += 1; }
+    const r = cv.getBoundingClientRect(); nightTap(e.clientX - r.left, e.clientY - r.top, e.clientX, e.clientY);
   };
+  renderTools();
   requestAnimationFrame(nightLoop);
 }
+function nightTap(x, y, px, py) {
+  if (!N || N.over) return;
+  // 수단을 고른 뒤의 탭도 손가락 밑의 해체자는 흩는다. 줄을 고르는 탭과 흩는 탭이 서로를 지우지 않게 한다
+  if (N.armed) {
+    if (Math.hypot(x - N.cx, y - N.cy) < 30) { N.armed = null; pop('그만뒀다', 'var(--dim)', px, py - 20); renderTools(); }
+    else applyTool(N.armed, nearestSpoke(x, y), px, py);
+  }
+  let hit = 0;
+  N.foes.forEach(f => { if (!f.dead && Math.hypot(f.x - x, f.y - y) < 34) { f.dead = true; hit++; N.kills++; burst(f.x, f.y, '#c9c3b6'); } });
+  if (hit) {
+    buzz(hit > 2 ? [8, 20, 8] : 8); SFX.scatter(); S.ieum += hit;
+    if (hit > 2) { S.ieum += hit; pop('한꺼번에 ' + hit, 'var(--gold)', px, py - 24); }  // 뭉친 것을 한 번에 흩으면 이음을 두 배로
+  }
+}
+function nearestSpoke(x, y) {  // 누른 곳의 방향에 가장 가까운 줄
+  const a = Math.atan2(y - N.cy, x - N.cx);
+  let best = 0, bd = 9;
+  N.spokes.forEach((s, i) => { const d = Math.abs(Math.atan2(Math.sin(a - s.ang), Math.cos(a - s.ang))); if (d < bd) { bd = d; best = i; } });
+  return best;
+}
+function toolState(id) {  // 쓸 수 없으면 그 이유, 쓸 수 있으면 ''
+  const t = TOOLS.find(x => x.id === id);
+  if (!t.ok()) return 'locked';
+  if (id === 'yarn') return N.stiff ? '서린의 손이 굳었다' : S.ieum < YARN_COST ? '이음이 모자란다' : '';
+  if (id === 'cut') return N.cutUsed ? '오늘 밤은 썼다' : '';
+  return N.stiff ? '서린의 손이 굳었다' : N.fixUsed ? '오늘 밤은 썼다' : '';
+}
+function renderTools() {
+  const any = TOOLS.some(t => t.ok());
+  $('nTools').style.display = any ? '' : 'none';
+  [['yarn', 'tYarn', 'tYarnSub'], ['cut', 'tCut', 'tCutSub'], ['fix', 'tFix', 'tFixSub']].forEach(([id, b, sub]) => {
+    const st = toolState(id);
+    $(b).style.visibility = st === 'locked' ? 'hidden' : '';
+    $(b).disabled = !!st && st !== 'locked' && N.armed !== id;
+    $(b).classList.toggle('armed', N.armed === id);
+    $(sub).textContent = st && st !== 'locked' ? st
+      : id === 'yarn' ? '이음 ' + YARN_COST : id === 'cut' ? '하룻밤 한 번' : '서린의 손 ' + Math.round(S.hand);
+  });
+  $('nHint').textContent = N.armed === 'yarn' ? '노란 실을 걸 줄을 눌러라. 붉은 줄 쪽에는 실이 덜 듣는다. 가운데를 누르면 그만둔다.'
+    : N.armed === 'cut' ? '끊을 줄을 눌러라. 붉은 줄 쪽을 끊으면 붉은 줄은 남고 해체자가 더 오래 몰린다. 가운데를 누르면 그만둔다.'
+    : N.t < N.freeze ? '서린이 붙잡았다. 해체자가 멈췄다.'
+    : '사각거리는 실밥을 눌러 흩어라. 붉은 줄에 걸린 곳으로 먼저 몰려든다.';
+}
+function armTool(id) {
+  if (!N || N.over || toolState(id)) return;
+  if (id === 'fix') return applyTool('fix');
+  N.armed = N.armed === id ? null : id; SFX.page(); renderTools();
+}
+function applyTool(id, i, px, py) {
+  N.armed = null;
+  const s = i != null ? N.spokes[i] : null;
+  if (id === 'yarn') {
+    if (s.yarn || s.cut) { pop(s.cut ? '끊긴 줄' : '이미 걸었다', 'var(--dim)', px, py); renderTools(); return; }
+    S.ieum -= YARN_COST; s.yarn = true; N.yarns++; SFX.yarn(); buzz(10);
+    pop('노란 실', 'var(--yellow)', px, py - 20);
+  } else if (id === 'cut') {
+    if (s.cut) { pop('이미 끊겼다', 'var(--dim)', px, py); renderTools(); return; }
+    // 붉은 줄은 해체자가 건드리지 못한다(원고 16화·72화). 끊기에도 같은 제한을 둔다(게임 규칙). 옆의 가는 줄만 끊기고, 남은 붉은 줄이 해체자를 더 오래 당긴다
+    s.cut = true; N.cuts++; N.cutUsed = true; N.bait = { s: i, until: N.t + BAIT_DUR + (s.red ? BAL.redBait : 0) };
+    burst(s.x, s.y, '#e0524f'); SFX.cut(); buzz(25);
+    pop(s.red ? '붉은 줄은 남았다' : '끊었다', s.red ? 'var(--red)' : 'var(--undo)', px, py - 20);
+  } else if (id === 'fix') {
+    N.fixUsed = true; N.freeze = N.t + FIX_DUR; S.hand = Math.min(100, S.hand + FIX_HAND); SFX.fix(); buzz([20, 40, 20]);
+    if (S.hand >= 100) {
+      S.stiff = STIFF_NIGHTS;
+      setTimeout(() => pop('“손이 안 펴져. 당분간 못 붙잡아.”', 'var(--yellow)', innerWidth / 2, innerHeight * .35), 300);
+    }
+  }
+  save(); renderTools();
+}
+$('tYarn').onclick = () => armTool('yarn');
+$('tCut').onclick = () => armTool('cut');
+$('tFix').onclick = () => armTool('fix');
 function burst(x, y, c) { for (let i = 0; i < 10; i++) N.parts.push({ x, y, vx: (Math.random() - .5) * 220, vy: (Math.random() - .5) * 220, life: .5, c }); }
 function pickSpoke() {
+  if (N.bait && N.t < N.bait.until) return N.bait.s;  // 끊은 끝으로 몰린다
   const tot = N.weights.reduce((a, b) => a + b, 0); let r = Math.random() * tot;
   for (let i = 0; i < N.weights.length; i++) { r -= N.weights[i]; if (r <= 0) return i; } return 0;
 }
 function nightLoop(now) {
   if (!N || N.over) return;
-  const dt = Math.min(.05, (now - N.last) / 1000); N.last = now; N.t += dt;
-  N.spawnAcc += dt * N.rate * (1 + N.t / N.dur);
-  while (N.spawnAcc >= 1) {
-    N.spawnAcc -= 1; const i = pickSpoke(), s = N.spokes[i];
-    N.foes.push({ s: i, p: 0, x: s.ox, y: s.oy, sp: N.speed * (s.red ? 1.3 : 1) * (.85 + Math.random() * .3), wob: Math.random() * 6 });
+  const dt = Math.min(.05, Math.max(0, (now - N.last) / 1000)); N.last = now; N.t += dt;
+  const frozen = N.t < N.freeze, baiting = N.bait && N.t < N.bait.until;
+  if (!frozen) {
+    N.spawnAcc += dt * N.rate * (1 + N.t / N.dur);
+    while (N.spawnAcc >= 1) {
+      N.spawnAcc -= 1; const i = pickSpoke(), s = N.spokes[i];
+      if (s.yarn) s.flash = .35;  // 노란 실이 걸린 줄은 해체자가 들어올 때 빛나 미리 알린다
+      N.foes.push({ s: i, p: 0, x: s.ox, y: s.oy, sp: N.speed * (s.red ? 1.3 : 1) * (.85 + Math.random() * .3), wob: Math.random() * 6 });
+    }
   }
   N.foes.forEach(f => {
     if (f.dead) return;
     const s = N.spokes[f.s];
     const L1 = Math.hypot(s.ox - s.x, s.oy - s.y), L2 = Math.hypot(s.x - N.cx, s.y - N.cy);
-    f.p += f.sp * dt;
+    if (!frozen) f.p += f.sp * dt * (s.yarn && f.p < L1 ? (s.red ? BAL.yarnRedSlow : YARN_SLOW) : 1);
+    if (baiting && f.s === N.bait.s && f.p > L1) f.p = L1;  // 끊긴 끝에 모여 갉는다
     if (f.p < L1) { const k = f.p / L1; f.x = s.ox + (s.x - s.ox) * k; f.y = s.oy + (s.y - s.oy) * k; }
     else {
       if (!s.cut) { s.cut = true; N.cuts++; burst(s.x, s.y, '#e0524f'); buzz(25); SFX.cut(); }
       const k = Math.min(1, (f.p - L1) / L2); f.x = s.x + (N.cx - s.x) * k; f.y = s.y + (N.cy - s.y) * k;
       if (k >= 1) { f.dead = true; N.hp--; burst(N.cx, N.cy, '#e3c46b'); buzz([40, 30, 40]); SFX.hurt(); }
     }
-    f.x += Math.sin(N.t * 9 + f.wob) * 1.2;
+    if (!frozen) f.x += Math.sin(N.t * 9 + f.wob) * 1.2;
   });
-  // 해체자의 사각거림: 많을수록 자주, 크게
-  N.scratchAcc = (N.scratchAcc || 0) + dt * N.foes.length * 2.5;
-  if (N.scratchAcc >= 1) { N.scratchAcc = 0; SFX.scratch(N.foes.length); }
+  N.spokes.forEach(s => { s.flash = Math.max(0, s.flash - dt); });
+  // 해체자의 사각거림: 많을수록 자주, 크게. 고정 중에는 조용하다
+  if (!frozen) {
+    N.scratchAcc = (N.scratchAcc || 0) + dt * N.foes.length * 2.5;
+    if (N.scratchAcc >= 1) { N.scratchAcc = 0; SFX.scratch(N.foes.length); }
+  }
   N.foes = N.foes.filter(f => !f.dead);
   N.parts.forEach(p => { p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt; }); N.parts = N.parts.filter(p => p.life > 0);
-  drawNight();
+  drawNight(frozen, baiting);
   $('nTime').textContent = Math.max(0, Math.ceil(N.dur - N.t));
   $('nHp').textContent = '♥'.repeat(Math.max(0, N.hp)) + '♡'.repeat(Math.max(0, N.hpMax - N.hp));
   $('nKill').textContent = N.kills;
+  renderTools();
   if (N.t >= N.dur || N.hp <= 0) return endNight();
   requestAnimationFrame(nightLoop);
 }
-function drawNight() {
+function drawNight(frozen, baiting) {
   const { ctx, W, H, cx, cy } = N;
   ctx.clearRect(0, 0, W, H);
-  N.spokes.forEach(s => {
+  N.spokes.forEach((s, i) => {
+    if (N.armed) {  // 수단을 고르면 걸 수 있는 줄의 몫이 밝아진다
+      const ok = N.armed === 'yarn' ? !s.yarn && !s.cut : !s.cut, half = Math.PI / N.spokes.length;
+      ctx.fillStyle = ok ? (N.armed === 'yarn' ? 'rgba(242,214,75,.07)' : 'rgba(201,195,182,.06)') : 'rgba(0,0,0,0)';
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, Math.hypot(s.ox - cx, s.oy - cy) + 20, s.ang - half + .04, s.ang + half - .04); ctx.closePath(); ctx.fill();
+    }
     ctx.strokeStyle = s.cut ? '#3a2422' : s.red ? '#e0524f' : (S.nodes[s.n.id] != null ? '#6fd3c1' : '#2f3f36');
-    ctx.lineWidth = s.red ? 2 + Math.min(s.red, 4) : 2;
+    ctx.lineWidth = s.red && !s.cut ? 2 + Math.min(s.red, 4) : 2;
     ctx.setLineDash(s.cut ? [3, 7] : []);
     ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(s.x, s.y); ctx.stroke();
+    if (s.cut && s.red) {  // 옆의 가는 줄은 끊겨도 붉은 줄은 그대로 남는다
+      const px = -Math.sin(s.ang) * 3, py = Math.cos(s.ang) * 3;
+      ctx.setLineDash([]); ctx.strokeStyle = '#e0524f'; ctx.lineWidth = 1.5 + Math.min(s.red, 4) * .5;
+      ctx.beginPath(); ctx.moveTo(cx + px, cy + py); ctx.lineTo(s.x + px, s.y + py); ctx.stroke();
+    }
     ctx.strokeStyle = '#1f2a24'; ctx.setLineDash([2, 8]); ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.ox, s.oy); ctx.stroke();
     ctx.setLineDash([]);
+    if (s.yarn) {  // 바깥 구간을 가로지르는 노란 실
+      const mx = s.x + (s.ox - s.x) * .45, my = s.y + (s.oy - s.y) * .45, px = -Math.sin(s.ang) * 13, py = Math.cos(s.ang) * 13;
+      ctx.strokeStyle = '#f2d64b'; ctx.lineWidth = 2.5 + s.flash * 8;
+      ctx.beginPath(); ctx.moveTo(mx - px, my - py); ctx.lineTo(mx + px, my + py); ctx.stroke();
+    }
+    if (baiting && i === N.bait.s) {  // 해체자가 몰리는 끊긴 끝
+      ctx.strokeStyle = 'rgba(201,195,182,.6)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(s.x, s.y, 30 + Math.sin(N.t * 10) * 4, 0, Math.PI * 2); ctx.stroke();
+    }
     ctx.font = '22px sans-serif'; ctx.textAlign = 'center'; ctx.globalAlpha = s.cut ? .3 : 1;
     ctx.fillText(s.n.icon, s.x, s.y + 8); ctx.globalAlpha = 1;
   });
   ctx.fillStyle = '#16231d'; ctx.strokeStyle = '#e3c46b'; ctx.lineWidth = 2;
   ctx.beginPath(); ctx.arc(cx, cy, 26, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
   ctx.font = '24px sans-serif'; ctx.fillText('📜', cx, cy + 8);
-  N.foes.forEach(f => {  // 회백색 실밥 뭉치
+  N.foes.forEach(f => {  // 회백색 실밥 뭉치. 고정 중에는 움직이지 않는다
     ctx.strokeStyle = '#c9c3b6'; ctx.lineWidth = 1.4;
+    const tt = frozen ? N.freeze - FIX_DUR : N.t;
     for (let k = 0; k < 6; k++) {
-      const a = k + N.t * 4 + f.wob; ctx.beginPath();
+      const a = k + tt * 4 + f.wob; ctx.beginPath();
       ctx.moveTo(f.x, f.y); ctx.lineTo(f.x + Math.cos(a) * 9, f.y + Math.sin(a * 1.3) * 9); ctx.stroke();
     }
     ctx.fillStyle = '#e8e2d4'; ctx.beginPath(); ctx.arc(f.x, f.y, 4.5, 0, Math.PI * 2); ctx.fill();
   });
   N.parts.forEach(p => { ctx.globalAlpha = Math.max(0, p.life * 2); ctx.fillStyle = p.c; ctx.fillRect(p.x, p.y, 3, 3); });
   ctx.globalAlpha = 1;
+  if (frozen) { ctx.fillStyle = 'rgba(227,196,107,.08)'; ctx.fillRect(0, 0, W, H); }
+}
+function dawnHand() {  // 새벽마다 서린의 손이 조금 풀린다. 볕마을을 붙잡고 있으면 풀리지 않는다
+  if (S.fixed || S.stiff) return false;
+  S.hand = Math.max(0, S.hand - HAND_DAWN); return true;
+}
+function handStat() {
+  if (!TOOLS[2].ok() || (!S.hand && !S.stiff)) return '';
+  return `<div class="stat"><span>서린의 손</span><b style="color:var(--yellow)">${S.stiff ? '굳음 · 남은 밤 ' + S.stiff : Math.round(S.hand) + (S.fixed ? ' (볕마을을 붙잡고 있다)' : '')}</b></div>`;
 }
 function endNight() {
-  N.over = true;
+  N.over = true; N.armed = null;
   const lostNames = N.cuts, kept = N.hp > 0;
   const morning = 5 + Math.min(S.streak, 7) * 2;  // 마루의 매듭 보너스
   S.ieum += morning;
   // 첫 새벽에는 첫 조각을 반드시 열 수 있게 나무가 모자란 만큼 채운다
   const gift = S.onboarded ? 0 : Math.max(0, SETTLE_NODES[0].cost - Math.floor(S.ieum));
   S.ieum += gift;
-  S.stab = Math.max(0, S.stab + (kept ? 0.002 : -0.002) - lostNames * 0.0005);
+  // 고정한 밤에는 지켜도 안정화율이 오르지 않는다(자라나는 것이 멈춘다)
+  const keptGain = kept ? (N.fixUsed ? 0 : 0.002) : -0.002;
+  S.stab = Math.max(0, S.stab + keptGain - lostNames * 0.0005);
   curNodes().forEach(n => { S.red[n.id] = 0; });
+  dawnHand();
   save();
   SFX.dawn(kept);
   const result = kept ? (lostNames ? '기록 천은 지켰다. 끊긴 줄이 있다.' : '한 줄도 끊기지 않았다.') : '기록 천이 찢겼다. 그래도 아침은 온다.';
   const buttons = [['아침으로', goHome, true]];
   // 첫 5분에는 광고를 권하지 않는다
   if (S.onboarded) buttons.unshift(['광고 보고 아침 보상 두 배 (시험용: 바로 지급)', () => { S.ieum += morning; save(); goHome(); }]);
-  modal(`<h2>새벽</h2><div class="sub">${result}</div>
-    <div class="stat"><span>쫓아낸 해체자</span><b>${N.kills}</b></div>
+  modal(`<h2>새벽</h2><div class="sub">${result}${N.fixUsed && kept ? '<br>붙잡은 밤이었다. 안정화율은 오르지 않았다.' : ''}</div>
+    <div class="stat"><span>흩은 해체자</span><b>${N.kills}</b></div>
     <div class="stat"><span>끊긴 줄</span><b style="color:var(--red)">${lostNames}</b></div>
-    <div class="stat"><span>마루의 매듭 보너스</span><b>실타래 +${morning}</b></div>
-    ${gift ? `<div class="stat"><span>나무 수확</span><b>+${gift}</b></div>` : ''}
+    <div class="stat"><span>마루의 매듭 보너스</span><b>이음 +${morning}</b></div>
+    ${gift ? `<div class="stat"><span>나무가 보탠 이음</span><b>+${gift}</b></div>` : ''}
+    ${handStat()}
     <div class="stat"><span>영역 안정화율</span><b>${S.stab.toFixed(3)}%</b></div>`, buttons);
 }
 function fixedDawn() {  // 고정된 볕마을: 밤 없이 아침. 매듭 보너스는 받지만 안정화율은 그대로다
   const morning = 5 + Math.min(S.streak, 7) * 2;
   S.ieum += morning; save();
   SFX.dawn(true);
-  modal(`<h2>밤 없는 저녁</h2><div class="sub">바깥에는 밤이 왔다. 볕마을 안은 늦은 오후 그대로였다. 주민들은 저녁이라며 잠들었다.<br>기록 천은 한 올도 변하지 않았다.</div>
-    <div class="stat"><span>마루의 매듭 보너스</span><b>실타래 +${morning}</b></div>
+  modal(`<h2>멈춘 저녁</h2><div class="sub">바깥에는 밤이 왔다. 볕마을 안은 늦은 오후 그대로였다. 주민들은 저녁이라며 잠들었다.<br>기록 천은 한 올도 변하지 않았다.</div>
+    <div class="stat"><span>마루의 매듭 보너스</span><b>이음 +${morning}</b></div>
+    ${handStat()}
     <div class="stat"><span>영역 안정화율</span><b>${S.stab.toFixed(3)}% (그대로)</b></div>`,
     [['광고 보고 아침 보상 두 배 (시험용: 바로 지급)', () => { S.ieum += morning; save(); goHome(); }], ['아침으로', goHome, true]]);
 }
