@@ -274,7 +274,7 @@ const SPECIMENS = [
 ];
 // ───────────────────────── 표본 그림 ─────────────────────────
 // 시각 초안(docs/character_art)의 방향: 어둡고 젖은 바탕, 안개, 뿌리, 낮은 채도.
-// 노란색·붉은색·파란색·하늘색은 세계에서 뜻이 있으므로 그림의 바탕과 대상에는 쓰지 않는다.
+// 노란색·붉은색·파란색·하늘색·연한 분홍은 세계에서 뜻이 있으므로 그림의 바탕과 대상에는 쓰지 않는다.
 // 하늘색은 분류를 맞혔을 때 대상을 따라 뻗는 선(.trace, 대상의 윤곽을 한 번 더 그린 것)에만 쓴다(세계 규칙 3절).
 const INK = 'stroke="#0a0f0c" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"';
 const plate = (inner, ground = true) => `<svg viewBox="0 0 200 160" role="img" aria-hidden="true">
@@ -289,14 +289,14 @@ ${ground ? '<path d="M0 132 C50 124 150 126 200 132 L200 160 L0 160Z" fill="url(
 <g fill="#cfe0d8" opacity=".18"><circle cx="24" cy="52" r="1"/><circle cx="160" cy="34" r="1.2"/><circle cx="140" cy="96" r=".9"/><circle cx="52" cy="104" r="1.1"/></g>
 </svg>`;
 const ART = {
-  // 놋그릇에 담긴 물과 손끝에서 떨어지는 물방울(4화의 놋그릇)
+  // 4화의 놋그릇에 담긴 물과 그 위의 물방울(표본은 1화)
   water: plate(`<path d="M58 104 Q100 150 142 104 Z" fill="#7a6a45" ${INK}/>
 <ellipse cx="100" cy="104" rx="42" ry="8" fill="#5f7e7c" ${INK}/>
 <ellipse cx="92" cy="103" rx="16" ry="2.4" fill="#9fb8b2" opacity=".55"/>
 <path d="M104 46 C96 60 92 66 92 72 a12 12 0 0 0 24 0 C116 66 112 60 104 46 Z" fill="#6f908d" ${INK}/>
 <path d="M99 66 q-2 5 1 9" stroke="#c9dad5" stroke-width="2" fill="none" stroke-linecap="round"/>`),
   // 흰다리: 개만 한 네발짐승, 진갈색 젖은 털, 등의 작은 잎, 이마의 가는 뿔 둘, 큰 검은 눈.
-  // 오른쪽을 보는 옆모습이라 보는 쪽 앞발이 짐승의 왼쪽 앞발이다. 그 발만 발목까지 희다.
+  // 오른쪽을 보는 옆모습이라 화면 앞쪽(관람자 쪽) 앞발이 짐승의 왼쪽 앞발이다. 그 발만 발목까지 희다.
   heuindari: plate(`<path d="M44 98 C40 80 56 70 80 70 L118 68 C130 60 136 50 142 46 L152 44 C162 46 168 54 166 62 C164 70 156 72 148 74 C142 84 136 94 128 100 C112 108 70 110 44 98 Z" fill="#4a3526" ${INK}/>
 <path d="M46 88 C36 88 30 94 30 102" fill="none" stroke="#4a3526" stroke-width="9" stroke-linecap="round"/>
 <path d="M56 98 L52 132 M70 100 L70 132 M114 96 L112 132" stroke="#3b2a1e" stroke-width="9" stroke-linecap="round"/>
@@ -307,7 +307,7 @@ const ART = {
 <circle cx="153" cy="54" r="4.2" fill="#07090a"/><circle cx="154.5" cy="52.5" r="1.2" fill="#dfe8e4"/>
 <g fill="#4f7a4a" ${INK}><ellipse cx="66" cy="70" rx="7" ry="3.6" transform="rotate(-25 66 70)"/><ellipse cx="82" cy="66" rx="6" ry="3.2" transform="rotate(20 82 66)"/><ellipse cx="98" cy="67" rx="7" ry="3.4" transform="rotate(-15 98 67)"/><ellipse cx="112" cy="64" rx="5" ry="2.8" transform="rotate(30 112 64)"/><ellipse cx="74" cy="74" rx="5" ry="2.6" transform="rotate(10 74 74)"/></g>
 <g fill="#dfe6ea" opacity=".75"><circle cx="134" cy="28" r="1.1"/><circle cx="138" cy="36" r=".8"/><circle cx="164" cy="28" r="1"/><circle cx="160" cy="36" r=".7"/><circle cx="131" cy="40" r=".7"/></g>`),
-  // 줄어드는 우물물: 돌벽의 틈으로 흙가루가 빨려 들고, 어제의 물 자국은 수면보다 위에 있다(6화)
+  // 줄어드는 우물물: 돌벽의 틈으로 흙가루가 빨려 들어가고, 어제의 물 자국은 수면보다 위에 있다(6화)
   well: plate(`<path d="M40 30 L40 140 L160 140 L160 30" fill="#1a2420" stroke="#55615a" stroke-width="2"/>
 <g fill="#3f4a44" ${INK}><rect x="28" y="24" width="20" height="14" rx="3"/><rect x="28" y="40" width="14" height="16" rx="3"/><rect x="28" y="58" width="16" height="14" rx="3"/><rect x="152" y="24" width="20" height="14" rx="3"/><rect x="158" y="40" width="14" height="16" rx="3"/><rect x="156" y="58" width="16" height="14" rx="3"/></g>
 <path d="M44 64 H156" stroke="#9aaa9f" stroke-width="1.4" stroke-dasharray="4 4" opacity=".7"/>
@@ -316,7 +316,7 @@ const ART = {
 <path d="M156 70 L150 84 L156 94 L149 112 L156 128" fill="none" stroke="#07090a" stroke-width="3"/>
 <g fill="#8c7a5c"><circle cx="70" cy="95" r="1.6"/><circle cx="92" cy="95.5" r="1.4"/><circle cx="114" cy="95" r="1.7"/><circle cx="130" cy="95.5" r="1.4"/><circle cx="142" cy="95" r="1.2"/><circle cx="148" cy="97" r="1"/></g>
 <path d="M84 99 q30 -2 60 2" stroke="#8c7a5c" stroke-width="1" fill="none" opacity=".6" stroke-dasharray="2 3"/>`, false),
-  // 낙엽 모양의 물체: 굵은 뿌리 위의 낙엽, 그 밑에서 펴진 여섯 다리. 뒷다리 하나의 발끝이 흐리다(5화)
+  // 낙엽 모양의 물체: 굵은 뿌리 위의 낙엽, 그 밑에서 펴진 여섯 다리. 뒷다리 하나의 발끝이 흐리다(7화)
   leafbug: plate(`<path d="M-4 128 C40 120 70 96 110 88 C140 82 170 70 206 50 L206 84 C170 100 140 108 112 114 C76 122 46 140 -4 150Z" fill="#3a2e24" ${INK}/>
 <path d="M30 132 C60 120 90 104 130 96" stroke="#4d3f31" stroke-width="2" fill="none"/>
 <g stroke="#07090a" stroke-width="2" fill="none" stroke-linecap="round"><path d="M86 92 l-8 10 M96 90 l-4 12 M108 88 l2 12 M118 86 l6 10 M124 84 l10 8"/></g>
@@ -324,7 +324,7 @@ const ART = {
 <path d="M74 84 C88 64 122 60 140 72 C128 88 98 96 74 84 Z" fill="#7a5a34" ${INK}/>
 <path d="M76 84 C98 78 120 74 140 72 M96 80 l6 -8 M112 77 l6 -8 M100 81 l8 6 M118 76 l6 6" stroke="#4e3a22" stroke-width="1.2" fill="none"/>
 <path d="M140 72 l8 -2" stroke="#4e3a22" stroke-width="1.6"/>`),
-  // 거울토끼: 회색 토끼, 거울처럼 가장자리가 빛나는 투명한 옆구리, 그 안에 반대쪽을 보며 웅크린 작은 토끼. 뒷발이 흐리다(9화)
+  // 거울토끼: 회색 토끼, 가장자리가 거울처럼 빛나는 투명한 옆구리, 그 안에 반대쪽을 보며 웅크린 작은 토끼. 뒷발이 흐리다(9화)
   mirrorhare: plate(`<path d="M50 112 C44 92 58 76 84 74 C104 72 120 76 132 82 C140 70 150 66 158 70 C166 74 166 86 158 92 C152 98 146 100 140 104 C132 116 100 122 76 120 C64 120 54 118 50 112 Z" fill="#7f8682" ${INK}/>
 <path d="M146 70 C138 50 136 34 142 28 C148 36 150 54 152 68 M154 68 C156 50 162 36 168 34 C170 44 164 58 158 70" fill="#7f8682" ${INK}/>
 <circle cx="157" cy="80" r="3.6" fill="#07090a"/><circle cx="158.2" cy="78.8" r="1" fill="#dfe8e4"/>
@@ -361,7 +361,7 @@ const ART = {
 <path d="M84 96 C78 84 90 78 84 66 M104 92 C98 80 110 74 104 60 M122 96 C116 86 126 80 122 70" fill="none" stroke="#9aaa9f" stroke-width="1.6" stroke-linecap="round" opacity=".45"/>`),
   // 무지개: 세계에서 뜻이 있는 색을 피해, 안개 속의 엷은 띠로만 그린다
   rainbow: plate(`<g fill="none" stroke-width="7" opacity=".42" stroke-linecap="round">
-<path d="M26 132 A74 74 0 0 1 174 132" stroke="#b9a7c8"/><path d="M34 132 A66 66 0 0 1 166 132" stroke="#a9c4b0"/><path d="M42 132 A58 58 0 0 1 158 132" stroke="#d4c2a6"/><path d="M50 132 A50 50 0 0 1 150 132" stroke="#c9a59a"/></g>
+<path d="M26 132 A74 74 0 0 1 174 132" stroke="#b9a7c8"/><path d="M34 132 A66 66 0 0 1 166 132" stroke="#a9c4b0"/><path d="M42 132 A58 58 0 0 1 158 132" stroke="#d4c2a6"/><path d="M50 132 A50 50 0 0 1 150 132" stroke="#b5ad98"/></g>
 <path d="M0 120 C40 112 70 124 100 118 S160 110 200 120 L200 140 L0 140Z" fill="#2a3a33" opacity=".7"/>`),
   whale: plate(`<rect x="0" y="96" width="200" height="64" fill="#1c2c2a"/>
 <path d="M0 96 C30 92 50 100 80 96 S140 92 200 96" stroke="#5f7e7c" stroke-width="1.6" fill="none"/>
