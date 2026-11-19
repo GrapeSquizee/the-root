@@ -530,6 +530,10 @@ const BAL = {
   yarnCost: 8,       // 노란 실 한 줄의 실타래
   yarnRedSlow: .7,   // 붉은 줄이 걸린 줄에서는 노란 실이 덜 듣는다(붉은 줄이 당긴다)
   redBait: 3,        // 붉은 줄이 걸린 줄을 끊으면 해체자가 그만큼 더 오래 몰린다
+  sfxMaster: .9,     // 효과음 전체 음량(압축기 앞)
+  ambWind: .016,     // 정착지 바람
+  ambBreeze: .008,   // 고정을 푼 볕마을의 아주 약한 바람
+  ambNight: .025,    // 밤의 낮은 울림(해체자가 많을 때의 최대)
 };
 
 // ───────────────────────── 상태 ─────────────────────────
@@ -545,7 +549,18 @@ if (S.chapterDone) { S.done.settle = true; delete S.chapterDone; }  // v0.2 저�
 
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => Math.floor(n).toLocaleString('ko-KR');
-function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); }
+function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); syncAmb(id); }
+// 화면과 장에 맞는 배경 소리. 첫 5분(1화 장면과 첫 판의 낮)은 소리 없이 시작한다. 밤의 울림은 첫 밤부터 난다
+function ambFor(id) {
+  if (id === 'night') return 'night';
+  if (!S.onboarded) return null;
+  if (curCh().id === 'byeot') return S.fixed ? null : 'breeze';
+  return 'wind';
+}
+function syncAmb(id) {
+  const on = id || (document.querySelector('.screen.on') || {}).id;
+  if (typeof SFX !== 'undefined') SFX.amb(ambFor(on));
+}
 function buzz(ms) { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) {} }
 function pop(text, color, x, y) {
   const el = document.createElement('div'); el.className = 'pop'; el.textContent = text; el.style.color = color;
@@ -565,15 +580,25 @@ const loreCount = (ch) => ch.nodes.reduce((n, x) => n + (S.lore[x.id] || []).len
 // ───────────────────────── 소리 ─────────────────────────
 // 파일 없이 Web Audio로 만든다. 첫 탭 이후에만 소리가 난다(브라우저 자동 재생 제한).
 const SFX = (() => {
-  let ac = null, noiseBuf = null;
+  let ac = null, noiseBuf = null, windBuf = null, bus = null, amb = null, ambKind = null;
   const ctx = () => {
     if (S.mute) return null;
     if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; } }
-    if (ac.state === 'suspended') ac.resume();
+    if (ac.state === 'suspended' && !document.hidden) ac.resume().catch(() => {});
     return ac;
   };
+  // 모든 소리는 한 줄기(bus)로 모인다: 전체 음량 → 압축기. 휴대전화 스피커에서 큰 소리가 갈라지지 않게 한다
+  const out = (a) => {
+    if (!bus || bus.ctx !== a) {
+      const g = a.createGain(), c = a.createDynamicsCompressor();
+      g.gain.value = BAL.sfxMaster;
+      c.threshold.value = -14; c.knee.value = 10; c.ratio.value = 4; c.attack.value = .003; c.release.value = .2;
+      g.connect(c).connect(a.destination); bus = { ctx: a, in: g };
+    }
+    return bus.in;
+  };
   const noise = (a) => {
-    if (!noiseBuf) {
+    if (!noiseBuf || noiseBuf.sampleRate !== a.sampleRate) {
       noiseBuf = a.createBuffer(1, a.sampleRate * .5, a.sampleRate);
       const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
     }
@@ -586,36 +611,101 @@ const SFX = (() => {
     if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || .18, t + .01);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(g).connect(a.destination); o.start(t); o.stop(t + dur + .02);
+    o.connect(g).connect(out(a)); o.start(t); o.stop(t + dur + .02);
   }
   function hiss(dur, freq, q, vol, delay) {  // 대역 잡음: 해체자의 사각거림
     const a = ctx(); if (!a) return;
     const t = a.currentTime + (delay || 0), s = noise(a), f = a.createBiquadFilter(), g = a.createGain();
     f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = q;
     g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    s.connect(f).connect(g).connect(a.destination); s.start(t, Math.random() * .3); s.stop(t + dur + .02);
+    s.connect(f).connect(g).connect(out(a)); s.start(t, Math.random() * .3); s.stop(t + dur + .02);
   }
+  // ── 배경 소리 ──
+  // wind: 정착지의 바람(1화, 7화). breeze: 고정을 푼 볕마을의 아주 약한 바람(29화).
+  // null: 소리 없음. 고정된 볕마을(21화, 바람이 끊기고 귀가 먹먹하다)과 첫 5분(1화, 비가 멈춘 채 소리가 없다).
+  // night: 밤의 낮은 울림. 밤에는 바람을 넣지 않는다(16화, 바람 한 점 없는 밤의 사각거림).
+  const lfo = (a, rate, depth, param) => {
+    const o = a.createOscillator(), g = a.createGain();
+    o.frequency.value = rate; g.gain.value = depth; o.connect(g).connect(param); o.start(); return o;
+  };
+  function ambBuild(a, kind) {
+    const g = a.createGain(), nodes = [], t = a.currentTime;
+    g.gain.setValueAtTime(0.0001, t); g.connect(out(a));
+    if (kind === 'wind' || kind === 'breeze') {
+      if (!windBuf || windBuf.sampleRate !== a.sampleRate) {  // 길게 만들어 되풀이가 들리지 않게 한다
+        windBuf = a.createBuffer(1, a.sampleRate * 4, a.sampleRate);
+        const d = windBuf.getChannelData(0); let b = 0;
+        for (let i = 0; i < d.length; i++) { b = b * .97 + (Math.random() * 2 - 1) * .03; d[i] = b * 6; }  // 낮은 쪽이 두꺼운 잡음
+      }
+      const s = a.createBufferSource(), f = a.createBiquadFilter(), sw = a.createGain();
+      s.buffer = windBuf; s.loop = true;
+      f.type = 'bandpass'; f.Q.value = .8; f.frequency.value = kind === 'wind' ? 520 : 700;
+      sw.gain.value = .6;  // 돌풍: 음량과 대역이 천천히 오르내린다
+      nodes.push(lfo(a, .09, kind === 'wind' ? 260 : 90, f.frequency), lfo(a, .053, kind === 'wind' ? .4 : .15, sw.gain));
+      s.connect(f).connect(sw).connect(g); s.start(); nodes.push(s);
+      g.gain.exponentialRampToValueAtTime(kind === 'wind' ? BAL.ambWind : BAL.ambBreeze, t + 2.5);
+    } else if (kind === 'night') {
+      // 낮은 울림. 휴대전화 스피커는 300Hz 아래가 거의 나지 않으므로 거친 파형을 걸러 위 배음을 남긴다
+      const f = a.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 520; f.Q.value = 2;
+      [[73.4, 'sawtooth', .5], [73.9, 'sawtooth', .5], [36.7, 'sine', .6]].forEach(([hz, type, v]) => {
+        const o = a.createOscillator(), og = a.createGain(); o.type = type; o.frequency.value = hz; og.gain.value = v;
+        o.connect(og).connect(f); o.start(); nodes.push(o);
+      });
+      nodes.push(lfo(a, .07, 160, f.frequency));
+      f.connect(g);
+      g.gain.exponentialRampToValueAtTime(BAL.ambNight * .6, t + 1.5);
+    }
+    return { g, nodes, kind };
+  }
+  function ambStop(fade) {
+    if (!amb || !ac) { amb = null; return; }
+    const { g, nodes } = amb, t = ac.currentTime;
+    g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(Math.max(.0001, g.gain.value), t);
+    g.gain.exponentialRampToValueAtTime(.0001, t + (fade || 1.2));
+    nodes.forEach(n => { try { n.stop(t + (fade || 1.2) + .05); } catch (e) { /* 이미 멈춤 */ } });
+    amb = null;
+  }
+  function ambSync() {
+    if (S.mute || !ambKind) { ambStop(); return; }
+    if (amb && amb.kind === ambKind) return;
+    const a = ctx(); if (!a) return;
+    ambStop(); amb = ambBuild(a, ambKind);
+  }
+  // 앱이 가려지면 소리를 멈추고, 돌아오면 잇는다
+  document.addEventListener('visibilitychange', () => {
+    if (!ac) return;
+    if (document.hidden) ac.suspend().catch(() => {}); else if (!S.mute) ac.resume().catch(() => {});
+  });
   // 연속 배율이 오를수록 5음 음계를 따라 한 칸씩 올라간다
   const PENTA = [0, 2, 4, 7, 9];
   const comboFreq = (c) => { const k = Math.min(c, 14); return 392 * Math.pow(2, (Math.floor(k / 5) * 12 + PENTA[k % 5]) / 12); };
   return {
-    unlock: () => ctx(),
+    unlock: () => { ctx(); ambSync(); },
+    amb: (kind) => { ambKind = kind; ambSync(); },
+    // 밤의 울림: 해체자가 많을수록 조금 커지고, 고정 중에는 낮게 가라앉는다
+    nightLevel: (n, frozen) => {
+      if (!amb || amb.kind !== 'night') return;
+      const v = BAL.ambNight * (frozen ? .2 : Math.min(1, .6 + n * .03));
+      amb.g.gain.setTargetAtTime(v, ac.currentTime, .4);
+    },
+    muted: () => ambSync(),
+    _use: (a) => { ac = a; bus = null; amb = null; },  // 시험용: 오프라인 오디오로 바꿔 끼운다
     ok: (combo) => { const f = comboFreq(Math.max(0, combo - 1)); tone(f, .16, 'triangle', .2); tone(f * 2, .1, 'sine', .06, null, .03); },
     bigOk: (combo) => { const f = comboFreq(Math.max(0, combo - 1)); [1, 1.25, 1.5].forEach((m, i) => tone(f * m, .22, 'triangle', .14, null, i * .06)); },
-    bad: () => { tone(180, .28, 'square', .09, 90); hiss(.18, 900, 1.2, .12); },
-    blur: () => hiss(.4, 500, .6, .08),
+    bad: () => { tone(240, .28, 'square', .16, 120); hiss(.18, 900, 1.2, .32); },
+    blur: () => hiss(.4, 500, .6, .18),
     lock: () => { tone(523, .12, 'sine', .14); tone(784, .18, 'sine', .1, null, .07); },
-    tick: () => tone(1200, .03, 'square', .025),
-    page: () => hiss(.06, 3200, 2, .05),
+    tick: () => tone(1200, .03, 'square', .07),
+    page: () => hiss(.06, 3200, 2, .12),
     lore: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, .5, 'sine', .09, null, i * .08)),
     coin: () => { tone(988, .07, 'square', .05); tone(1319, .12, 'square', .05, null, .06); },
     scratch: (n) => hiss(.05 + Math.random() * .05, 2400 + Math.random() * 2400, 3, Math.min(.05, .012 * n)),
-    scatter: () => { hiss(.12, 1800, .8, .16); tone(660, .08, 'triangle', .07, 990); },
-    cut: () => { tone(120, .35, 'sawtooth', .1, 60); hiss(.3, 700, .8, .1); },
-    hurt: () => { tone(220, .5, 'sine', .2, 110); tone(233, .5, 'sine', .12, 116); },
+    scatter: () => { hiss(.12, 1800, .8, .36); tone(660, .08, 'triangle', .12, 990); },
+    cut: () => { tone(120, .35, 'sawtooth', .14, 60); hiss(.3, 700, .8, .3); },
+    hurt: () => { tone(220, .5, 'sine', .2, 110); tone(233, .5, 'sine', .12, 116); tone(440, .45, 'triangle', .1, 220); },
     yarn: () => { tone(330, .25, 'triangle', .12, 440); tone(660, .12, 'sine', .05, null, .05); },
     fix: () => { [196, 247, 294].forEach((f, i) => tone(f, .9, 'sine', .1, null, i * .03)); hiss(.5, 300, .5, .05); },
-    dawn: (kept) => (kept ? [392, 494, 587, 784] : [392, 370, 330]).forEach((f, i) => tone(f, .6, 'sine', .1, null, i * .14)),
+    dawn: (kept) => (kept ? [392, 494, 587, 784] : [392, 370, 330]).forEach((f, i) => tone(f, .6, 'sine', .085, null, i * .14)),
   };
 })();
 // 첫 접촉에서 오디오를 깨운다
@@ -631,6 +721,7 @@ const idleMin = () => Math.max(0, Math.min((idleNow() - S.lastCollect) / 60000, 
 function idlePending() { return idleMin() * idleRate(); }
 
 function renderHome() {
+  syncAmb();
   const ch = curCh(), nodes = ch.nodes;
   $('hIeum').textContent = fmt(S.ieum);
   $('hLore').textContent = loreCount(ch) + '/' + nodes.length * 2;
@@ -1164,6 +1255,8 @@ function nightLoop(now) {
     N.scratchAcc = (N.scratchAcc || 0) + dt * N.foes.length * 2.5;
     if (N.scratchAcc >= 1) { N.scratchAcc = 0; SFX.scratch(N.foes.length); }
   }
+  N.ambAcc = (N.ambAcc || 0) + dt;
+  if (N.ambAcc >= .25) { N.ambAcc = 0; SFX.nightLevel(N.foes.length, frozen); }
   N.foes = N.foes.filter(f => !f.dead);
   N.parts.forEach(p => { p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt; }); N.parts = N.parts.filter(p => p.life > 0);
   drawNight(frozen, baiting);
@@ -1244,6 +1337,7 @@ function endNight() {
   curNodes().forEach(n => { S.red[n.id] = 0; });
   dawnHand();
   save();
+  SFX.amb(ambFor('home'));  // 새벽이 오면 밤의 울림이 걷힌다
   SFX.dawn(kept);
   const result = kept ? (lostNames ? '기록 천은 지켰다. 끊긴 줄이 있다.' : '한 줄도 끊기지 않았다.') : '기록 천이 찢겼다. 그래도 아침은 온다.';
   const buttons = [['아침으로', goHome, true]];
@@ -1270,14 +1364,14 @@ function fixedDawn() {  // 고정된 볕마을: 밤 없이 아침. 매듭 보너
 function goHome() {
   show('home'); renderHome(); tickIdle();
   if (!S.onboarded) {
-    S.onboarded = true; save();
+    S.onboarded = true; save(); syncAmb();
     modal(`<h2>기록 천</h2><div class="sub">모은 실타래로 기록 천의 조각을 연다. 조각마다 선택지가 둘이고, 고른 쪽이 이 세계의 기록으로 남는다.<br><br>빛나는 <b style="color:var(--gold)">우물</b>을 눌러 보자.</div>`, [['확인', null, true]]);
   }
 }
 
 $('dayBtn').onclick = () => startDay(false);
 const renderMute = () => { $('muteBtn').textContent = S.mute ? '🔇' : '🔊'; };
-$('muteBtn').onclick = () => { S.mute = !S.mute; save(); renderMute(); SFX.coin(); };
+$('muteBtn').onclick = () => { S.mute = !S.mute; save(); renderMute(); SFX.muted(); SFX.coin(); };
 renderMute();
 renderHome(); tickIdle();
 // 첫 실행: 1화 장면으로 바로 들어간다. v0.1 저장(seen)이 있으면 건너뛴다.
