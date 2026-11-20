@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- THE ROOT 아이콘: 어두운 바탕, 기록 천 한 조각, 그 아래로 뻗는 뿌리. 의미 있는 색(노랑·빨강·파랑·하늘색)은 쓰지 않는다 -->
+  <!-- THE ROOT 아이콘: 어두운 바탕, 기록 천 한 조각, 그 아래로 뻗는 뿌리. 의미 있는 색(노란색·붉은색·파란색·하늘색·연한 분홍)은 쓰지 않는다 -->
   <defs>
     <radialGradient id="bg" cx="50%" cy="30%" r="80%">
       <stop offset="0" stop-color="#22342b"/><stop offset=".65" stop-color="#0f1512"/>

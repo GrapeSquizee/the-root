@@ -1401,7 +1401,7 @@ const PWA = (() => {
   if (standalone() && navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
   $('installBtn').onclick = () => {
     if (deferred) { const d = deferred; deferred = null; d.prompt(); d.userChoice.finally(render); return; }
-    modal(`<h2>홈 화면에 두기</h2><div class="sub">브라우저의 공유 버튼을 누르고 <b>‘홈 화면에 추가’</b>를 고르면 된다.<br>홈 화면의 THE ROOT로 열면 기록이 브라우저 정리에 지워지지 않고, 인터넷이 없어도 이어서 할 수 있다.</div>`, [['확인', null, true]]);
+    modal(`<h2>홈 화면에 두기</h2><div class="sub">브라우저의 공유 버튼을 누르고 <b>‘홈 화면에 추가’</b>를 고르면 된다.<br>홈 화면의 THE ROOT로 열면 기록이 브라우저 정리에 잘 지워지지 않고, 인터넷이 없어도 이어서 할 수 있다.</div>`, [['확인', null, true]]);
   };
   return { render, standalone };
 })();

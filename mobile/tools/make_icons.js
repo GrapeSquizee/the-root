@@ -5,8 +5,8 @@ const dir = path.join(__dirname, '..', 'icons');
 const svg = fs.readFileSync(path.join(dir, 'icon.svg'), 'utf8');
 const jobs = [
   ['icon-192.png', 192, 1], ['icon-512.png', 512, 1], ['apple-touch-icon.png', 180, 1],
-  // 마스크용: 안드로이드가 둥글게 잘라도 그림이 남도록 가운데 80% 안에 넣는다
-  ['icon-maskable-512.png', 512, .8],
+  // 마스크용: 안드로이드가 둥글게 잘라도 그림이 남도록 가운데 지름 80% 원 안에 들도록 72%로 줄여 넣는다
+  ['icon-maskable-512.png', 512, .72],
 ];
 (async () => {
   const b = await chromium.launch(); const p = await b.newPage();
