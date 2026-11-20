@@ -1,0 +1,19 @@
+{
+  "name": "세상을 부수고 싶다고 했더니 분류부터 시켰다 — THE ROOT",
+  "short_name": "THE ROOT",
+  "description": "탭으로 표본을 분류해 실타래를 모으고, 기록 천의 조각을 열어 이 세계의 기록을 완성한다.",
+  "lang": "ko",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f1512",
+  "theme_color": "#0f1512",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

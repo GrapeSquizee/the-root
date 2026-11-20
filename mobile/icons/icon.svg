@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- THE ROOT 아이콘: 어두운 바탕, 기록 천 한 조각, 그 아래로 뻗는 뿌리. 의미 있는 색(노랑·빨강·파랑·하늘색)은 쓰지 않는다 -->
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="30%" r="80%">
+      <stop offset="0" stop-color="#22342b"/><stop offset=".65" stop-color="#0f1512"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <g fill="none" stroke-linecap="round">
+    <!-- 기록 천: 가로세로로 엮인 올 -->
+    <rect x="176" y="104" width="160" height="128" rx="10" fill="#1d2822" stroke="#e3c46b" stroke-width="8"/>
+    <g stroke="#e3c46b" stroke-width="4" opacity=".55">
+      <path d="M176 136h160M176 168h160M176 200h160"/>
+      <path d="M208 104v128M240 104v128M272 104v128M304 104v128"/>
+    </g>
+    <!-- 줄기와 뿌리 -->
+    <g stroke="#6fd3c1">
+      <path d="M256 232v70" stroke-width="20"/>
+      <path d="M256 296c-10 40-50 60-104 70s-70 40-80 74" stroke-width="14"/>
+      <path d="M256 296c10 40 50 60 104 70s70 40 80 74" stroke-width="14"/>
+      <path d="M256 300c-4 50-14 90-34 140" stroke-width="12"/>
+      <path d="M256 300c4 50 14 90 34 140" stroke-width="12"/>
+      <path d="M190 352c-24 14-34 40-36 70M322 352c24 14 34 40 36 70" stroke-width="7" opacity=".7"/>
+    </g>
+    <!-- 매듭 -->
+    <circle cx="256" cy="296" r="15" fill="#0f1512" stroke="#6fd3c1" stroke-width="8"/>
+  </g>
+</svg>

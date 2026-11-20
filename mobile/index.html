@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0f1512">
 <title>THE ROOT 모바일</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="THE ROOT">
 <style>
 :root {
   --bg: #0f1512;
@@ -27,7 +34,7 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
 body { display: flex; justify-content: center; }
 #app { position: relative; width: 100%; max-width: 440px; height: 100%; overflow: hidden;
   background: radial-gradient(120% 70% at 50% 0%, #1f2e27 0%, var(--bg) 60%); user-select: none; }
-.screen { position: absolute; inset: 0; display: none; flex-direction: column; padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); }
+.screen { position: absolute; inset: 0; display: none; flex-direction: column; padding: max(14px, env(safe-area-inset-top)) 16px calc(14px + env(safe-area-inset-bottom)); }
 .screen.on { display: flex; }
 button { font: inherit; color: inherit; border: 0; cursor: pointer; }
 .hud { display: flex; gap: 8px; align-items: center; font-size: 14px; }
@@ -43,13 +50,15 @@ h1 { font-size: 20px; margin: 4px 0; letter-spacing: -0.02em; }
 .ghost-btn { padding: 10px 14px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); font-size: 14px; }
 
 /* 홈: 기록 천 지도 */
-#map { position: relative; flex: 1; margin: 6px 0 10px; }
-#map svg { width: 100%; height: 100%; }
+#map { position: relative; flex: 1; min-height: 0; margin: 6px 0 10px; }
+#map svg { width: 100%; height: 100%; overflow: visible; }
 .node-label { font-size: 12px; fill: var(--text); text-anchor: middle; pointer-events: none; }
 .node-cost { font-size: 11px; fill: var(--gold); text-anchor: middle; pointer-events: none; }
 #idle { display: flex; align-items: center; gap: 10px; background: var(--panel); border: 1px solid var(--line);
   border-radius: 14px; padding: 10px 12px; margin-bottom: 10px; font-size: 13px; }
 #idle .grow { flex: 1; }
+/* 좁은 휴대전화(폭 360 이하)에서 홈 아래 버튼 줄이 두 줄로 꺾이지 않게 한다 */
+@media (max-width: 360px) { #homeRow .ghost-btn { white-space: nowrap; padding: 10px 8px; font-size: 13px; } }
 .bar { height: 6px; background: #0b100d; border-radius: 4px; overflow: hidden; margin-top: 5px; }
 .bar i { display: block; height: 100%; background: var(--root); width: 0; transition: width .3s; }
 
@@ -150,10 +159,11 @@ h1 { font-size: 20px; margin: 4px 0; letter-spacing: -0.02em; }
       </div>
       <button class="ghost-btn" id="collectBtn">받기 <b id="idleAmt">0</b></button>
     </div>
-    <div class="row" style="margin-bottom:10px">
+    <div class="row" id="homeRow" style="margin-bottom:10px">
       <button class="ghost-btn" id="codexBtn" style="flex:1">세계 기록</button>
       <button class="ghost-btn" id="streakBtn" style="flex:1">마루의 매듭 <b id="streak">0</b>일</button>
       <button class="ghost-btn" id="muteBtn" aria-label="소리 켜고 끄기">🔊</button>
+      <button class="ghost-btn" id="installBtn" aria-label="휴대전화 홈 화면에 두기" title="휴대전화 홈 화면에 두기" style="display:none">📲</button>
     </div>
     <button class="ghost-btn" id="fixBtn" style="display:none;margin-bottom:10px"></button>
     <button class="big-btn" id="dayBtn">낮 — 분류 시작</button>
@@ -1362,7 +1372,7 @@ function fixedDawn() {  // 고정된 볕마을: 밤 없이 아침. 매듭 보너
     [['광고 보고 아침 보상 두 배 (시험용: 바로 지급)', () => { S.ieum += morning; save(); goHome(); }], ['아침으로', goHome, true]]);
 }
 function goHome() {
-  show('home'); renderHome(); tickIdle();
+  show('home'); renderHome(); tickIdle(); PWA.render();
   if (!S.onboarded) {
     S.onboarded = true; save(); syncAmb();
     modal(`<h2>기록 천</h2><div class="sub">모은 실타래로 기록 천의 조각을 연다. 조각마다 선택지가 둘이고, 고른 쪽이 이 세계의 기록으로 남는다.<br><br>빛나는 <b style="color:var(--gold)">우물</b>을 눌러 보자.</div>`, [['확인', null, true]]);
@@ -1370,10 +1380,35 @@ function goHome() {
 }
 
 $('dayBtn').onclick = () => startDay(false);
+
+// ───────────────────────── 앱으로 두기(PWA) ─────────────────────────
+// 서비스 워커가 게임 파일을 저장해 두어, 한 번 연 뒤에는 인터넷 없이도 돌아간다.
+// 홈 화면에 둔 앱으로 열면 저장(localStorage)이 지워지지 않게 브라우저에 부탁한다.
+const PWA = (() => {
+  let deferred = null;
+  const standalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  const ios = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  // 첫 판을 마치기 전에는 권하지 않는다. 버튼만 보이고, 저절로 뜨는 창은 없다
+  const render = () => {
+    const can = !standalone() && S.onboarded && (deferred || ios());
+    $('installBtn').style.display = can ? '' : 'none';
+  };
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  }
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferred = e; render(); });
+  window.addEventListener('appinstalled', () => { deferred = null; render(); });
+  if (standalone() && navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+  $('installBtn').onclick = () => {
+    if (deferred) { const d = deferred; deferred = null; d.prompt(); d.userChoice.finally(render); return; }
+    modal(`<h2>홈 화면에 두기</h2><div class="sub">브라우저의 공유 버튼을 누르고 <b>‘홈 화면에 추가’</b>를 고르면 된다.<br>홈 화면의 THE ROOT로 열면 기록이 브라우저 정리에 지워지지 않고, 인터넷이 없어도 이어서 할 수 있다.</div>`, [['확인', null, true]]);
+  };
+  return { render, standalone };
+})();
 const renderMute = () => { $('muteBtn').textContent = S.mute ? '🔇' : '🔊'; };
 $('muteBtn').onclick = () => { S.mute = !S.mute; save(); renderMute(); SFX.muted(); SFX.coin(); };
 renderMute();
-renderHome(); tickIdle();
+renderHome(); tickIdle(); PWA.render();
 // 첫 실행: 1화 장면으로 바로 들어간다. v0.1 저장(seen)이 있으면 건너뛴다.
 if (S.seen && !S.onboarded) { S.onboarded = true; save(); }
 function startTutorial() {
