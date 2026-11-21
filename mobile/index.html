@@ -402,9 +402,9 @@ const artOf = (sp) => ART[sp.id] || `<span class="emoji">${sp.glyph}</span>`;
 // 기록 천 조각: 열면 이야기 장면과 선택지 둘. 고른 선택지가 세계 기록으로 남는다.
 const SETTLE_NODES = [
   { id: 'well', name: '우물', icon: '🪣', cost: 40, after: [], scene: [
-      '우물을 맡은 은솔이 항아리를 우물가에 내려놓았다. 수첩에 무언가를 적고 나서야 연우를 봤다.',
+      '우물을 맡은 은솔이 항아리를 내려놓았다. 수첩에 무언가를 적고 나서야 연우를 봤다.',
       '<span class="say">“오늘 퍼 갈 수 있는 건... 여기까지야.”</span>',
-      '곁에 있던 아홉 살 마루가 검은 매듭을 지은 밧줄을 내밀었다.',
+      '곁에 있던 아이, 회색 우비를 입은 마루가 검은 매듭을 지은 밧줄을 내밀었다.',
       '<span class="say">“어제는 일곱 개 반이었어. 오늘은 여덟 번째까지 내려갔어~”</span>' ],
     opts: [
       { t: '마루와 매듭을 같이 센다', h: '나무가 실타래를 더 모은다', lore: '우물 — 수위는 마루의 검은 매듭으로 잰다. 마루는 매듭을 손가락으로 짚으며 센다.', reward: { idle: 1 } },
@@ -838,7 +838,7 @@ function openNode(id) {
   const both = (S.lore[id] || []).length >= 2;
   if (both) { show('codex'); renderCodex(); return; }
   if (!open && !nodeReady(n)) {
-    modal(`<h2>${n.name}</h2><div class="sub">이 조각은 ${needNames(n)} 조각에서 이어진다. 그쪽을 먼저 열자.</div>`, [['확인']]);
+    modal(`<h2>${n.name}</h2><div class="sub">이 조각은 ${needNames(n)} 조각에서 이어진다. 그 조각을 먼저 열자.</div>`, [['확인']]);
     return;
   }
   if (!open && S.ieum < n.cost) {
