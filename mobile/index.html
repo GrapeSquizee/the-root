@@ -401,40 +401,40 @@ const artOf = (sp) => ART[sp.id] || `<span class="emoji">${sp.glyph}</span>`;
 
 // 기록 천 조각: 열면 이야기 장면과 선택지 둘. 고른 선택지가 세계 기록으로 남는다.
 const SETTLE_NODES = [
-  { id: 'well', name: '우물', icon: '🪣', cost: 40, scene: [
-      '은솔이 항아리를 우물가에 내려놓았다. 수첩에 무언가를 적고 나서야 연우를 봤다.',
+  { id: 'well', name: '우물', icon: '🪣', cost: 40, after: [], scene: [
+      '우물을 맡은 은솔이 항아리를 우물가에 내려놓았다. 수첩에 무언가를 적고 나서야 연우를 봤다.',
       '<span class="say">“오늘 퍼 갈 수 있는 건... 여기까지야.”</span>',
-      '마루가 검은 매듭을 지은 밧줄을 내밀었다.',
+      '곁에 있던 아홉 살 마루가 검은 매듭을 지은 밧줄을 내밀었다.',
       '<span class="say">“어제는 일곱 개 반이었어. 오늘은 여덟 번째까지 내려갔어~”</span>' ],
     opts: [
       { t: '마루와 매듭을 같이 센다', h: '나무가 실타래를 더 모은다', lore: '우물 — 수위는 마루의 검은 매듭으로 잰다. 마루는 매듭을 손가락으로 짚으며 센다.', reward: { idle: 1 } },
       { t: '돌벽의 틈부터 본다', h: '실타래를 얻는다', lore: '우물 — 물은 마른 게 아니라 돌벽 틈으로 샌다. 수면의 흙가루가 옆으로 사라지는 쪽에 틈이 있다.', reward: { ieum: 40 } } ] },
-  { id: 'yarn', name: '노란 실', icon: '🧶', cost: 80, scene: [
-      '끊어진 길 앞에 노란 실이 가로질러 걸려 있었다. 서린이 매듭을 다시 조였다.',
+  { id: 'yarn', name: '노란 실', icon: '🧶', cost: 80, after: ['well'], scene: [
+      '끊어진 길 앞에 노란 실이 가로질러 걸려 있었다. 허리에 노란 실뭉치를 단 키 큰 여자, 서린이 매듭을 다시 조였다.',
       '<span class="say">“넘어오지 마. 아래가 비었어.”</span>' ],
     opts: [
       { t: '실 앞에서 멈춘다', h: '밤에 해체자가 느려진다', lore: '노란 실 — 위험한 곳에 남기는 표시다. 주민들은 실 너머로 들어가지 않는다.', reward: { slow: 1 } },
       { t: '“아래를 같이 봐도 돼요?”', h: '실타래를 얻는다', lore: '서린 — 길이 불안하면 직접 밟아 보고 나서 남을 통과시킨다. “발은 내가 밟은 데만.”', reward: { ieum: 60 } } ] },
-  { id: 'pot', name: '솥뚜껑', icon: '🍲', cost: 130, scene: [
+  { id: 'pot', name: '솥뚜껑', icon: '🍲', cost: 130, after: ['well'], scene: [
       '나무 아래에서 한 남자가 솥뚜껑을 닦고 있었다. 연우가 비탈길 쪽으로 걸음을 옮기자 남자가 손을 들었다.',
       '<span class="say">“그쪽 길은 안 돼. 어제 *딸꾹* 무너졌어.”</span>' ],
     opts: [
       { t: '다른 길을 묻는다', h: '나무가 실타래를 더 모은다', lore: '나무 아래 남자 — 딸꾹질을 하면서도 위험한 길은 끝까지 막는다.', reward: { idle: 1 } },
       { t: '솥뚜껑 닦는 걸 돕는다', h: '기록 천이 단단해진다', lore: '정착지 — 사람들은 나무 아래에 모여 산다. 솥 하나를 여럿이 나눠 쓴다.', reward: { hp: 1 } } ] },
-  { id: 'white', name: '흰다리', icon: '🦌', cost: 190, scene: [
+  { id: 'white', name: '흰다리', icon: '🦌', cost: 190, after: ['pot'], scene: [
       '흰 앞발의 짐승이 머리를 털었다. 뿔 끝의 은빛 가루가 비에 젖은 돌 위로 흩어졌다.',
       '짐승은 연우를 한 번 돌아보더니 나무 쪽으로 몇 걸음 걸었다.' ],
     opts: [
       { t: '나무까지 따라간다', h: '실타래를 얻는다', lore: '흰다리 — 등에 잎이 난 짐승이다. 빛을 받아 살고 포자로 번식한다.', reward: { ieum: 100 } },
       { t: '손을 내밀지 않고 기다린다', h: '나무가 실타래를 더 모은다', lore: '흰다리 — 말이 없어도 관계는 이어진다. 먼저 손을 뻗지 않아야 곁에 남는다.', reward: { idle: 1 } } ] },
-  { id: 'red', name: '붉은 줄', icon: '🟥', cost: 260, scene: [
+  { id: 'red', name: '붉은 줄', icon: '🟥', cost: 260, after: ['yarn'], scene: [
       '틀린 답을 고른 자리에 붉은 줄이 남아 있었다. 다른 사람들은 그 줄을 보지 못했다.',
       '서린이 연우의 시선이 머문 곳을 따라 봤다.',
       '<span class="say">“거기 뭐가 있어?”</span>' ],
     opts: [
       { t: '“아무것도 아니에요.”', h: '실타래를 얻는다', lore: '붉은 줄 — 틀린 답이 남긴 줄이다. 그 줄은 연우만 본다.', reward: { ieum: 140 } },
       { t: '“제가 틀린 데예요.”', h: '밤에 해체자가 느려진다', lore: '붉은 줄 — 해체자는 붉은 줄에 걸린 것부터 노린다. 말해 두면 함께 지킬 수 있다.', reward: { slow: 1 } } ] },
-  { id: 'cloth', name: '기록 천', icon: '📜', cost: 340, scene: [
+  { id: 'cloth', name: '기록 천', icon: '📜', cost: 340, after: ['red', 'white'], scene: [
       '은솔이 접어 둔 천을 펼쳤다. 집과 사람의 이름이 숯으로 적혀 있었다.',
       '<span class="say">“여기 적힌 건... 정착지 사람들 이름이야.”</span>',
       '몇 줄은 비어 있었다. 무엇을 적어야 할지 아무도 몰랐던 자리였다.' ],
@@ -445,21 +445,21 @@ const SETTLE_NODES = [
 
 // 2장 볕마을(소설 21~30화). 일곱 해 전 서린이 통째로 고정한 골짜기 마을.
 const BYEOT_NODES = [
-  { id: 'stop', name: '정류장', icon: '🚏', cost: 380, scene: [
+  { id: 'stop', name: '정류장', icon: '🚏', cost: 380, after: [], scene: [
       '볕마을 경계 밖에 지붕만 남은 버스 정류장이 있었다. 서린이 기둥 옆에 짐을 내려놓았다.',
       '<span class="say">“여기서 자. 안에서 자면 그 하루에 붙어.”</span>',
       '이쪽은 벌써 해가 기울었다. 풀 한 줄 너머의 마을에는 아직 늦은 오후의 볕이 들어 있었다.' ],
     opts: [
       { t: '경계의 풀에 손을 넣어 본다', h: '실타래를 얻는다', lore: '볕마을 경계 — 풀 한 줄을 사이에 두고 바람이 끊긴다. 안에는 늦은 오후의 볕이 한 각도로 멈춰 있다.', reward: { ieum: 120 } },
       { t: '정류장 바닥에 눕는다', h: '기록 천이 단단해진다', lore: '볕마을 — 바깥 사람도 안에서 자면 고정한 하루에 붙는다. 그래서 연우와 서린은 경계 밖 정류장에서 잔다.', reward: { hp: 1 } } ] },
-  { id: 'stair', name: '계단', icon: '🪜', cost: 460, scene: [
+  { id: 'stair', name: '계단', icon: '🪜', cost: 460, after: ['stop'], scene: [
       '양쪽으로 머리를 묶은 다섯 살 아이, 보리가 계단을 뛰어 내려오다 발을 헛디뎠다. 연우가 손을 뻗기도 전에 보리는 바닥에 엎어졌다.',
       '보리는 울지 않았다. 무릎에는 긁힌 자국 하나 없었다. 보리가 고개를 들어 연우를 올려다봤다.',
       '<span class="say">“오빠는 누구야?”</span>' ],
     opts: [
       { t: '무릎부터 살핀다', h: '밤에 해체자가 느려진다', lore: '볕마을 — 안에서는 넘어져도 상처가 나지 않고 울지도 않는다. 키도 자라지 않는다.', reward: { slow: 1 } },
       { t: '“어제도 만났잖아.”', h: '나무가 실타래를 더 모은다', lore: '보리 — 다섯 살. 자고 나면 고정한 날로 돌아가서 연우를 매일 처음 본다. 연우를 ‘오빠’라고 부른다.', reward: { idle: 1 } } ] },
-  { id: 'jar', name: '항아리', icon: '🏺', cost: 560, scene: [
+  { id: 'jar', name: '항아리', icon: '🏺', cost: 560, after: ['stair'], scene: [
       '머리를 천 끈으로 묶은 여자가 앞치마의 밀가루를 털며 나왔다. 보리의 엄마 가람이었다. 가람은 서린을 보자 반갑게 웃었다.',
       '<span class="say">“벌써 왔어? 아까 나가더니 금방 왔네.”</span>',
       '가람을 따라 집에 들어서자 부엌의 항아리가 보였다. 물이 목까지 찰랑였다. 가람이 나무 그릇을 들어 보였다.',
@@ -467,21 +467,21 @@ const BYEOT_NODES = [
     opts: [
       { t: '처음 듣는 이야기처럼 듣는다', h: '나무가 실타래를 더 모은다', lore: '가람 — 고정한 날의 이야기를 매일 ‘오늘 일’로 한다. 고정한 날은 보리가 처음 혼자 물을 떠 온 날이다.', reward: { idle: 1 } },
       { t: '항아리를 들여다본다', h: '실타래를 얻는다', lore: '볕마을 — 항아리는 아침마다 고정한 날의 양만큼 다시 찬다. 새 숯 금이나 매듭은 더해지지 않는다.', reward: { ieum: 200 } } ] },
-  { id: 'cutname', name: '잘린 이름', icon: '✂️', cost: 680, scene: [
+  { id: 'cutname', name: '잘린 이름', icon: '✂️', cost: 680, after: ['stair'], scene: [
       '모임터 나무에 큰 자루 천이 걸려 있었다. 천에는 집마다 칸이 나뉘어 식구의 이름이 적혀 있었고, 맨 위에는 ‘붙잡은 사람, 서린’이라고 쓰여 있었다.',
       '그 아래 한 자리가 손가락 두 마디만큼 반듯하게 잘려 나가 있었다. 서린이 엄지로 가장자리를 눌러 보다가 손을 뗐다.',
       '<span class="say">“잘려서 가져갔어. 이름째.”</span>' ],
     opts: [
       { t: '잘린 가장자리를 들여다본다', h: '밤에 해체자가 느려진다', lore: '함께 적은 사람 — 이름 자리가 해체자가 지나간 자리처럼 반듯하게 잘려 있다. 서린의 엄지로도 이어지지 않는다.', reward: { slow: 1 } },
       { t: '보리에게 잘린 이름의 주인을 묻는다', h: '기록 천이 단단해진다', lore: '함께 적은 사람 — 주민들은 그날 서린 곁에 있던 사람을 기억하지만, 이름을 부르려 하면 막힌다. 보리는 ‘그 언니’라고 부른다.', reward: { hp: 1 } } ] },
-  { id: 'song', name: '자장가', icon: '🎵', cost: 820, scene: [
-      '가람이 이불에 누운 딸 보리의 배를 천천히 두드리며 노래를 불렀다.',
+  { id: 'song', name: '자장가', icon: '🎵', cost: 820, after: ['jar'], scene: [
+      '가람이 이불에 누운 보리의 배를 천천히 두드리며 노래를 불렀다.',
       '<span class="say">“잎 하나 펴면 해가 오고, 잎 둘 펴면 물이 오고. 자장자장 우리 아가, 셋째 잎엔 누가 오나.”</span>',
       '가람이 같은 구절을 한 번 더 불러 끝나 갈 때, 숨소리에 가까운 목소리가 뒤를 이었다. 문틀에 기대앉은 서린이었다.' ],
     opts: [
       { t: '가람에게 노래를 어디서 배웠는지 묻는다', h: '나무가 실타래를 더 모은다', lore: '볕마을 자장가 — 가람은 고정한 날 ‘함께 적은 사람’에게 앞 구절을 배웠다. 그 사람도 거기까지만 불렀다.', reward: { idle: 1 } },
       { t: '서린의 노래를 끝까지 듣는다', h: '실타래를 얻는다', lore: '볕마을 자장가 — “셋째 잎엔 네가 크고, 넷째 잎엔 손을 놓지.” 뒤 구절은 서린만 안다. 서린은 자기가 왜 아는지 모른다.', reward: { ieum: 300 } } ] },
-  { id: 'frame', name: '문틀', icon: '📏', cost: 1000, scene: [
+  { id: 'frame', name: '문틀', icon: '📏', cost: 1000, after: ['song', 'cutname'], scene: [
       '가람의 집 문틀에 보리의 키를 잰 숯 금이 그어져 있었다. 맨 위의 금은 일곱 해째 같은 자리였다.',
       '도시에서 점검을 온 기록관이 줄 끝에 단 작은 추를 들어 보였다. 둥근 안경을 쓴 해담이었다. 볕마을에는 도시의 동쪽 길 셋이 묶여 있었다.',
       '<span class="say">“이 문은 열지 마십시오, 이연우 씨.”</span>',
@@ -496,10 +496,17 @@ const BYEOT_INTRO = [
   '<span class="say">“여기가 볕마을이야.”</span> 서린이 말했다. <span class="say">“일곱 해 전에 내가 붙잡았어. 통째로.”</span>',
   '바깥에는 곧 밤이 온다. 안에는 오지 않는다. 연우는 정착지 나무에 새 잎이 나지 않던 아침을 떠올렸다.',
 ];
+// 고리 순서(지도와 밤의 여섯 갈래): 먼저 열 조각과 다음 조각이 되도록 이웃하게 둔다.
+// 세계 기록은 비용 순(처음 정한 순서)으로 보여 준다.
+const ringOf = (nodes, ids) => ids.map(id => nodes.find(n => n.id === id));
 const CHAPTERS = [
-  { id: 'settle', name: '정착지', center: '🌳', nodes: SETTLE_NODES },
-  { id: 'byeot', name: '볕마을', center: '🌇', nodes: BYEOT_NODES },
+  { id: 'settle', name: '정착지', center: '🌳', nodes: ringOf(SETTLE_NODES, ['well', 'yarn', 'red', 'cloth', 'white', 'pot']) },
+  { id: 'byeot', name: '볕마을', center: '🌇', nodes: ringOf(BYEOT_NODES, ['stop', 'stair', 'jar', 'song', 'frame', 'cutname']) },
 ];
+// 조각 여는 순서: after의 조각을 모두 열어야 이어진다. 장면이 앞 조각에서 소개한 인물을 다시 소개하지 않게 한다.
+const nodeById = (id) => CHAPTERS.flatMap(c => c.nodes).find(n => n.id === id);
+const nodeReady = (n) => (n.after || []).every(id => S.nodes[id] != null);
+const needNames = (n) => (n.after || []).filter(id => S.nodes[id] == null).map(id => '‘' + nodeById(id).name + '’').join('·');
 const curCh = () => CHAPTERS[S.ch] || CHAPTERS[0];
 const curNodes = () => curCh().nodes;
 const fixedHere = () => curCh().id === 'byeot' && S.fixed;  // 고정된 볕마을에서는 밤이 오지 않는다
@@ -799,10 +806,16 @@ function drawMap() {
     const open = S.nodes[n.id] != null, red = S.red[n.id] > 0;
     svg += `<line x1="${cx}" y1="${cy}" x2="${n.x}" y2="${n.y}" stroke="${red ? 'var(--red)' : open ? 'var(--root)' : '#2f3f36'}" stroke-width="${red ? 2 + S.red[n.id] : 2}" stroke-dasharray="${open ? '' : '4 6'}"/>`;
   });
+  // 조각과 조각을 잇는 실: 앞 조각이 열려 있으면 밝게
+  NODES.forEach((n) => (n.after || []).forEach(id => {
+    const p = NODES.find(m => m.id === id); if (!p) return;
+    const lit = S.nodes[id] != null;
+    svg += `<line x1="${p.x}" y1="${p.y}" x2="${n.x}" y2="${n.y}" stroke="${lit ? 'var(--gold)' : '#2f3f36'}" stroke-width="${lit ? 2 : 1.5}" stroke-dasharray="${lit && S.nodes[n.id] != null ? '' : '2 5'}" opacity="${lit ? .8 : .6}"/>`;
+  }));
   svg += `<circle cx="${cx}" cy="${cy}" r="34" fill="#16231d" stroke="var(--gold)" stroke-width="2"/>
     <text x="${cx}" y="${cy + 10}" font-size="30" text-anchor="middle">${curCh().center}</text>`;
   NODES.forEach((n) => {
-    const open = S.nodes[n.id] != null, afford = S.ieum >= n.cost;
+    const open = S.nodes[n.id] != null, ready = nodeReady(n), afford = ready && S.ieum >= n.cost;
     const fill = open ? '#1e3a33' : afford ? '#2a2614' : '#141b17';
     const stroke = open ? 'var(--root)' : afford ? 'var(--gold)' : '#2f3f36';
     svg += `<g data-node="${n.id}" style="cursor:pointer">
@@ -810,7 +823,8 @@ function drawMap() {
         ${afford && !open ? '<animate attributeName="r" values="29;33;29" dur="1.4s" repeatCount="indefinite"/>' : ''}</circle>
       <text x="${n.x}" y="${n.y + 8}" font-size="22" text-anchor="middle" opacity="${open || afford ? 1 : .35}">${n.icon}</text>
       <text class="node-label" x="${n.x}" y="${n.y + 46}">${n.name}</text>
-      ${open ? '' : `<text class="node-cost" x="${n.x}" y="${n.y + 60}">실타래 ${n.cost}</text>`}
+      ${open ? '' : ready ? `<text class="node-cost" x="${n.x}" y="${n.y + 60}">실타래 ${n.cost}</text>`
+        : `<text class="node-cost" x="${n.x}" y="${n.y + 60}" style="fill:var(--dim)">${needNames(n)} 다음</text>`}
     </g>`;
   });
   svg += '</svg>';
@@ -823,6 +837,10 @@ function openNode(id) {
   const open = S.nodes[id] != null;
   const both = (S.lore[id] || []).length >= 2;
   if (both) { show('codex'); renderCodex(); return; }
+  if (!open && !nodeReady(n)) {
+    modal(`<h2>${n.name}</h2><div class="sub">이 조각은 ${needNames(n)} 조각에서 이어진다. 그쪽을 먼저 열자.</div>`, [['확인']]);
+    return;
+  }
   if (!open && S.ieum < n.cost) {
     modal(`<h2>${n.name}</h2><div class="sub">실타래가 ${n.cost - Math.floor(S.ieum)} 모자란다. 낮에 분류하거나 나무에서 받아 오자.</div>`, [['확인']]);
     return;
@@ -905,7 +923,7 @@ function checkChapter() {
 // ───────────────────────── 세계 기록 ─────────────────────────
 function renderCodex() {
   $('codexList').innerHTML = CHAPTERS.slice(0, S.unlocked + 1).map(ch =>
-    `<h4 style="color:var(--dim);margin:12px 0 6px">${ch.name} · ${loreCount(ch)}/${ch.nodes.length * 2}</h4>` + ch.nodes.map(n => {
+    `<h4 style="color:var(--dim);margin:12px 0 6px">${ch.name} · ${loreCount(ch)}/${ch.nodes.length * 2}</h4>` + ch.nodes.slice().sort((a, b) => a.cost - b.cost).map(n => {
     const taken = S.lore[n.id] || [];
     if (!taken.length) return `<div class="entry locked"><h4>${n.icon} ${n.name}</h4>아직 열지 않은 조각</div>`;
     return `<div class="entry"><h4>${n.icon} ${n.name} · 선택지 ${taken.length}/2</h4>` +
