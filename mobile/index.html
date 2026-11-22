@@ -496,12 +496,72 @@ const BYEOT_INTRO = [
   '<span class="say">“여기가 볕마을이야.”</span> 서린이 말했다. <span class="say">“일곱 해 전에 내가 붙잡았어. 통째로.”</span>',
   '바깥에는 곧 밤이 온다. 안에는 오지 않는다. 연우는 정착지 나무에 새 잎이 나지 않던 아침을 떠올렸다.',
 ];
+// 3장 중심 도시(소설 31~37화). 해담이 온 동쪽 길 끝, 언덕 하나를 덮은 도시.
+// 두 줄기: 동쪽 문 → 강당 → 당번판, 동쪽 문 → 장부 → 장터. 당번판과 장터를 모두 열면 밤의 장터.
+// 여울·달래는 강당, 함지는 장터, 산란은 밤의 장터에서 처음 나온다. 장터 줄기에는 여울이 나오지 않는다.
+const CITY_NODES = [
+  { id: 'gate', name: '동쪽 문', icon: '🚪', cost: 1150, after: [], scene: [
+      '동쪽 문 앞에도 돌기둥이 두 개 서 있었다. 기둥마다 걸린 추가 흔들렸고, 문지기 둘이 그 추를 번갈아 보며 무언가를 적었다.',
+      '<div class="screen-text">영역 진입.</div>',
+      '문지기 뒤에서 해담이 나왔다. 해담은 안경을 고쳐 쓰고 판의 맨 위 칸을 보여 주었다. 연우가 읽을 수 없는 글씨 한 줄이 따로 적혀 있었다.',
+      '<span class="say">“이 칸은 이연우 씨 칸입니다. 소속은 비워 두었습니다.”</span>' ],
+    opts: [
+      { t: '“왜 제 칸이 있어요?”', h: '실타래를 얻는다', lore: '해담의 판 — 도시는 연우의 칸을 만들고 소속을 비워 두었다. 일곱 해 동안 아무도 못 연 볕마을 기둥을 목록에 없는 사람이 나흘 만에 열었다고 해담이 보고했기 때문이다.', reward: { ieum: 350 } },
+      { t: '문 앞의 추를 본다', h: '밤에 해체자가 느려진다', lore: '동쪽 길 — 길가에 백 걸음마다 허리 높이의 돌기둥이 있고, 꼭대기 쇠고리에 추가 달려 있다. 볕마을 기둥 하나를 연 뒤로 추들은 바람을 거슬러 볕마을 쪽으로 기울며 떤다.', reward: { slow: 1 } } ] },
+  { id: 'hall', name: '강당', icon: '🧵', cost: 1300, after: ['gate'], scene: [
+      '아침에 해담이 데려간 곳은 기록소 앞의 강당이었다. 서른 명쯤 되는 사람들이 긴 탁자에 흩어져 앉아 있었다. 벽에 걸린 도시 지도에는 길마다 색이 다른 실이 꽂혀 있었다.',
+      '팔에 굵은 끈을 감은 여자, 달래가 서린의 굽은 손가락을 하나씩 만져 보았다. 그사이 한쪽 귀에 흙이 묻은 청년이 연우 옆에 와 섰다.',
+      '<span class="say">“나는 여울이야. 나는 듣는 쪽이야. 땅에 귀 대면 줄 소리가 들려. 너는? 듣는 쪽이야, 만지는 쪽이야?”</span>',
+      '스크린 이야기를 할 생각은 없었다. <span class="say">“보는 쪽이요.”</span>' ],
+    opts: [
+      { t: '여울을 따라 바닥에 귀를 댄다', h: '나무가 실타래를 더 모은다', lore: '복원사 — 도시에 서른 명쯤 있고, 스크린은 없다. 듣는 쪽 여울은 땅에 귀를 대고 줄 소리를 듣는다. 팽팽한 줄은 높게 울리고, 끊어지기 직전인 줄은 쉰 소리를 낸다.', reward: { idle: 1 } },
+      { t: '달래에게 지도의 실을 묻는다', h: '기록 천이 단단해진다', lore: '강당의 지도 — 흰 실은 버티는 길, 노란 실은 위험해서 사람을 못 들이는 길, 갈색 실은 끊겨서 아직 못 이은 길이다. 만지는 쪽 달래가 끈으로 매듭을 묶으면 길이 그 매듭을 따라 버틴다.', reward: { hp: 1 } } ] },
+  { id: 'ledger', name: '장부', icon: '📒', cost: 1450, after: ['gate'], scene: [
+      '기록소 안쪽 서고에서 해담이 두꺼운 장부를 펼쳤다. 복원사들이 줄 하나를 두고 정한 것이 모두 적혀 있었다. 남긴 줄, 끊은 줄, 붙잡은 줄, 푼 줄.',
+      '틀린 줄이라 끊은 칸 옆에 없어진 집의 수가 적혀 있었다.',
+      '<span class="say">“서른한 채입니다. 사람이 다친 경우는 따로 적었습니다.”</span>',
+      '해담이 장을 넘겼다. 맨 위에 북쪽 둑길이라고 적힌 장이었다. 첫째 칸이 비어 있었다.' ],
+    opts: [
+      { t: '“첫째 칸 아이 이름이 뭐예요?”', h: '기록 천이 단단해진다', lore: '북쪽 둑길 — 첫째 빈칸의 아이는 아홉 살 하랑이다. 해담은 이름을 알면서도, 이름을 적으면 찾은 것처럼 보일까 봐 칸을 비워 둔다.', reward: { hp: 1 } },
+      { t: '“그 집들에서 불리던 이름은요?”', h: '실타래를 얻는다', lore: '해담의 장부 — 집은 몇째 거리, 몇째 집으로 적는다. 그 집에서 서로 부르던 이름과 ‘자라지 않음’을 적을 칸은 없다. 보리는 일곱 해 전에도 지금도 다섯 살로 적혀 있다.', reward: { ieum: 450 } } ] },
+  { id: 'board', name: '당번판', icon: '🕰️', cost: 1650, after: ['hall'], scene: [
+      '광장 가운데의 탑은 굵은 뿌리 여러 가닥이 꼬여 이룬 것이었다. 꼭대기의 시계에는 숫자 없이 홈만 있었고, 바늘은 하나였다.',
+      '뿌리 속 하늘색 빛이 밑동에서부터 차올라 판에 닿자 둔탁한 소리가 났다. 바늘이 홈 하나만큼 움직였다.',
+      '탑 아래의 당번판에는 복원사마다 맡은 거리가 적혀 있었다. 여울이 판을 끝까지 훑더니 머쓱하게 웃었다.',
+      '<span class="say">“없네. 목록에 없는 사람은 배정도 없어. 해담 아저씨 원칙이야.”</span>' ],
+    opts: [
+      { t: '바늘이 움직일 때까지 센다', h: '밤에 해체자가 느려진다', lore: '광장 시계 — 뿌리 속 빛이 판에 닿을 때마다 바늘이 홈 하나만큼 움직인다. 주민은 ‘한 바퀴’로 날을 센다. 연우가 센 간격은 열하나, 열넷으로 일정하지 않았다.', reward: { slow: 1 } },
+      { t: '여울을 따라 금 위 골목으로 간다', h: '나무가 실타래를 더 모은다', lore: '금 위 골목 — 당번판에는 거리만 있고 구역 사이의 금은 없다. 금 위에서 마흔 해를 산 할머니의 집은 어느 칸에도 없다. 여울은 배정 밖의 그 골목에 노란 끈을 걸었다.', reward: { idle: 1 } } ] },
+  { id: 'market', name: '장터', icon: '🥣', cost: 1850, after: ['ledger'], scene: [
+      '넷째 거리와 다섯째 거리 사이의 금 위에 장터가 있었다. 그릇 장수 함지는 돈 상자를 금 이쪽에, 그릇 더미를 저쪽에 두고 쉬지 않고 금을 넘나들었다.',
+      '함지의 좌판 다리 옆에 투명한 선 둘이 떠올라 있었다. 하나는 다섯째 거리의 가마 쪽으로, 하나는 넷째 거리의 골목 쪽으로 금을 가로질러 뻗어 있었다.',
+      '연우가 그 자리를 오래 보고 있자 함지가 그릇을 내려놓았다.',
+      '<span class="say">“너 그거 뭐 보는 거야? 이 장터가 어느 쪽인지 보여? 넷째야, 다섯째야?”</span>' ],
+    opts: [
+      { t: '“둘 다 있는 것만 봤어요.”', h: '기록 천이 단단해진다', lore: '경계의 장터 — 함지의 그릇은 다섯째 거리 가마에서 오고, 손님은 넷째 거리 사람이 많다. 해담은 장터를 한쪽 구역으로 붙이려고 금 위에 말뚝을 박았다. 어느 쪽으로 붙여도 반대쪽 줄은 끊긴다.', reward: { hp: 1 } },
+      { t: '실 파는 노인에게 묻는다', h: '실타래를 얻는다', lore: '실 파는 노인 — 금 위에서 육십 년 동안 실을 팔았다. “좋은 것도 맞고 무서운 것도 맞아. 둘 중에 하나만 말하라면 못 해.” 그걸 묻는 사람은 연우가 처음이었다.', reward: { ieum: 550 } } ] },
+  { id: 'sanran', name: '밤의 장터', icon: '🌙', cost: 2100, after: ['board', 'market'], scene: [
+      '그날 밤, 해담이 금 위에 박아 둔 말뚝 앞으로 사각거리는 소리가 올라왔다. 회백색의 작은 것들, 해체자가 말뚝 앞에서 일제히 멈췄다.',
+      '<span class="say">“그 말뚝, 내가 뽑아 줄까?”</span>',
+      '함지의 좌판 위에 한 여자가 걸터앉아 있었다. 턱선에서 잘린 검은 머리였다. 여자가 발치의 해체자들을 턱으로 가리켰다.',
+      '<span class="say">“겁먹지 마. 저것들은 사람한테 관심 없어. 줄에 걸린 것만 봐. 너는 어디에도 안 걸려 있잖아. 목록에도, 구역에도.”</span>' ],
+    opts: [
+      { t: '“하랑은요?”', h: '밤에 해체자가 느려진다', lore: '좌판 위의 여자 — 해체자를 보낸다기보다 해체자가 제 말을 듣는다고 한다. 북쪽 둑길을 물으면 ‘주민이 원했다’고만 하고 말뚝 이야기로 돌린다.', reward: { slow: 1 } },
+      { t: '“이름이 뭐예요?”', h: '나무가 실타래를 훨씬 더 모은다', lore: '산란 — “너한텐 말해도 돼. 너는 어느 목록에도 없으니까. 네가 불러도 아무 데도 안 걸려.” 자장가는 ‘셋째 잎엔 누가 오나’까지만 알고, 누구에게 배웠는지 모른다.', reward: { idle: 2 } } ] },
+];
+const CITY_INTRO = [
+  '해담이 왔던 길로 올라섰다. 길가에는 허리 높이의 돌기둥이 백 걸음마다 서 있었고, 꼭대기마다 작은 추가 매달려 있었다.',
+  '이튿날 오후, 길이 낮은 언덕을 넘자 도시가 보였다. 서로 다른 시대에 지은 것 같은 건물들이 언덕 하나를 다 덮고 있었고, 그 사이로 곧은 길이 바둑판처럼 나 있었다.',
+  '도시 한가운데에 높은 탑이 서 있었다. 도시 너머 아주 먼 곳에는 산보다 큰 그림자가 하늘을 가리고 있었다.',
+  '<span class="say">“중심 나무야.”</span> 서린이 말했다. <span class="say">“여기서 봐도 저렇게 멀어.”</span>',
+];
 // 고리 순서(지도와 밤의 여섯 갈래): 먼저 열 조각과 다음 조각이 되도록 이웃하게 둔다.
 // 세계 기록은 비용 순(처음 정한 순서)으로 보여 준다.
 const ringOf = (nodes, ids) => ids.map(id => nodes.find(n => n.id === id));
 const CHAPTERS = [
   { id: 'settle', name: '정착지', center: '🌳', nodes: ringOf(SETTLE_NODES, ['well', 'yarn', 'red', 'cloth', 'white', 'pot']) },
   { id: 'byeot', name: '볕마을', center: '🌇', nodes: ringOf(BYEOT_NODES, ['stop', 'stair', 'jar', 'song', 'frame', 'cutname']) },
+  { id: 'city', name: '중심 도시', center: '🏙️', nodes: ringOf(CITY_NODES, ['gate', 'hall', 'board', 'sanran', 'market', 'ledger']) },
 ];
 // 조각 여는 순서: after의 조각을 모두 열어야 이어진다. 장면이 앞 조각에서 소개한 인물을 다시 소개하지 않게 한다.
 const nodeById = (id) => CHAPTERS.flatMap(c => c.nodes).find(n => n.id === id);
@@ -544,12 +604,15 @@ const BAL = {
   nightGrow: .08,    // 지낸 날 하나마다 오르는 밤의 세기
   nightCap: 1.6,     // 밤의 세기에 더해지는 양의 상한(낮을 20번 마치면 닿는다)
   byeotNight: .2,    // 고정을 푼 볕마을의 밤은 조금 더 세다
+  cityNight: .3,     // 중심 도시의 밤은 그보다 조금 더 세다(빈 데 없이 붙잡힌 줄이 많다)
   yarnCost: 8,       // 노란 실 한 줄의 실타래
   yarnRedSlow: .7,   // 붉은 줄이 걸린 줄에서는 노란 실이 덜 듣는다(붉은 줄이 당긴다)
   redBait: 3,        // 붉은 줄이 걸린 줄을 끊으면 해체자가 그만큼 더 오래 몰린다
   sfxMaster: .9,     // 효과음 전체 음량(압축기 앞)
   ambWind: .016,     // 정착지 바람
   ambBreeze: .008,   // 고정을 푼 볕마을의 아주 약한 바람
+  ambCity: .011,     // 중심 도시의 바람(정착지보다 약하다)
+  clockVol: .05,     // 광장 시계의 둔탁한 소리
   ambNight: .025,    // 밤의 낮은 울림(해체자가 많을 때의 최대)
 };
 
@@ -572,6 +635,7 @@ function ambFor(id) {
   if (id === 'night') return 'night';
   if (!S.onboarded) return null;
   if (curCh().id === 'byeot') return S.fixed ? null : 'breeze';
+  if (curCh().id === 'city') return 'city';
   return 'wind';
 }
 function syncAmb(id) {
@@ -641,6 +705,7 @@ const SFX = (() => {
   // wind: 정착지의 바람(1화, 7화). breeze: 고정을 푼 볕마을의 아주 약한 바람(29화).
   // null: 소리 없음. 고정된 볕마을(21화, 바람이 끊기고 귀가 먹먹하다)과 첫 5분(1화, 비가 멈춘 채 소리가 없다).
   // night: 밤의 낮은 울림. 밤에는 바람을 넣지 않는다(16화, 바람 한 점 없는 밤의 사각거림).
+  // city: 중심 도시. 정착지보다 약한 바람에, 광장 시계의 둔탁한 소리가 일정하지 않은 간격으로 난다(34화).
   const lfo = (a, rate, depth, param) => {
     const o = a.createOscillator(), g = a.createGain();
     o.frequency.value = rate; g.gain.value = depth; o.connect(g).connect(param); o.start(); return o;
@@ -648,7 +713,8 @@ const SFX = (() => {
   function ambBuild(a, kind) {
     const g = a.createGain(), nodes = [], t = a.currentTime;
     g.gain.setValueAtTime(0.0001, t); g.connect(out(a));
-    if (kind === 'wind' || kind === 'breeze') {
+    let timer = null;
+    if (kind === 'wind' || kind === 'breeze' || kind === 'city') {
       if (!windBuf || windBuf.sampleRate !== a.sampleRate) {  // 길게 만들어 되풀이가 들리지 않게 한다
         windBuf = a.createBuffer(1, a.sampleRate * 4, a.sampleRate);
         const d = windBuf.getChannelData(0); let b = 0;
@@ -656,11 +722,15 @@ const SFX = (() => {
       }
       const s = a.createBufferSource(), f = a.createBiquadFilter(), sw = a.createGain();
       s.buffer = windBuf; s.loop = true;
-      f.type = 'bandpass'; f.Q.value = .8; f.frequency.value = kind === 'wind' ? 520 : 700;
+      f.type = 'bandpass'; f.Q.value = .8; f.frequency.value = kind === 'wind' ? 520 : kind === 'city' ? 600 : 700;
       sw.gain.value = .6;  // 돌풍: 음량과 대역이 천천히 오르내린다
       nodes.push(lfo(a, .09, kind === 'wind' ? 260 : 90, f.frequency), lfo(a, .053, kind === 'wind' ? .4 : .15, sw.gain));
       s.connect(f).connect(sw).connect(g); s.start(); nodes.push(s);
-      g.gain.exponentialRampToValueAtTime(kind === 'wind' ? BAL.ambWind : BAL.ambBreeze, t + 2.5);
+      g.gain.exponentialRampToValueAtTime(kind === 'wind' ? BAL.ambWind : kind === 'city' ? BAL.ambCity : BAL.ambBreeze, t + 2.5);
+      if (kind === 'city') {  // 광장 시계: 뿌리 속 빛이 판에 닿을 때의 둔탁한 소리. 간격은 열하나~열넷쯤으로 흔들린다
+        const knock = () => { if (!document.hidden) clock(); timer = setTimeout(knock, (11 + Math.random() * 3) * 1000); };
+        timer = setTimeout(knock, (4 + Math.random() * 4) * 1000);
+      }
     } else if (kind === 'night') {
       // 낮은 울림. 휴대전화 스피커는 300Hz 아래가 거의 나지 않으므로 거친 파형을 걸러 위 배음을 남긴다
       const f = a.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 520; f.Q.value = 2;
@@ -672,11 +742,17 @@ const SFX = (() => {
       f.connect(g);
       g.gain.exponentialRampToValueAtTime(BAL.ambNight * .6, t + 1.5);
     }
-    return { g, nodes, kind };
+    return { g, nodes, kind, stop: () => clearTimeout(timer) };
+  }
+  function clock() {  // 휴대전화 스피커에서도 들리게 낮은 음 위에 배음을 얹는다
+    const v = BAL.clockVol;
+    tone(110, .7, 'triangle', v, 98); tone(220, .4, 'sine', v * .7, 196); tone(440, .12, 'sine', v * .35);
+    hiss(.08, 600, 1, v * 1.2);
   }
   function ambStop(fade) {
     if (!amb || !ac) { amb = null; return; }
     const { g, nodes } = amb, t = ac.currentTime;
+    if (amb.stop) amb.stop();
     g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(Math.max(.0001, g.gain.value), t);
     g.gain.exponentialRampToValueAtTime(.0001, t + (fade || 1.2));
     nodes.forEach(n => { try { n.stop(t + (fade || 1.2) + .05); } catch (e) { /* 이미 멈춤 */ } });
@@ -706,6 +782,7 @@ const SFX = (() => {
       amb.g.gain.setTargetAtTime(v, ac.currentTime, .4);
     },
     muted: () => ambSync(),
+    clock,
     _use: (a) => { ac = a; bus = null; amb = null; },  // 시험용: 오프라인 오디오로 바꿔 끼운다
     ok: (combo) => { const f = comboFreq(Math.max(0, combo - 1)); tone(f, .16, 'triangle', .2); tone(f * 2, .1, 'sine', .06, null, .03); },
     bigOk: (combo) => { const f = comboFreq(Math.max(0, combo - 1)); [1, 1.25, 1.5].forEach((m, i) => tone(f * m, .22, 'triangle', .14, null, i * .06)); },
@@ -737,8 +814,13 @@ const idleNow = () => S.fixed ? S.fixedAt : Date.now();
 const idleMin = () => Math.max(0, Math.min((idleNow() - S.lastCollect) / 60000, IDLE_CAP_MIN));
 function idlePending() { return idleMin() * idleRate(); }
 
+let cityAsk = S.done.byeot && S.unlocked < 2;  // 중심 도시가 생기기 전에 볕마을을 마친 저장: 홈에서 한 번 도시로 안내한다
 function renderHome() {
   syncAmb();
+  if (cityAsk && S.onboarded) {
+    cityAsk = false;
+    setTimeout(() => modal(`<h2>중심 도시가 열렸다</h2><div class="sub">해담이 도시에서 서린을 기다린다.</div>`, [['도시로', unlockCity, true], ['나중에']]), 0);
+  }
   const ch = curCh(), nodes = ch.nodes;
   $('hIeum').textContent = fmt(S.ieum);
   $('hLore').textContent = loreCount(ch) + '/' + nodes.length * 2;
@@ -748,7 +830,7 @@ function renderHome() {
   $('idleText').innerHTML = S.fixed
     ? '<span style="color:var(--yellow)">볕마을이 고정돼 정착지 나무에 새 잎이 나지 않는다</span>'
     : `나무가 실타래를 모으는 중 <b style="color:var(--root)">${idleHour()}</b>/시간`;
-  const other = CHAPTERS[S.ch === 0 ? 1 : 0];
+  const other = CHAPTERS[nextCh()];
   $('chBtn').style.display = S.unlocked >= 1 ? '' : 'none';
   $('chBtn').textContent = '⇄ ' + other.name;
   $('fixBtn').style.display = S.unlocked >= 1 ? '' : 'none';
@@ -772,7 +854,9 @@ $('collectBtn').onclick = (e) => {
   pop('+' + p, 'var(--root)', e.clientX, e.clientY); buzz(15); SFX.coin();
 };
 setInterval(() => { if ($('home').classList.contains('on')) tickIdle(); }, 1000);
-$('chBtn').onclick = () => { S.ch = S.ch === 0 ? 1 : 0; save(); SFX.page(); renderHome(); };
+// 열린 장을 차례로 돈다(정착지 → 볕마을 → 중심 도시 → 정착지)
+const nextCh = () => (S.ch + 1) % (Math.min(S.unlocked, CHAPTERS.length - 1) + 1);
+$('chBtn').onclick = () => { S.ch = nextCh(); save(); SFX.page(); renderHome(); };
 // 고정의 딜레마: 붙잡아 두면 밤을 확실히 넘기지만, 나무가 자라지 않고 안정화율도 오르지 않는다
 function setFixed(on) {
   if (on === S.fixed) return;
@@ -792,6 +876,14 @@ function unlockByeot() {  // 정착지를 마치면 볕마을이 열리고, 처�
   tapScene('2장 — 볕마을', BYEOT_INTRO, () => {
     show('home'); renderHome(); tickIdle();
     modal(`<h2>볕마을</h2><div class="sub">볕마을은 고정돼 있다. 밤이 오지 않아 기록 천이 다치지 않고, 낮에는 같은 표본이 같은 순서로 되풀이된다. 대신 정착지 나무에 새 잎이 나지 않는다.<br><br>아래의 <b style="color:var(--yellow)">고정</b> 버튼으로 풀 수 있다. 붙잡을지 놓을지는 매일 고른다.</div>`, [['확인', null, true]]);
+  });
+}
+function unlockCity() {  // 볕마을을 마치면 중심 도시가 열린다. 볕마을의 고정 상태는 그대로 둔다
+  if (S.unlocked >= 2) return;
+  S.unlocked = 2; S.ch = 2; save();
+  tapScene('3장 — 중심 도시', CITY_INTRO, () => {
+    show('home'); renderHome(); tickIdle();
+    modal(`<h2>중심 도시</h2><div class="sub">도시에도 밤이 온다. 볕마을의 밤보다 해체자가 조금 더 많이, 더 빨리 온다.<br><br>볕마을의 <b style="color:var(--yellow)">고정</b>은 도시에 있어도 그대로 이어진다. 붙잡아 두면 정착지 나무가 멈춘다.</div>`, [['확인', null, true]]);
   });
 }
 if (S.done.settle && S.unlocked < 1) { S.unlocked = 1; S.fixed = true; S.fixedAt = Date.now(); save(); }  // v0.2에서 정착지를 마친 저장
@@ -915,8 +1007,11 @@ function checkChapter() {
   if (ch.id === 'settle') {
     modal(`<h2>정착지의 기록 천이 이어졌다</h2><div class="sub">영역 안정화율 ${S.stab.toFixed(3)}%<br><br>서린이 해 뜨는 쪽을 가리켰다. 그쪽에 일곱 해 전 서린이 붙잡은 마을이 있다.<br>남은 선택지를 고르면 정착지의 숨은 기록이 열린다.</div>`,
       [['볕마을로', unlockByeot, true]]);
+  } else if (ch.id === 'byeot') {
+    modal(`<h2>볕마을의 기록 천이 이어졌다</h2><div class="sub">영역 안정화율 ${S.stab.toFixed(3)}%<br><br>해담의 추가 동쪽으로 흔들린다. 해담은 도시로 보고하러 가면서, 며칠 안에 서린에게 도시로 와 달라고 했다.<br>남은 선택지를 고르면 볕마을의 숨은 기록이 열린다.</div>`,
+      [['도시로', unlockCity, true]]);
   } else {
-    modal(`<h2>볕마을의 기록 천이 이어졌다</h2><div class="sub">영역 안정화율 ${S.stab.toFixed(3)}%<br><br>해담의 추가 동쪽으로 흔들린다. 다음 기록: 중심 도시 (준비 중)</div>`, [['확인', null, true]]);
+    modal(`<h2>중심 도시의 기록 천이 이어졌다</h2><div class="sub">영역 안정화율 ${S.stab.toFixed(3)}%<br><br>좌판에서 내려선 산란이 어둠 속으로 걸어가며 말했다.<br><span class="say">“내일 회의가 반을 자르면, 그 밤에 내가 나머지 반을 잘라 줄게. 공평하게.”</span><br><br>다음 기록: 흩어지는 하루 (준비 중)</div>`, [['확인', null, true]]);
   }
 }
 
@@ -1162,7 +1257,7 @@ function beginNight() {
   if (N.stiff) { S.stiff--; if (!S.stiff) S.hand = 40; }  // 쉬고 나면 손이 조금 풀린 채로 돌아온다
   save();
   // 밤은 날마다 조금씩 세지다가 상한에서 멈춘다. 고정을 푼 볕마을은 조금 더 세다
-  const level = 1 + Math.min(S.day * BAL.nightGrow, BAL.nightCap) + (curCh().id === 'byeot' ? BAL.byeotNight : 0);
+  const level = 1 + Math.min(S.day * BAL.nightGrow, BAL.nightCap) + (curCh().id === 'byeot' ? BAL.byeotNight : curCh().id === 'city' ? BAL.cityNight : 0);
   N.rate = 1.1 * level;         // 초당 등장 수
   N.speed = 34 * Math.min(level, 2.2) * (1 - Math.min(S.slow, 3) * .12);
   if (!S.onboarded) { N.dur = 12; N.rate *= .6; }  // 첫 밤은 짧고 느슨하게

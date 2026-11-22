@@ -30,12 +30,12 @@ const { chromium } = require('playwright');
       ok: () => SFX.ok(1), ok10: () => SFX.ok(10), bigOk: () => SFX.bigOk(5), bad: () => SFX.bad(), blur: () => SFX.blur(),
       lock: () => SFX.lock(), tick: () => SFX.tick(), page: () => SFX.page(), lore: () => SFX.lore(), coin: () => SFX.coin(),
       scratch8: () => SFX.scratch(8), scatter: () => SFX.scatter(), cut: () => SFX.cut(), hurt: () => SFX.hurt(),
-      yarn: () => SFX.yarn(), fix: () => SFX.fix(), dawnKept: () => SFX.dawn(true), dawnTorn: () => SFX.dawn(false),
+      yarn: () => SFX.yarn(), fix: () => SFX.fix(), clock: () => SFX.clock(), dawnKept: () => SFX.dawn(true), dawnTorn: () => SFX.dawn(false),
     };
     const out = {};
     for (const [k, fn] of Object.entries(cases)) out[k] = { full: await measure(fn, 2, false), phone: await measure(fn, 2, true) };
     S.onboarded = true;
-    for (const k of ['wind', 'breeze', 'night']) {
+    for (const k of ['wind', 'breeze', 'city', 'night']) {
       const fn = () => { SFX.amb(null); SFX.amb(k); if (k === 'night') { /* 해체자 많을 때 */ } };
       out['amb_' + k] = { full: await measure(fn, 8, false), phone: await measure(fn, 8, true) };
     }
