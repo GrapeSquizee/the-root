@@ -1,5 +1,6 @@
 // 효과음과 배경 소리의 크기를 잰다. 저장소 루트에서 `node mobile/tools/sound_levels.js` (Playwright 필요).
 // thud: 기록실(5장) 바닥의 빛이 지나갈 때의 둔탁한 소리. 배경 'vault'는 setTimeout으로 울려 오프라인 렌더로는 재지 않는다.
+// thudFar: 사흘 밤(6장) 서쪽 거리에서 땅 밑으로 아주 작게 들리는 뿌리의 소리. 배경 'nights'도 setTimeout으로 울려 재지 않는다.
 // full: 전 대역, phone: 300Hz 아래와 9kHz 위를 깎아 휴대전화 스피커를 흉내 낸 값. st=50ms 최대 RMS, peak, avg(dBFS).
 const { chromium } = require('playwright');
 (async () => {
@@ -31,7 +32,7 @@ const { chromium } = require('playwright');
       ok: () => SFX.ok(1), ok10: () => SFX.ok(10), bigOk: () => SFX.bigOk(5), bad: () => SFX.bad(), blur: () => SFX.blur(),
       lock: () => SFX.lock(), tick: () => SFX.tick(), page: () => SFX.page(), lore: () => SFX.lore(), coin: () => SFX.coin(),
       scratch8: () => SFX.scratch(8), scatter: () => SFX.scatter(), cut: () => SFX.cut(), hurt: () => SFX.hurt(),
-      yarn: () => SFX.yarn(), fix: () => SFX.fix(), clock: () => SFX.clock(), thud: () => SFX.clock(BAL.thudVol), bugs: () => SFX.bugs(), dawnKept: () => SFX.dawn(true), dawnTorn: () => SFX.dawn(false),
+      yarn: () => SFX.yarn(), fix: () => SFX.fix(), clock: () => SFX.clock(), thud: () => SFX.clock(BAL.thudVol), thudFar: () => SFX.clock(BAL.thudFar), bugs: () => SFX.bugs(), dawnKept: () => SFX.dawn(true), dawnTorn: () => SFX.dawn(false),
     };
     const out = {};
     for (const [k, fn] of Object.entries(cases)) out[k] = { full: await measure(fn, 2, false), phone: await measure(fn, 2, true) };
